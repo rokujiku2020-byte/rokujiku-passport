@@ -1,0 +1,84 @@
+# 生成AIパスポート 学習アプリ（ウェブアプリ版）
+
+単一ページのウェブアプリです。サーバー側の処理は一切なく、**静的ファイルを置くだけ**で動きます。
+PWA対応済みなので、スマホの「ホーム画面に追加」でアプリのように起動し、**オフラインでも使えます**。
+
+## 中身
+
+| ファイル | 役割 |
+|---|---|
+| `index.html` | アプリ本体（全154問・6軸リファレンス・間違いノートすべて含む） |
+| `manifest.json` | PWA設定（アプリ名・アイコン・全画面表示） |
+| `sw.js` | Service Worker（オフライン動作用のキャッシュ） |
+| `icon.svg` / `icon-*.png` | アイコン各サイズ |
+
+学習の記録（学習時間・スコア・間違いノート）は**利用者のブラウザ内**（localStorage）に保存されます。
+サーバーには何も送信されません。
+
+---
+
+## 公開のしかた（3つの選択肢）
+
+### 案A：Netlify Drop（最速・1分・アカウント不要で試せる）
+1. https://app.netlify.com/drop を開く
+2. この `webapp` フォルダを**そのままドラッグ&ドロップ**
+3. `https://xxxx.netlify.app` のURLが即発行される
+
+### 案B：GitHub Pages（無料・URLが安定・おすすめ）
+1. GitHubで新規リポジトリを作成（例：`genai-passport`）
+2. この `webapp` フォルダの中身をリポジトリ直下にアップロード
+3. リポジトリの Settings → Pages → Source を `main` ブランチの `/ (root)` に設定
+4. 数分後 `https://<ユーザー名>.github.io/genai-passport/` で公開される
+
+コマンドで行う場合：
+
+```bash
+cd webapp && git init && git add -A && git commit -m "生成AIパスポート学習アプリ" && git branch -M main && git remote add origin https://github.com/<ユーザー名>/genai-passport.git && git push -u origin main
+```
+
+### 案C：Cloudflare Pages（独自ドメインを使いたい場合）
+1. https://dash.cloudflare.com → Workers & Pages → Create → Pages
+2. 「Upload assets」でこのフォルダをアップロード（またはGitHub連携）
+3. 独自ドメインを割り当て可能
+
+> **重要**：PWA（オフライン動作・ホーム画面追加）は **HTTPS でのみ有効**です。
+> 上記3案はいずれも自動でHTTPSになります。
+
+---
+
+## スマホへのインストール
+
+**iPhone（Safari）**：公開URLを開く → 共有ボタン → 「ホーム画面に追加」
+**Android（Chrome）**：公開URLを開く → メニュー → 「アプリをインストール」
+
+インストール後はアドレスバーのない全画面で起動し、電波がなくても動作します。
+
+---
+
+## ローカルで動かす（動作確認用）
+
+```bash
+python3 -m http.server 8765 --directory webapp
+```
+
+ブラウザで http://localhost:8765 を開きます。
+（`file://` で直接開くとService Workerが動かないため、必ずサーバー経由で確認してください）
+
+---
+
+## アプリを更新したとき
+
+`index.html` を差し替えたら、`sw.js` の1行目付近にある
+
+```js
+const CACHE = "genai-passport-v1";
+```
+
+の数字を `v2`, `v3` … と増やしてください。利用者の端末で古いキャッシュが破棄され、新しい内容が読み込まれます。
+
+---
+
+## 注意
+
+- 収録問題は公式の過去問ではなく、**公式シラバス（2026年2月適用）に基づく独自作成**です。
+- 学習記録はブラウザごとに保存されます。端末を移すときはアプリ内の「↔ 引き継ぎ（バックアップ）」を使ってください。

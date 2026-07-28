@@ -1,0 +1,1640 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>生成AIパスポート 学習アプリ</title>
+<meta name="description" content="生成AIパスポート試験（2026年2月シラバス対応）の学習アプリ。全154問の演習・6軸フレームワーク・間違いノート付き。">
+<meta name="theme-color" content="#0d9488" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1512" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AIパスポート">
+<style>
+  html,body{margin:0;padding:0}
+  body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+</style>
+</head>
+<body>
+<style>
+  :root{
+    --bg:#eef8f3;--surface:#ffffff;--surface-2:#e6f4ee;--surface-3:#d7ece1;
+    --text:#153a30;--muted:#5c7d72;--faint:#8aa89e;
+    --border:#cfe6db;--border-strong:#b3d6c8;
+    --accent:#0d9488;--accent2:#10b981;--accent-ink:#0a6b61;--accent-wash:#e2f4ee;
+    --gold:#b7791f;--gold-bg:#f8eed6;--todo:#9ab0a8;
+    --correct:#0d9488;--correct-bg:#e3f4ee;--correct-bd:#a9d8ca;
+    --wrong:#c0392b;--wrong-bg:#fbeae7;--wrong-bd:#eec1b9;
+    --shadow:0 1px 2px rgba(13,80,70,.05),0 10px 26px rgba(13,80,70,.08);
+    --grad:linear-gradient(135deg,#10b981,#0d9488);
+    --r:16px;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#0c1512;--surface:#11211b;--surface-2:#173026;--surface-3:#1f3d31;
+    --text:#e6f2ec;--muted:#8fb0a5;--faint:#6b8a80;
+    --border:#264238;--border-strong:#345344;
+    --accent:#2dd4bf;--accent2:#34d399;--accent-ink:#5eead4;--accent-wash:#123029;
+    --gold:#e0b357;--gold-bg:#2a2213;--todo:#5c7168;
+    --correct:#34d399;--correct-bg:#12281d;--correct-bd:#2c5a3c;
+    --wrong:#f28b7d;--wrong-bg:#2a1714;--wrong-bd:#5c2e27;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0c1512;--surface:#11211b;--surface-2:#173026;--surface-3:#1f3d31;
+    --text:#e6f2ec;--muted:#8fb0a5;--faint:#6b8a80;
+    --border:#264238;--border-strong:#345344;
+    --accent:#2dd4bf;--accent2:#34d399;--accent-ink:#5eead4;--accent-wash:#123029;
+    --gold:#e0b357;--gold-bg:#2a2213;--todo:#5c7168;
+    --correct:#34d399;--correct-bg:#12281d;--correct-bd:#2c5a3c;
+    --wrong:#f28b7d;--wrong-bg:#2a1714;--wrong-bd:#5c2e27;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+  }
+  :root[data-theme="light"]{
+    --bg:#eef8f3;--surface:#ffffff;--surface-2:#e6f4ee;--surface-3:#d7ece1;
+    --text:#153a30;--muted:#5c7d72;--faint:#8aa89e;
+    --border:#cfe6db;--border-strong:#b3d6c8;
+    --accent:#0d9488;--accent2:#10b981;--accent-ink:#0a6b61;--accent-wash:#e2f4ee;
+    --gold:#b7791f;--gold-bg:#f8eed6;--todo:#9ab0a8;
+    --correct:#0d9488;--correct-bg:#e3f4ee;--correct-bd:#a9d8ca;
+    --wrong:#c0392b;--wrong-bg:#fbeae7;--wrong-bd:#eec1b9;
+    --shadow:0 1px 2px rgba(13,80,70,.05),0 10px 26px rgba(13,80,70,.08);
+  }
+
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:var(--bg);color:var(--text);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo,sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased;font-feature-settings:"palt" 1}
+  .wrap{max-width:600px;margin:0 auto;padding:0 15px 46px;min-height:100dvh}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-variant-numeric:tabular-nums}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+  .hidden{display:none !important}
+  .btn{display:block;width:100%;border:none;border-radius:13px;padding:14px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit;transition:.15s;letter-spacing:.02em}
+  .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{filter:brightness(1.06)}
+  .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--border-strong)}
+  .btn:active{transform:translateY(1px)}
+
+  .appbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(9px);padding:13px 0 11px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--border);margin-bottom:16px}
+  .appbar .t b{font-size:.92rem;font-weight:800}
+  .appbar .t span{display:block;font-size:.68rem;color:var(--muted)}
+  .back{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:11px;padding:8px 13px;font-size:.82rem;font-weight:800;cursor:pointer;font-family:inherit}
+  .back:hover{border-color:var(--border-strong)}
+
+  .hero{background:var(--grad);border-radius:14px;padding:13px 15px;color:#fff;box-shadow:0 6px 16px rgba(13,148,136,.22);margin-bottom:11px}
+  .hero .rd{display:flex;align-items:baseline;gap:5px}
+  .hero .rd .lb2{font-size:.72rem;font-weight:800;opacity:.92;margin-right:2px}
+  .hero .rd .big{font-size:1.5rem;font-weight:800;line-height:1}
+  .hero .rd .u{font-size:.85rem;font-weight:800;opacity:.9}
+  .hbar{height:5px;background:rgba(255,255,255,.28);border-radius:99px;margin-top:9px;overflow:hidden}
+  .hbar>i{display:block;height:100%;background:#fff;border-radius:99px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+  .hnote{font-size:.68rem;opacity:.9;margin-left:auto;text-align:right;line-height:1.4}
+  .stat2{display:flex;gap:10px;margin-bottom:11px}
+  .stat2 .s{flex:1;padding:11px 13px}
+  .stat2 .lab{font-size:.66rem;color:var(--muted);margin-bottom:3px}
+  .stat2 .val{font-size:1.2rem;font-weight:800;line-height:1}
+  .stat2 .val small{font-size:.8rem;color:var(--muted);font-weight:700}
+
+  .seclabel{font-size:.74rem;letter-spacing:.02em;color:var(--muted);font-weight:800;margin:22px 4px 11px;display:flex;justify-content:space-between;align-items:baseline}
+  .seclabel .r{font-size:.7rem;color:var(--faint);font-weight:600}
+
+  .dom{margin-bottom:12px}
+  .domhd{display:flex;align-items:center;gap:11px;padding:4px 6px 9px}
+  .domhd .code{flex:none;width:30px;height:30px;border-radius:9px;background:var(--accent-wash);color:var(--accent-ink);font-weight:800;display:grid;place-items:center;font-size:.9rem}
+  .domhd .nm{font-weight:800;font-size:.92rem}
+  .domhd .pbar{flex:1;height:6px;background:var(--surface-3);border-radius:99px;overflow:hidden;max-width:110px;margin-left:auto}
+  .domhd .pbar>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .5s}
+  .domhd .pct{font-size:.72rem;color:var(--muted);font-weight:700;width:34px;text-align:right}
+  .topic{display:flex;align-items:center;gap:11px;padding:11px 13px;margin-bottom:7px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+  .topic .stbtn{flex:none;width:26px;height:26px;border-radius:8px;border:none;display:grid;place-items:center;font-weight:900;font-size:.8rem;font-family:inherit}
+  .st-done{background:var(--accent);color:#fff}
+  .st-partial{background:var(--gold-bg);color:var(--gold);border:1.5px solid var(--gold)}
+  .st-todo{background:var(--surface-3);color:var(--todo)}
+  .topic .nm{flex:1;min-width:0}
+  .topic .nm .tt{font-weight:700;font-size:.86rem;line-height:1.35}
+  .topic .nm .sub{font-size:.68rem;color:var(--faint);margin-top:2px}
+  .warnb{font-size:.6rem;font-weight:800;color:var(--gold);background:var(--gold-bg);border-radius:99px;padding:2px 7px;margin-left:6px;white-space:nowrap;vertical-align:1px}
+  .topic .go{flex:none;border:1px solid var(--border);background:var(--surface-2);color:var(--accent-ink);border-radius:9px;padding:7px 11px;font-size:.74rem;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .topic .go:hover{border-color:var(--accent)}
+  .topic .go.soon{color:var(--faint);cursor:default;background:transparent}
+
+  .tools{display:flex;gap:10px;margin-top:18px}
+  .tools .btn{flex:1;padding:12px;font-size:.84rem}
+  .foot{text-align:center;color:var(--faint);font-size:.73rem;margin-top:20px;line-height:1.7}
+
+  .qbar{height:5px;border-radius:99px;background:var(--surface-3);overflow:hidden;margin-bottom:15px}
+  .qbar>i{display:block;height:100%;width:0;background:var(--grad);border-radius:99px;transition:width .35s cubic-bezier(.2,.8,.2,1)}
+  .map{border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .map .mhd{display:flex;align-items:center;justify-content:space-between;background:var(--grad);color:#fff;padding:9px 13px}
+  .map .mhd .cap{font-size:.62rem;letter-spacing:.06em;opacity:.9;font-weight:800}
+  .map .mhd .field{font-size:.66rem;font-weight:800;background:rgba(255,255,255,.18);padding:3px 9px;border-radius:99px}
+  .arow{display:flex;align-items:center;gap:10px;padding:9px 13px;border-top:1px solid var(--border);background:var(--surface);transition:.3s}
+  .arow:first-of-type{border-top:none}
+  .arow .axl{flex:none;width:74px;font-size:.62rem;color:var(--muted);font-weight:800;line-height:1.25;display:flex;gap:4px;align-items:center}
+  .arow .terms{display:flex;flex-wrap:wrap;gap:5px}
+  .arow .term{font-size:.7rem;background:transparent;border:1px solid var(--border);border-radius:7px;padding:3px 8px;color:var(--faint);transition:.2s}
+  .arow .term.on{border:1.5px solid var(--accent);color:var(--accent-ink);font-weight:700}
+  .arow.cur{background:var(--accent-wash)}
+  .arow.cur .axl{color:var(--accent-ink)}
+  .arow.cur .axl::before{content:"★";font-size:.68rem}
+  .relbox{border:1px solid var(--border);border-radius:14px;padding:12px 13px;background:var(--surface-2)}
+  .relbox .cap{font-size:.62rem;letter-spacing:.06em;color:var(--muted);font-weight:800;display:flex;justify-content:space-between;gap:8px}
+  .relbox .field{color:var(--accent-ink)}
+  .relbox .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .relbox .chip{font-size:.72rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 9px}
+  .ctxtoggle{display:flex;align-items:center;gap:8px;width:100%;background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:12px;padding:11px 13px;font-family:inherit;font-size:.8rem;font-weight:800;color:var(--muted);cursor:pointer;margin:16px 0 0;transition:.15s}
+  .ctxtoggle:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .ctxtoggle .chev{margin-left:auto;transition:transform .25s;font-size:.7rem}
+  .ctxtoggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+  #ctxBody{margin-top:10px}
+  .tdef{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+
+  .qwrap{padding:20px}
+  .qhead{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+  .qnum{font-size:.76rem;color:var(--muted);font-weight:800}
+  .hardtag{font-size:.62rem;font-weight:800;color:var(--gold);background:var(--gold-bg);border-radius:99px;padding:2px 8px}
+  .timer{margin-left:auto;font-size:.72rem;color:var(--faint);display:flex;align-items:center;gap:5px}
+  .timer .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  .qtext{font-size:1.1rem;line-height:1.6;font-weight:700;margin:0 0 18px;text-wrap:pretty}
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1.5px solid var(--border-strong);border-radius:12px;padding:13px 14px;font-size:.95rem;line-height:1.5;color:var(--text);cursor:pointer;font-family:inherit;transition:.15s;min-height:50px}
+  .opt:hover:not(:disabled){border-color:var(--accent)}
+  .opt:disabled{cursor:default}
+  .opt .key{flex:none;width:25px;height:25px;border-radius:7px;background:var(--surface-3);color:var(--muted);font-weight:800;font-size:.84rem;display:grid;place-items:center;transition:.15s}
+  .opt .lab{flex:1;padding-top:1px}
+  .opt .mark{flex:none;align-self:center;font-weight:900}
+  .opt.correct{border-color:var(--correct-bd);background:var(--correct-bg)}.opt.correct .key{background:var(--correct);color:#fff}.opt.correct .mark{color:var(--correct)}
+  .opt.wrong{border-color:var(--wrong-bd);background:var(--wrong-bg)}.opt.wrong .key{background:var(--wrong);color:#fff}.opt.wrong .mark{color:var(--wrong)}
+  .opt.sel{border-color:var(--accent);background:var(--accent-wash)}.opt.sel .key{background:var(--accent);color:#fff}
+  .explain{margin-top:15px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);padding:14px 15px;font-size:.88rem;line-height:1.65}
+  .explain .lead{font-weight:800;margin-bottom:5px;font-size:.82rem}
+  .explain.ok .lead{color:var(--correct)}.explain.ng .lead{color:var(--wrong)}
+  .explain b{color:var(--accent-ink)}
+  .gloss{margin-top:9px;padding-top:8px;border-top:1px dashed var(--border);font-size:.72rem;color:var(--muted);line-height:1.7}
+  .gloss b{color:var(--accent-ink);font-weight:700}
+  .navrow{margin-top:16px}
+
+  .result{padding:26px 20px}
+  .score-ring{text-align:center;margin:4px 0 16px}
+  .score-ring .big{font-size:2.9rem;font-weight:800;line-height:1}
+  .score-ring .big small{font-size:1.25rem;color:var(--muted);font-weight:700}
+  .score-ring .sub{color:var(--muted);font-size:.88rem}
+  .verdict{text-align:center;font-weight:800;font-size:1.02rem;padding:10px;border-radius:11px;margin-bottom:16px}
+  .verdict.pass{background:var(--correct-bg);color:var(--correct);border:1px solid var(--correct-bd)}
+  .verdict.fail{background:var(--wrong-bg);color:var(--wrong);border:1px solid var(--wrong-bd)}
+  .review h3{font-size:.78rem;color:var(--muted);margin:18px 0 10px;font-weight:800}
+  .ritem{border:1px solid var(--border);border-left:3px solid var(--wrong);border-radius:10px;padding:12px 13px;margin-bottom:9px;background:var(--surface-2)}
+  .ritem .q{font-weight:600;font-size:.88rem;margin-bottom:6px}
+  .ritem .a{font-size:.8rem;color:var(--muted)}.ritem .a b{color:var(--correct)}
+  .allright{text-align:center;color:var(--muted);padding:6px 0;font-size:.9rem}
+  .btns2{display:flex;gap:10px;margin-top:20px}.btns2 .btn{flex:1}
+
+  .axref{padding:6px 2px}
+  .axcard{padding:15px 16px;margin-bottom:11px}
+  .axcard .an{font-weight:800;font-size:.98rem;color:var(--accent-ink);margin-bottom:3px}
+  .axcard .ad{font-size:.75rem;color:var(--muted);margin-bottom:9px}
+  .axcard .gl{font-size:.64rem;font-weight:800;color:var(--muted);margin:11px 0 5px;letter-spacing:.02em}
+  .axcard .gl:first-of-type{margin-top:2px}
+  .axcard .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .axcard .chip{font-size:.74rem;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:4px 9px;transition:.2s}
+  .axcard .chip.on{border:1.5px solid var(--accent);color:var(--accent-ink);font-weight:700;background:transparent}
+  .axcard .chip.focus{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:800}
+  #axDetail{position:sticky;top:62px;z-index:6;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin:0 2px 12px;box-shadow:var(--shadow);font-size:.84rem;line-height:1.7}
+  #axDetail .cap{font-size:.62rem;color:var(--muted);font-weight:800;letter-spacing:.05em;margin-bottom:2px}
+  #axDetail b{color:var(--accent-ink)}
+  .fn{font-size:.72rem;color:var(--accent-ink);background:var(--accent-wash);border-radius:7px;padding:5px 9px;margin-top:5px;line-height:1.55;display:inline-block}
+
+  .modal{position:fixed;inset:0;background:rgba(8,20,16,.5);display:grid;place-items:center;z-index:50;padding:18px}
+  .modal .box{background:var(--surface);border-radius:16px;padding:18px;max-width:460px;width:100%;box-shadow:var(--shadow)}
+  .modal h3{margin:0 0 4px;font-size:1.05rem}
+  .modal p{margin:0 0 11px;font-size:.82rem;color:var(--muted)}
+  .modal textarea{width:100%;height:110px;border:1px solid var(--border);border-radius:10px;padding:10px;font-family:ui-monospace,monospace;font-size:.7rem;background:var(--surface-2);color:var(--text);resize:vertical}
+  .modal .mrow{display:flex;gap:9px;margin-top:11px}.modal .mrow .btn{flex:1;padding:11px;font-size:.85rem}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}.timer .dot{animation:none}}
+</style>
+
+<div class="wrap">
+  <header class="appbar">
+    <div class="t"><b>生成AIパスポート 学習アプリ</b><span id="subtitle">2026年2月シラバス対応</span></div>
+    <button class="back hidden" id="homeBtn">← ホーム</button>
+  </header>
+
+  <!-- HOME -->
+  <main id="home">
+    <section class="hero">
+      <div class="rd">
+        <span class="lb2">合格到達度</span>
+        <span class="big" id="readyPct">0</span><span class="u">%</span>
+        <span class="hnote" id="hnote"></span>
+      </div>
+      <div class="hbar"><i id="hbar"></i></div>
+    </section>
+
+    <div class="stat2">
+      <div class="s card"><div class="lab">⏱ 累計学習時間</div><div class="val mono" id="totalTime">0<small>分</small></div></div>
+      <div class="s card"><div class="lab">🎯 合格まで あと</div><div class="val mono" id="remainTime">—</div></div>
+    </div>
+
+    <div class="card hidden" id="noticeCard" style="padding:13px 15px;margin-bottom:12px;border-color:var(--gold)">
+      <div style="font-size:.8rem;line-height:1.6"><b style="color:var(--gold)">⚠ お知らせ</b><br>
+      以前の「難易度：応用のみ」設定が残っていたため、一部の問題だけで進捗が判定されていました。<b>難易度の絞り込みを廃止</b>し、全問が出題されるよう修正しました。正確に測り直すため<b>スコアと進捗のみリセット</b>しています（学習時間と間違いノートはそのままです）。</div>
+      <button class="btn btn-ghost" id="noticeOk" style="padding:9px;font-size:.8rem;margin-top:9px">わかりました</button>
+    </div>
+
+    <div class="card hidden" id="resumeCard" style="padding:14px 16px;margin-bottom:12px;border-color:var(--accent)">
+      <div style="display:flex;align-items:center;gap:9px">
+        <span style="font-size:1.1rem">⏸</span>
+        <div style="flex:1;min-width:0">
+          <b id="resumeTitle" style="font-size:.9rem"></b>
+          <div id="resumeSub" style="font-size:.7rem;color:var(--muted)"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:10px">
+        <button class="btn btn-ghost" id="resumeDiscard" style="padding:10px;font-size:.8rem;flex:1">破棄</button>
+        <button class="btn btn-primary" id="resumeBtn" style="padding:10px;font-size:.8rem;flex:2">▶ 続きから再開</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="jumpBtn" style="padding:13px;font-size:.88rem">▶ 未着手のトピックへ</button>
+
+    <div class="card" style="padding:15px 16px;margin-top:12px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+        <span style="font-size:1.1rem">📝</span><b style="font-size:.94rem">模擬試験</b>
+        <span style="margin-left:auto;font-size:.68rem;color:var(--muted)" id="mockPool"></span>
+      </div>
+      <div style="display:flex;gap:9px">
+        <button class="btn btn-ghost" id="mock20" style="flex:1;padding:11px;font-size:.82rem">20問で腕試し</button>
+        <button class="btn btn-primary" id="mock40" style="flex:1;padding:11px;font-size:.82rem">40問で本番演習</button>
+      </div>
+    </div>
+
+    <div class="card" style="padding:15px 16px;margin-top:12px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+        <span style="font-size:1.1rem">🔁</span><b style="font-size:.94rem">間違いノート</b>
+        <span style="margin-left:auto;font-size:.68rem;color:var(--muted)" id="wrongMeta">0問</span>
+      </div>
+      <button class="btn btn-ghost" id="wrongBtn" style="padding:11px;font-size:.84rem">間違えた問題だけもう一度解く</button>
+    </div>
+
+    <div class="card" style="padding:15px 16px;margin-top:12px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+        <span style="font-size:1.1rem">🧭</span><b style="font-size:.94rem">6軸リファレンス</b>
+      </div>
+      <button class="btn btn-ghost" id="axrefBtn" style="padding:11px;font-size:.84rem">6軸リファレンスを開く</button>
+    </div>
+
+    <div class="seclabel">カリキュラム <span class="r" id="ratio"></span></div>
+    <div id="tree"></div>
+
+    <div class="tools">
+      <button class="btn btn-ghost" id="dataBtn">↔ 引き継ぎ（バックアップ）</button>
+    </div>
+    <p class="foot">状態は<b>自動判定</b>：演習を始めると <b>◐着手</b>、80%以上で <b>✓完了</b>。<br><b>⚠</b> はまだ克服できていない間違いがある印（正解しても間違いノートには残ります）。<br>学習時間は解答中のみ自動計測。中断しても<b>途中から再開</b>できます。</p>
+    <div class="card" style="padding:13px 15px;margin-top:14px">
+      <div style="font-size:.7rem;color:var(--muted);line-height:1.75">
+        <b style="color:var(--text)">このアプリについて</b><br>
+        本アプリは<b>非公式の学習用ツール</b>です。生成AIパスポート試験を主催する一般社団法人生成AI活用普及協会（GUGA）とは<b>一切関係ありません</b>。<br>
+        収録問題は公式の過去問ではなく、<b>公開シラバス（2026年2月適用）に基づく独自作成</b>です。内容の正確性・合格を保証するものではありません。受験要項は必ず公式サイトでご確認ください。<br>
+        学習記録（時間・スコア・間違いノート）は<b>お使いの端末内にのみ保存</b>され、外部に送信されません。アクセス解析・広告・Cookieによる追跡も行っていません。
+      </div>
+    </div>
+  </main>
+
+  <!-- QUIZ -->
+  <main id="quiz" class="hidden">
+    <div class="qbar"><i id="qbarfill"></i></div>
+    <section class="card qwrap">
+      <div class="qhead"><span class="qnum mono" id="qnum">Q1</span><span id="hardTag"></span>
+        <span class="timer"><span class="dot"></span><span class="mono" id="sessTime">0:00</span></span></div>
+      <p class="qtext" id="qtext"></p>
+      <div class="opts" id="opts"></div>
+      <div id="explainWrap"></div>
+      <div id="ctx"></div>
+      <div class="navrow hidden" id="navrow"><button class="btn btn-primary" id="nextBtn">次の問題へ</button></div>
+    </section>
+  </main>
+
+  <!-- RESULT -->
+  <main id="result" class="hidden">
+    <section class="card result">
+      <div style="text-align:center;font-size:.72rem;color:var(--muted);font-weight:800" id="rtopic"></div>
+      <div class="score-ring"><div class="big"><span id="rscore">0</span><small> / <span id="rtot">0</span></small></div>
+        <div class="sub">正答率 <span class="mono" id="rpct">0</span>%</div></div>
+      <div class="verdict" id="verdict"></div>
+      <div class="review" id="review"></div>
+      <div class="btns2"><button class="btn btn-ghost" id="retryWrong">間違いだけ再挑戦</button><button class="btn btn-primary" id="toHome">ホームへ</button></div>
+    </section>
+  </main>
+
+  <!-- 6-AXIS REFERENCE -->
+  <main id="axref" class="hidden">
+    <div id="axDetail"></div>
+    <div class="axref" id="axrefBody"></div>
+    <p class="foot">ワードをタップすると関連ワードがハイライトされます。</p>
+  </main>
+</div>
+
+<div id="modalHost"></div>
+
+<script>
+/* ============ AXES ============ */
+const AXES=["学習方法","タスク","モデル性質","アーキテクチャ","具体モデル","学習上の問題"];
+const AXDESC=[
+  "どうやって学ぶか（教師あり/なし・強化・RLHF 等）",
+  "何をする／何を出すか（分類・回帰・生成 等）",
+  "どんな特徴・ふるまいか（マルチモーダル・アライメント 等）",
+  "どんな構造か（CNN・RNN・Transformer 等）。※生成の“しかた”は軸3、学習の“方式”は軸1",
+  "実在の製品・モデル名（GPT・Claude 等）と、代表的なアルゴリズム",
+  "つまずき・弱点と、その対策（過学習↔正則化 等）"
+];
+/* 各軸は粒度ごとにグループ分け。グループ名で上位/下位・種類の違いを明示する */
+const AXGROUPS=[
+  [ {g:"学習パラダイム（何を手がかりに学ぶか）",terms:["教師あり学習","教師なし学習","半教師あり学習","自己教師あり","強化学習"]},
+    {g:"学習済みモデルの知識を転用する（転移学習）",terms:["転移学習","プレトレーニング","ファインチューニング"]},
+    {g:"対話向けの仕上げ工程（RLHFは強化学習を使う）",terms:["インストラクションチューニング","RLHF"]},
+    {g:"GANの学習方式",terms:["敵対的学習"]} ],
+  [ {g:"基本のタスク（何を出力するか）",terms:["分類","回帰","クラスタリング","次元削減","生成"]},
+    {g:"画像分野の応用",terms:["画像認識","物体検出"]},
+    {g:"言語分野の応用",terms:["翻訳・要約"]} ],
+  [ {g:"扱える情報の種類",terms:["マルチモーダル"]},
+    {g:"人の意図との整合（アライメント→その現れが指示追従）",terms:["アライメント","指示追従"]},
+    {g:"モデルの内部（規模と要素）",terms:["パラメータ","特徴量・重み"]},
+    {g:"生成のしかたと出力の制御",terms:["自己回帰モデル","Temperature/Top-p"]},
+    {g:"性能の指標",terms:["汎化性能"]},
+    {g:"AI研究全体の区分（個々のモデルの性質ではない）",terms:["弱いAI/強いAI"]} ],
+  [ {g:"すべての基礎",terms:["ニューラルネットワーク"]},
+    {g:"画像向け",terms:["CNN"]},
+    {g:"系列（時系列・文章）向け ＝ RNN系",terms:["RNN","LSTM"]},
+    {g:"生成向け",terms:["GAN","VAE","拡散モデル"]},
+    {g:"現在の主流と、その中核機構",terms:["Transformer","Attention"]} ],
+  [ {g:"生成AI（対話・文章）／OpenAI系",terms:["ChatGPT/GPT系","GPT-4o","InstructGPT"]},
+    {g:"生成AI（対話・文章）／他社",terms:["Claude","Gemini","Copilot","Llama"]},
+    {g:"生成AI（画像・動画）",terms:["DALL·E","Sora"]},
+    {g:"言語理解（生成ではない）",terms:["BERT"]},
+    {g:"強化学習の代表例",terms:["AlphaGo"]},
+    {g:"代表的なアルゴリズム（モデルではなく手法）",terms:["k-means","PCA"]} ],
+  [ {g:"汎化の問題",terms:["過学習","未学習"]},
+    {g:"過学習への対策（問題ではなく打ち手）",terms:["正則化","ドロップアウト"]},
+    {g:"系列モデル特有の問題（RNN系）",terms:["勾配消失","長期依存"]},
+    {g:"GAN特有の問題",terms:["モード崩壊"]},
+    {g:"生成AIで起きる問題",terms:["ハルシネーション","迎合"]},
+    {g:"データ起因の問題（AI全般・生成AI特有ではない）",terms:["バイアス"]} ],
+];
+const AXTERMS=AXGROUPS.map(gs=>gs.reduce((a,g)=>a.concat(g.terms),[]));
+
+/* ============ 略語辞典 ============ */
+const GLOSSARY={
+  "AGI":"Artificial General Intelligence（汎用人工知能・強いAI）",
+  "ANI":"Artificial Narrow Intelligence（特化型人工知能・弱いAI）",
+  "AI":"Artificial Intelligence（人工知能）",
+  "LLM":"Large Language Model（大規模言語モデル）",
+  "NLP":"Natural Language Processing（自然言語処理）",
+  "CNN":"Convolutional Neural Network（畳み込みニューラルネットワーク）",
+  "RNN":"Recurrent Neural Network（回帰型ニューラルネットワーク）",
+  "LSTM":"Long Short-Term Memory（長・短期記憶）",
+  "GAN":"Generative Adversarial Network（敵対的生成ネットワーク）",
+  "VAE":"Variational Autoencoder（変分自己符号化器）",
+  "GPT":"Generative Pre-trained Transformer（生成的事前学習Transformer）",
+  "BERT":"Bidirectional Encoder Representations from Transformers",
+  "RLHF":"Reinforcement Learning from Human Feedback（人間のフィードバックによる強化学習）",
+  "SFT":"Supervised Fine-Tuning（教師ありファインチューニング）",
+  "PPO":"Proximal Policy Optimization（近接方策最適化）",
+  "RAG":"Retrieval-Augmented Generation（検索拡張生成）",
+  "MCP":"Model Context Protocol（AIと外部ツールをつなぐ標準規格）",
+  "PCA":"Principal Component Analysis（主成分分析）",
+  "GPU":"Graphics Processing Unit（画像処理装置）",
+  "CPU":"Central Processing Unit（中央処理装置）",
+  "OCR":"Optical Character Recognition（光学文字認識）",
+  "SMS":"Short Message Service（ショートメッセージ）",
+  "DDoS":"Distributed Denial of Service（分散型サービス妨害攻撃）",
+  "SQL":"Structured Query Language（データベース操作言語）",
+  "IBT":"Internet Based Testing（インターネット経由の受験方式）",
+};
+function glossHtml(q){
+  const txt=q.q+" "+q.opts.join(" ")+" "+q.ex,found=[];
+  for(const k in GLOSSARY){if(new RegExp("\\b"+k+"\\b").test(txt))found.push('<b>'+k+'</b>＝'+GLOSSARY[k]);}
+  return found.length?'<div class="gloss">📖 '+found.join('<br>')+'</div>':"";
+}
+
+/* ============ 用語辞典 ============ */
+const TERMDICT={
+  "ダートマス会議":"1956年に開かれた会議。ジョン・マッカーシーらが「人工知能（Artificial Intelligence）」という言葉を初めて用いたとされ、AI研究の出発点とされる。",
+  "マッカーシー":"ジョン・マッカーシー。「人工知能の父」の一人で、1956年のダートマス会議でAIという言葉を提唱した。",
+  "AIの定義":"AIには世界共通の確定した定義がない。「人間のような知的な処理を行う技術」と広く捉えられており、定義が定まっていないこと自体が試験のポイント。",
+  "弱いAI/強いAI":"弱いAI（ANI）は特定作業に特化した現行のAI。強いAI（AGI）は人間のように汎用的に考えられるAIで、まだ実現していない。",
+  "特化型":"特定のタスク専用という意味。現在のAI（弱いAI・ANI）の性質。",
+  "第一次ブーム":"1950〜60年代のAIブーム。「探索と推論」が中心だったが、現実の複雑な問題に対応できず冬の時代を迎えた。",
+  "探索と推論":"場合分けを木構造でたどって答えを探す初期AIの中心技術。迷路やパズルには強いが、現実問題には無力だった。",
+  "AIの冬":"AIへの期待が失望に変わり、研究資金や関心が減った停滞期。第一次・第二次ブームの後に2度訪れた。",
+  "第二次ブーム":"1980年代のAIブーム。専門家の知識をルール化したエキスパートシステムが主役。知識記述の限界で再び冬へ。",
+  "エキスパートシステム":"専門家の知識を「もし〜なら〜」というルールとして蓄え、推論する仕組み。医療診断などに応用された。",
+  "知識ベース":"エキスパートシステムが参照する、ルール化された知識の蓄積のこと。",
+  "シンギュラリティ":"AIが人類の知能を超える転換点（技術的特異点）。ヴァーナー・ヴィンジらが提唱し、カーツワイルが2045年頃と予測した。",
+  "2045年問題":"レイ・カーツワイルがシンギュラリティの到来を2045年頃と予測したことによる呼び名。",
+  "AI効果":"AIが何かを達成すると「それは単なる自動処理で、知能ではない」と過小評価してしまう心理現象。",
+  "推論":"学習済みモデルに新しい入力を与え、予測・生成などの答えを出す段階。",
+  "学習":"データからパターンを獲得し、モデルのパラメータを調整して作り上げる段階。",
+  "GPU":"本来は画像処理用の装置だが、行列計算を大量に並列処理できるためディープラーニングの学習に不可欠。",
+  "並列処理":"多数の計算を同時に実行すること。GPUやTransformerの強み。",
+  "並列演算":"多数の計算を同時に実行すること。GPUの得意分野。",
+  "行列演算":"数値の表（行列）同士の計算。ニューラルネットワークの計算の中身はほぼこれ。",
+  "量子コンピュータ":"量子の重ね合わせ等を利用する新原理の計算機。特定の計算での高速化が期待される。GPUとは原理がまったく異なる。",
+  "重ね合わせ":"量子ビットが0と1の状態を同時に持てる性質。量子コンピュータの高速性の源泉。",
+  "教師あり学習":"正解ラベル付きデータで入力と出力の対応を学ぶ学習方法。代表タスクは分類と回帰。",
+  "教師なし学習":"ラベルなしデータから構造やパターンを見つける学習方法。代表はクラスタリングと次元削減。",
+  "強化学習":"行動への報酬を手がかりに、試行錯誤で最適な方策を学ぶ学習方法。AlphaGoやロボット制御が代表例。",
+  "半教師あり学習":"少量のラベル付きデータと大量のラベルなしデータを併用する学習方法。",
+  "転移学習":"学習済みモデルの知識を別の関連タスクへ再利用する考え方。代表的な実装は、事前学習（プレトレーニング）済みモデルをファインチューニングして転用すること。プレトレーニングは通常、モデル提供元が済ませている。少ないデータでも高精度を得やすい。",
+  "ファインチューニング":"学習済みモデルを追加データで微調整すること。特定の用途に合わせて性能を高める。",
+  "RLHF":"人間のフィードバックによる強化学習。SFT（教師あり微調整）→報酬モデル→PPOの3段階で、モデルを人の好みに合わせる。ChatGPT誕生の鍵。学習の位置づけは事前学習後の「仕上げ工程」だが、学習パラダイムとしては強化学習の一種であり、教師ありファインチューニングとは仕組みが異なる。",
+  "SFT→報酬モデル→PPO":"RLHFの3ステップ。SFT（教師あり微調整）→報酬モデルの学習→PPO（強化学習）の順に行う。",
+  "インストラクションチューニング":"指示と模範回答のペアで学習させ、指示追従能力を高める手法。InstructGPTの核。",
+  "プレトレーニング":"大量データによる事前学習。基盤となる知識・言語能力を獲得する段階。",
+  "自己教師あり":"データ自身から擬似的な正解（次の単語など）を作って学ぶ方法。LLMの事前学習で使われる。",
+  "敵対的学習":"生成器と識別器を競わせるGANの学習方法。",
+  "分類":"データをあらかじめ決めたカテゴリに振り分けるタスク。迷惑メール判定など。教師あり学習の代表。",
+  "回帰":"連続する数値を予測するタスク。住宅価格や気温、売上金額の予測など。教師あり学習の代表。",
+  "クラスタリング":"ラベルなしでデータを似た者同士のグループに分けるタスク。k-meansが代表。教師なし学習。",
+  "次元削減":"情報をできるだけ保ちつつ変数を減らすタスク。PCA（主成分分析）が代表。教師なし学習。",
+  "生成":"新しいテキスト・画像・音声などを作り出すタスク。生成AIの中核。",
+  "画像認識":"画像に写っているものを識別するタスク。CNNが得意とする。",
+  "物体検出":"画像の中の物体の位置と種類を同時に見つけ出すタスク。",
+  "翻訳・要約":"言語を変換・圧縮する自然言語処理タスク。生成AIの得意分野。",
+  "マルチモーダル":"テキスト・画像・音声など複数の種類の情報をまとめて扱える性質。GPT-4oの「o」はomni（全方位）の意。",
+  "アライメント":"AIの出力を人間の意図や価値観に合わせること。RLHFの目的。",
+  "指示追従":"ユーザーの指示に忠実に従う能力。インストラクションチューニングで強化される。",
+  "パラメータ":"モデル内部の調整可能な数値（重みなど）。パラメータ数（規模）は設計時に決まり、その値が学習で調整される。数が多いほど表現力が高い傾向があり、LLMの規模の目安になる。",
+  "Temperature/Top-p":"出力のランダム性・多様性を制御する設定値。高いほど多様、低いほど堅実で安定した出力になる。",
+  "特徴量・重み":"特徴量はデータの特徴を数値化したもの。重みは各入力の重要度で、学習によって調整される。",
+  "汎化性能":"未知のデータにも正しく対応できる能力。過学習するとこれが下がる。",
+  "ニューラルネットワーク":"脳の神経回路を模した計算モデル。人工ニューロン（ノード）を層状につなぎ、重みを学習で調整する。",
+  "CNN":"畳み込みニューラルネットワーク。畳み込み（特徴抽出）とプーリング（縮小）で画像認識に強い。",
+  "RNN":"回帰型ニューラルネットワーク。前の出力を次の入力へ渡して系列データを扱う。長期依存と勾配消失が弱点。",
+  "LSTM":"長・短期記憶。ゲート機構で情報の保持と忘却を制御し、RNNの長期依存・勾配消失問題を緩和した。",
+  "GAN":"敵対的生成ネットワーク。偽データを作る生成器と、真偽を見抜く識別器を競わせて本物らしいデータを生成する。",
+  "VAE":"変分自己符号化器。データを潜在空間に圧縮（エンコード）し、そこから新しいデータを生成（デコード）する。",
+  "Transformer":"Self-Attentionで系列を並列処理する、現在のLLMの基盤アーキテクチャ。2017年の論文で登場。",
+  "Attention":"文中の語同士の関連度を重み付けして文脈を捉える仕組み。Transformerの中核。",
+  "自己回帰モデル":"直前までの出力を使って次の1語を予測する方式。GPTのテキスト生成はこの繰り返し。",
+  "畳み込み":"フィルタを使って画像から局所的な特徴を抽出するCNNの処理。",
+  "プーリング":"特徴マップを縮小して位置ずれに強くするCNNの処理。",
+  "ChatGPT/GPT系":"OpenAIの対話型生成AI。GPT-3→3.5→4→4oと進化し、RLHFで対話能力を獲得した。",
+  "GPT-4o":"OpenAIのマルチモーダルモデル。「o」はomni（全方位）の意で、テキスト・画像・音声を統合的に扱える。",
+  "Claude":"Anthropicが開発した対話型生成AI。安全性を重視した設計で知られる。",
+  "Gemini":"Googleが開発したマルチモーダル生成AI。",
+  "Copilot":"Microsoftの生成AI。OfficeやGitHub（コード補完）などの業務ツールに統合されている。",
+  "Llama":"Metaが開発した大規模言語モデル。重みがオープンに公開され、自社環境でも動かせるのが特徴。",
+  "BERT":"Googleの言語モデル。文を双方向に読んで意味を理解するのが得意で、検索や分類に強い（生成は不得意）。",
+  "Sora":"OpenAIの動画生成AI。テキストから動画を作り出す。",
+  "DALL·E":"OpenAIの画像生成AI。テキストの指示から画像を作り出す。",
+  "InstructGPT":"指示追従を強化したGPT。インストラクションチューニングとRLHFを適用し、ChatGPTの土台となった。",
+  "k-means":"クラスタリングの代表的アルゴリズム。データをk個のグループに自動で分ける。",
+  "PCA":"主成分分析。データの情報をできるだけ保ちながら変数を減らす、次元削減の代表手法。",
+  "AlphaGo":"強化学習と深層学習を組み合わせ、人間のプロ棋士を破った囲碁AI。",
+  "過学習":"訓練データに適合しすぎて未知データに弱くなる現象。対策は正則化・ドロップアウト・データ増強。逆は未学習。",
+  "未学習":"アンダーフィッティング。モデルが単純すぎて訓練データにも十分適合できない状態。過学習の逆。",
+  "正則化":"モデルの複雑さに罰則を与えて過学習を抑える手法。データの尺度をそろえる「正規化」とは別物。",
+  "ドロップアウト":"学習時に一部のノードをランダムに無効化し、特定ノードへの依存を減らして過学習を抑える手法。",
+  "ハルシネーション":"事実に基づかない内容をもっともらしく生成してしまう現象。RAGでの根拠付けや人間の事実確認で対策する。",
+  "バイアス":"学習データの偏りが原因で、AIの出力に不公平・差別的な傾向が出ること。多様で代表性のあるデータで対策。",
+  "迎合":"sycophancy。ユーザーの意見に過度に同調してしまう傾向。事実より同意を優先してしまう問題。",
+  "勾配消失":"深い層ほど学習の信号が弱まり、学習が進まなくなる問題。RNNで顕著に起き、LSTMがこれを緩和した。",
+  "長期依存":"系列データで、離れた位置の情報同士の関係のこと。RNNはこれが苦手で、LSTMやTransformerが改善した。",
+  "検索拡張生成":"RAG。外部の知識データベース等から関連情報を検索し、それを根拠に回答を生成する仕組み。最新情報・社内文書に対応でき、ハルシネーションを抑える。",
+  "チャンク":"RAGで文書を検索しやすい大きさに分割した断片のこと。",
+  "ベクトルデータベース":"文章の意味を数値ベクトルとして保存し、意味が近いものを検索できるデータベース。RAGの中核部品。",
+  "類似検索":"意味の近さ（ベクトル間の距離）でデータを探す検索方式。キーワード一致でなく意味で探せる。",
+  "AIエージェント":"目標に向けてタスクを分解し、ツールを使いながら「計画→実行→観察」を繰り返して自律的に処理を進めるAI。",
+  "タスク分解":"大きな目標を実行可能な手順に分けること。AIエージェントの計画段階。",
+  "MCP":"Model Context Protocol。AIと外部のツール・データソースをつなぐための標準規格。",
+  "GenSpark":"AIエージェント系ツールの一例。",
+  "Manus":"AIエージェント系ツールの一例。",
+  "Skywork AI":"AIエージェント系ツールの一例。",
+  "ディープフェイク":"深層学習で作る、本物そっくりの偽の映像・音声。GANなどで生成され、なりすましや偽情報拡散のリスクがある。",
+  "深層偽造":"ディープフェイクの日本語訳。深層学習による本物そっくりの偽コンテンツ。",
+  "偽情報":"ディスインフォメーション。意図的に流される虚偽の情報。ディープフェイクにより巧妙化している。",
+  "個人情報":"氏名・生年月日の組み合わせなど、特定の個人を識別できる情報。個人識別符号を含む。",
+  "個人識別符号":"マイナンバーや指紋データなど、それ単体で特定の個人を識別できる符号。個人情報に含まれる。",
+  "要配慮個人情報":"人種・信条・病歴・犯罪歴など、差別や偏見につながりうる機微な情報。取得には原則本人の同意が必要。",
+  "匿名加工情報":"個人を復元・再識別できないように加工した情報。一定のルールの下で本人同意なく利活用できる。",
+  "仮名加工情報":"他の情報と照合しない限り個人を識別できないように加工した情報。匿名加工より簡便だが扱いに制限がある。",
+  "マスキング":"データの一部を隠す・置き換える加工。仮名加工・匿名加工の手段のひとつ。",
+  "個人情報保護委員会":"個人情報保護法を所管し事業者を監督する行政機関。内閣府の外局として置かれ独立性が高い。監督は指導・助言→勧告→命令と段階的に行う。",
+  "内閣府の外局":"内閣府に属しつつ独立して職務を行う機関。個人情報保護委員会もこれに当たる。",
+  "5000人要件の撤廃":"かつて「5000人分以下の個人情報しか扱わない事業者は適用外」という要件があったが撤廃され、現在は原則すべての事業者が対象。",
+  "知的財産権":"著作権・特許権・商標権・意匠権など、創作や発明を保護する権利の総称。",
+  "著作権":"創作的な表現を保護する権利。申請不要で、創作した時点で自動的に発生する。",
+  "特許権":"発明を保護する知的財産権。出願・審査を経て登録される。",
+  "商標権":"商品やサービスの名前・ロゴを保護する知的財産権。",
+  "意匠権":"製品のデザインを保護する知的財産権。",
+  "創作的関与":"AI生成物が著作物と認められるための鍵。人間がAIを道具として使い、創作意図と創作的寄与があること。",
+  "依拠性":"既存の著作物を参考にした（知っていた）こと。類似性とともに著作権侵害の判断基準になる。",
+  "類似性":"既存の著作物と表現が似ていること。依拠性とともに著作権侵害の判断基準になる。",
+  "AI新法":"「人工知能関連技術の研究開発及び活用の推進に関する法律」。2025年6月公布。罰則中心ではなく、推進のための理念・方針を定める性格。",
+  "AI社会原則":"人間中心のAI社会原則。3つの基本理念（人間の尊厳・多様性と包摂・持続可能性）と、人間中心・公平性・透明性などの原則からなる。",
+  "事業者ガイドライン":"AI事業者ガイドライン。AI開発者・AI提供者・AI利用者の3主体に向けた実務指針。",
+  "人間中心":"AI社会原則の中核。AIは人間の能力を拡張する道具であり、判断の主体はあくまで人間という考え方。",
+  "人間の尊厳":"AI社会原則の基本理念のひとつ。AIの利活用で人間の尊厳が尊重される社会を目指す。",
+  "多様性と包摂":"AI社会原則の基本理念のひとつ。多様な背景を持つ人々が幸せを追求できる社会。",
+  "持続可能性":"AI社会原則の基本理念のひとつ。AIの活用で持続可能な社会を実現すること。",
+  "公平性":"不当な差別をしないこと。AIのバイアス対策と直結する原則。",
+  "透明性":"AIの判断過程や利用について説明できる状態にすること。アカウンタビリティとセットで問われる。",
+  "アカウンタビリティ":"説明責任。AIの判断や影響について、関係者に説明できるようにしておく責務。",
+  "安全性":"AIが人の生命・身体・財産に危害を及ぼさないようにする原則。",
+  "フィッシング":"正規のサイトやメールを装って、ID・パスワードなどの認証情報を盗み取る詐欺。",
+  "スピアフィッシング":"特定の個人や組織を狙い、業務内容などを調べ込んで仕掛ける標的型フィッシング。",
+  "スミッシング":"SMS（ショートメッセージ）を悪用したフィッシング。音声通話を使うものはヴィッシング。",
+  "ランサムウェア":"データを暗号化し、復旧と引き換えに身代金（ransom）を要求する不正プログラム。",
+  "ソーシャルエンジニアリング":"技術ではなく、人の心理や行動の隙をついて情報を盗む手口の総称。",
+  "Zero-Shot":"例をいっさい与えず、指示だけで回答させるプロンプト技法。",
+  "Few-Shot":"少数の例（ショット）を示して、出力の形式や傾向を誘導するプロンプト技法。",
+  "プロンプトエンジニアリング":"望む出力を引き出せるよう、指示文（プロンプト）の与え方を工夫する取り組み。",
+  "ディープラーニング":"ニューラルネットワークの層を深く重ねた学習手法。第三次AIブームと生成AIを支える基盤技術。",
+  "RAG":"検索拡張生成。外部の知識データベース等から関連情報を検索し、それを根拠に回答を生成する仕組み。最新情報や社内文書に対応でき、ハルシネーションを抑えられる。",
+  "正規化":"データの尺度（スケール）をそろえる前処理。過学習を抑える「正則化」とは名前が似ているが全く別の処理で、試験で混同されやすい。",
+  "生成器":"GANで、識別器をだますような本物らしい偽データを作り出す側（Generator）。",
+  "識別器":"GANで、データが本物か偽物かを見分ける側（Discriminator）。生成器との役割の取り違えが頻出。",
+  "ヴィッシング":"音声通話（Voice）を悪用したフィッシング。SMSを使うものはスミッシング。",
+  "AI開発者":"AI事業者ガイドラインの3主体のひとつ。AIモデルやシステムを開発する立場。",
+  "AI提供者":"AI事業者ガイドラインの3主体のひとつ。開発されたAIを組み込み、サービスとして提供する立場。",
+  "AI利用者":"AI事業者ガイドラインの3主体のひとつ。提供されたAIを業務などで利用する立場。",
+  "ノーフリーランチ定理":"あらゆる問題で最良となる万能のアルゴリズムは存在しないという定理。問題に応じて手法を選ぶ必要がある。",
+  "モード崩壊":"GANの学習が偏り、生成器が似たようなデータばかり作ってしまう失敗現象。GAN特有の学習の難しさ。",
+  "拡散モデル":"ノイズから少しずつノイズを取り除いて画像などを生成するモデル。現在の画像・動画生成AI（DALL·E・Sora等）の主流で、かつてのGANに代わって広く使われている。",
+  /* --- 第1章 --- */
+  "ルールベース":"人があらかじめ「もし〜なら〜」という規則を与えて動かす仕組み。データから規則を学ぶ機械学習と対をなす、AIに知能をもたらす2つの仕組みの一方。",
+  "機械学習":"データからパターン（規則）を自動で学び取る仕組み。人が規則を与えるルールベースと対をなす。",
+  "AIの4つのレベル":"AIを能力で分けた区分。①単純な制御プログラム ②古典的なAI（多数の規則で振る舞う） ③機械学習を取り入れたAI ④ディープラーニングを取り入れたAI。",
+  "ビッグデータ":"インターネットの普及で蓄積された巨大なデータ群。ディープラーニングとともに第三次AIブームを牽引した。",
+  "第三次ブーム":"2000年代以降のAIブーム。ビッグデータの蓄積とディープラーニングの発展により到来し、現在の生成AIへつながる。",
+  "学習済みモデル":"学習を終えて、推論に使える状態になったモデル。これを別タスクへ再利用するのが転移学習。",
+  /* --- 第2章 --- */
+  "ボルツマンマシン":"確率的に動くニューラルネットワークの初期モデル。生成モデルの源流とされ、制約付きボルツマンマシン（RBM）はディープラーニング発展のきっかけになった。",
+  "位置エンコーディング":"Transformerで、単語の「順番」の情報を埋め込む仕組み。Attentionは並列処理のため語順を保持できず、これで補う。",
+  "MLM":"Masked Language Model（マスク言語モデル）。文の一部を隠して当てさせるBERTの学習方式。",
+  "NSP":"Next Sentence Prediction（次文予測）。2つの文が連続するかを当てさせるBERTの学習方式。",
+  "RoBERTa":"BERTの学習方法を改良した派生モデル。NSPを廃し、より大量のデータで学習する。",
+  "ALBERT":"BERTのパラメータを共有・削減して軽量化した派生モデル。",
+  "o系推論モデル":"GPT-o1・o3・o4など、答える前に段階的に考える（推論する）ことを重視したOpenAIのモデル系列。",
+  "GPT-5":"OpenAIのGPT系列の最新世代モデル。",
+  "GPTs":"ChatGPT上で、目的別に設定した自分専用のGPTを作成・共有できる機能。",
+  "Code Interpreter":"ChatGPTがコードを実行してデータ分析やグラフ作成を行う機能。",
+  "Operator":"OpenAIが提供する、ブラウザを操作して調べ物や手続きを代行するエージェント型サービス。",
+  "Codex":"OpenAIのコーディング支援AI。プログラムの生成・修正を行う。",
+  "Image Generation":"ChatGPTに統合された画像生成機能。",
+  /* --- 第3章 --- */
+  "Veo3":"Googleの動画生成AI。テキストから映像を生成する。",
+  "データ拡張":"画像を回転・反転・切り取りするなどして学習データを水増しする手法（augmentation）。データ不足と過学習の対策になる。",
+  "リマスタリング":"古い画像や音声をAIで高画質・高音質に再生成すること。",
+  "画像の前処理":"学習の前に画像のサイズをそろえる（リサイズ）、画素値の尺度をそろえる（正規化）などの準備作業。",
+  /* --- 第4章：権利 --- */
+  "肖像権":"自分の容ぼうを無断で撮影・公表されない権利。知的財産権とは別の人格的な権利。",
+  "パブリシティ権":"著名人の氏名や肖像が持つ経済的価値（顧客吸引力）を保護する権利。",
+  "不正競争防止法":"営業秘密の侵害や他社の商品表示の模倣など、不正な競争行為を規制する法律。",
+  "営業秘密":"秘密として管理され、有用で、公然と知られていない情報。不正競争防止法で保護される。",
+  "限定提供データ":"特定の相手に限って提供される、電磁的に管理されたデータ。不正競争防止法で保護される。",
+  "名誉毀損":"事実を示して他人の社会的評価を低下させること。生成AIによる虚偽情報の発信でも問題になりうる。",
+  /* --- 第4章：セキュリティ --- */
+  "マルウェア":"利用者に害を与える不正なソフトウェアの総称。ウイルス・ワーム・ランサムウェア・スパイウェアなどを含む。",
+  "アンチウイルスソフト":"マルウェアを検知・駆除するソフトウェア。定義ファイルの更新が重要。",
+  "ベイト攻撃":"「無料」「限定」などの餌（bait）で興味を引き、不正なファイルやサイトへ誘導する手口。",
+  "プレテキスト":"もっともらしい口実（作り話）を用意して信用させ、情報を聞き出す手口。",
+  "悪意のあるQRコード":"偽サイトへ誘導するQRコード。貼り替えや印刷物への偽装で使われる。",
+  "情報リテラシー":"情報を正しく探し、真偽を見極め、適切に発信・活用する能力。",
+  "デジタル市民権":"デジタル社会の一員として、責任を持って技術を使い他者を尊重する考え方。",
+  "AIガバナンス":"AIのリスクを管理しながら活用するための組織的な仕組み。環境・リスク分析、ゴール設定、AIマネジメントシステムの構築・運用からなる。",
+  /* --- 第5章 --- */
+  "ハイパーパラメータ":"学習や生成の前に人が設定する値。生成時のTemperatureやTop-pもこれに当たる。",
+  "n-gramモデル":"直前のn個の単語の並びから次の語を予測する、統計的な言語モデル。LLM以前の基礎的な手法。",
+  "プロンプトの4要素":"効果的なプロンプトの構成要素。Instruction（指示）・Context（文脈）・Input Data（入力データ）・Output Indicator（出力形式の指定）。",
+};
+/* 正式名称（略語の展開・英語の正式表記・法律の正式名称） */
+const FULLNAME={
+  "教師あり学習":"Supervised Learning","教師なし学習":"Unsupervised Learning","半教師あり学習":"Semi-Supervised Learning",
+  "自己教師あり":"自己教師あり学習（Self-Supervised Learning）","強化学習":"Reinforcement Learning（RL）",
+  "転移学習":"Transfer Learning","プレトレーニング":"事前学習（Pre-training）","ファインチューニング":"微調整（Fine-tuning）",
+  "インストラクションチューニング":"指示チューニング（Instruction Tuning）",
+  "RLHF":"Reinforcement Learning from Human Feedback（人間のフィードバックによる強化学習）",
+  "SFT→報酬モデル→PPO":"SFT＝Supervised Fine-Tuning／PPO＝Proximal Policy Optimization",
+  "敵対的学習":"Adversarial Training",
+  "分類":"Classification","回帰":"Regression","クラスタリング":"Clustering","次元削減":"Dimensionality Reduction",
+  "生成":"Generation","画像認識":"Image Recognition","物体検出":"Object Detection","翻訳・要約":"Translation / Summarization",
+  "マルチモーダル":"Multimodal","アライメント":"Alignment","指示追従":"Instruction Following","パラメータ":"Parameter",
+  "Temperature/Top-p":"Temperature／Top-p サンプリング（生成時のハイパーパラメータ）",
+  "特徴量・重み":"特徴量＝Feature／重み＝Weight","汎化性能":"Generalization Performance",
+  "弱いAI/強いAI":"弱いAI＝ANI（Artificial Narrow Intelligence）／強いAI＝AGI（Artificial General Intelligence）",
+  "自己回帰モデル":"Autoregressive Model",
+  "ニューラルネットワーク":"Neural Network（NN）","CNN":"Convolutional Neural Network（畳み込みニューラルネットワーク）",
+  "RNN":"Recurrent Neural Network（回帰型ニューラルネットワーク）","LSTM":"Long Short-Term Memory（長・短期記憶）",
+  "GAN":"Generative Adversarial Network（敵対的生成ネットワーク）","VAE":"Variational Autoencoder（変分自己符号化器）",
+  "拡散モデル":"Diffusion Model","Transformer":"Transformer（論文「Attention Is All You Need」2017年）",
+  "Attention":"Attention機構（注意機構）／Self-Attention＝自己注意","ディープラーニング":"深層学習（Deep Learning）",
+  "生成器":"Generator","識別器":"Discriminator","畳み込み":"Convolution","プーリング":"Pooling",
+  "ChatGPT/GPT系":"GPT＝Generative Pre-trained Transformer（生成的事前学習Transformer）",
+  "GPT":"Generative Pre-trained Transformer","GPT-4o":"「o」は omni（全方位）＝マルチモーダルの意（OpenAI）",
+  "InstructGPT":"InstructGPT（OpenAI・ChatGPTの土台）","Claude":"Claude（Anthropic）","Gemini":"Gemini（Google）",
+  "Copilot":"Copilot（Microsoft）","Llama":"Llama（Meta）","BERT":"Bidirectional Encoder Representations from Transformers（Google）",
+  "DALL·E":"DALL·E（OpenAI・画像生成）","Sora":"Sora（OpenAI・動画生成）","AlphaGo":"AlphaGo（DeepMind）",
+  "k-means":"k平均法（k-means clustering）","PCA":"Principal Component Analysis（主成分分析）",
+  "過学習":"オーバーフィッティング（Overfitting）","未学習":"アンダーフィッティング（Underfitting）",
+  "正則化":"Regularization","ドロップアウト":"Dropout","ハルシネーション":"Hallucination（幻覚）","バイアス":"Bias（偏り）",
+  "迎合":"Sycophancy（追従・おもねり）","勾配消失":"勾配消失問題（Vanishing Gradient Problem）",
+  "長期依存":"長期依存関係（Long-term Dependency）","モード崩壊":"Mode Collapse",
+  "検索拡張生成":"RAG＝Retrieval-Augmented Generation（検索拡張生成）","RAG":"Retrieval-Augmented Generation（検索拡張生成）",
+  "チャンク":"Chunk（文書の分割断片）","ベクトルデータベース":"Vector Database","類似検索":"類似度検索（Similarity Search）",
+  "AIエージェント":"AI Agent","MCP":"Model Context Protocol","タスク分解":"Task Decomposition",
+  "ディープフェイク":"Deepfake（深層偽造）","偽情報":"ディスインフォメーション（Disinformation）",
+  "GPU":"Graphics Processing Unit（画像処理装置）","量子コンピュータ":"Quantum Computer",
+  "シンギュラリティ":"技術的特異点（Technological Singularity）","AI効果":"AI Effect",
+  "ノーフリーランチ定理":"No Free Lunch Theorem",
+  "AI新法":"人工知能関連技術の研究開発及び活用の推進に関する法律（2025年6月公布）",
+  "AI社会原則":"人間中心のAI社会原則（内閣府）","事業者ガイドライン":"AI事業者ガイドライン（総務省・経済産業省）",
+  "個人情報保護委員会":"個人情報保護委員会（内閣府の外局）","個人識別符号":"個人識別符号（個人情報保護法 第2条）",
+  "要配慮個人情報":"要配慮個人情報（個人情報保護法）","匿名加工情報":"匿名加工情報（個人情報保護法）",
+  "仮名加工情報":"仮名加工情報（個人情報保護法）","知的財産権":"知的財産権（著作権・特許権・商標権・意匠権 等）",
+  "アカウンタビリティ":"Accountability（説明責任）","公平性":"Fairness","透明性":"Transparency",
+  "フィッシング":"Phishing","スピアフィッシング":"Spear Phishing（標的型フィッシング）",
+  "スミッシング":"Smishing（SMS＋Phishing）","ヴィッシング":"Vishing（Voice＋Phishing）",
+  "ランサムウェア":"Ransomware（ransom＝身代金）","ソーシャルエンジニアリング":"Social Engineering",
+  "Zero-Shot":"Zero-Shot Prompting（例示なし）","Few-Shot":"Few-Shot Prompting（少数の例示）",
+  "プロンプトエンジニアリング":"Prompt Engineering","ダートマス会議":"Dartmouth Conference（1956年）",
+  "エキスパートシステム":"Expert System","探索と推論":"Search and Reasoning",
+  "ルールベース":"Rule-based（規則ベース）","機械学習":"Machine Learning（ML）","ビッグデータ":"Big Data",
+  "学習済みモデル":"Trained Model / Pre-trained Model","AIの4つのレベル":"AIのレベル1〜4（制御→古典的AI→機械学習→ディープラーニング）",
+  "ボルツマンマシン":"Boltzmann Machine／制約付き＝RBM（Restricted Boltzmann Machine）",
+  "位置エンコーディング":"Positional Encoding","MLM":"Masked Language Model（マスク言語モデル）",
+  "NSP":"Next Sentence Prediction（次文予測）","RoBERTa":"Robustly Optimized BERT Approach（BERT派生）",
+  "ALBERT":"A Lite BERT（軽量版BERT）","o系推論モデル":"GPT-o1／o3／o4（OpenAIの推論重視モデル）",
+  "GPT-5":"GPT-5（OpenAI）","GPTs":"GPTs（ChatGPTの自作GPT機能）","Code Interpreter":"Code Interpreter（コード実行機能）",
+  "Operator":"Operator（OpenAI・ブラウザ操作エージェント）","Codex":"Codex（OpenAI・コーディング支援）",
+  "Image Generation":"Image Generation（ChatGPT統合の画像生成）","Veo3":"Veo 3（Google・動画生成AI）",
+  "データ拡張":"データ拡張（Data Augmentation）","リマスタリング":"Remastering","画像の前処理":"リサイズ（Resize）・正規化（Normalization）",
+  "肖像権":"肖像権（人格権の一種）","パブリシティ権":"Right of Publicity","不正競争防止法":"不正競争防止法（営業秘密・限定提供データを保護）",
+  "営業秘密":"営業秘密（秘密管理性・有用性・非公知性の3要件）","限定提供データ":"限定提供データ（不正競争防止法）",
+  "名誉毀損":"名誉毀損（刑法・民法）","マルウェア":"Malware（malicious software）","アンチウイルスソフト":"Anti-virus Software",
+  "ベイト攻撃":"Baiting（bait＝餌）","プレテキスト":"Pretexting（口実を用いる手口）","悪意のあるQRコード":"QRコード詐欺（Quishing）",
+  "情報リテラシー":"Information Literacy","デジタル市民権":"Digital Citizenship","AIガバナンス":"AI Governance",
+  "ハイパーパラメータ":"Hyperparameter（人が事前に設定する値）","n-gramモデル":"n-gram Model",
+  "プロンプトの4要素":"Instruction／Context／Input Data／Output Indicator",
+};
+function fullNameOf(k){return FULLNAME[k]||GLOSSARY[k]||null;}
+function fullNameHtml(k){const f=fullNameOf(k);return f?'<div class="fn">正式名称：'+f+'</div>':"";}
+const TERMKEYS=Object.keys(TERMDICT).sort((a,b)=>b.length-a.length);
+function lookupTerm(t){
+  if(TERMDICT[t])return t;
+  for(const k of TERMKEYS){if(t.indexOf(k)!==-1||k.indexOf(t)!==-1)return k;}
+  return null;
+}
+function chipHtml(x,base,on){
+  const k=lookupTerm(x);
+  return '<span class="'+base+(on?' on':'')+(k?' tdef':'')+'"'+(k?' data-term="'+k+'"':'')+'>'+x+'</span>';
+}
+
+/* ============ 問題データ ============ */
+const T=(focus,field,title,q,opts,a,ex,map)=>({focus,field,title,q,opts,a,ex,map});
+const R=(field,title,q,opts,a,ex,related)=>({field,title,q,opts,a,ex,related});
+const H=o=>{o.hard=true;return o;};
+
+const Q={};
+Q.A1=[
+  R("分野A AIの基礎","AIの定義","「人工知能（AI）」という言葉の由来として最も適切なものはどれですか？",["1956年のダートマス会議で、研究者たちによって初めて用いられたとされる。","産業革命期に、機械の自動制御を指す言葉として生まれた。","2000年代にスマートフォンの普及とともに提唱された。","ロボットの身体そのものを指す専門用語である。"],0,"1956年の<b>ダートマス会議</b>でマッカーシーらが「人工知能」の語を初めて用いたとされます。",["ダートマス会議","マッカーシー","AIの定義"]),
+  R("分野A AIの基礎","AIの種類","AIの分類における「弱いAI（ANI）」の説明として最も適切なものはどれですか？",["特定の作業に特化して能力を発揮する、現在実用化されているAIである。","あらゆる課題へ汎用的に対応できる、実現済みのAIである。","人類の知能をはるかに超えた超知能を指す。","物理的な身体を持つロボット全般を指す。"],0,"特定タスクに特化した現行AIが<b>弱いAI（ANI）</b>。汎用的に考える<b>強いAI（AGI）</b>は未実現です。",["弱いAI/強いAI","特化型"]),
+  R("分野A AIの基礎","AIの歴史","第一次AIブームを支えた中心的な技術の説明として最も適切なものはどれですか？",["迷路やパズルを解く「探索と推論」が中心であった。","専門家の知識をルール化した「エキスパートシステム」が中心であった。","大量データを用いた「ディープラーニング」が中心であった。","検索結果を踏まえて回答する「RAG」が中心であった。"],0,"第一次は「<b>探索と推論</b>」中心。現実の複雑な問題に対応できず冬を迎えました。",["第一次ブーム","探索と推論","AIの冬"]),
+  R("分野A AIの基礎","AIの歴史","第二次AIブームを代表する技術の説明として最も適切なものはどれですか？",["専門家の知識をルールとして与え、推論させる仕組みが中心であった。","迷路やパズルを解く探索と推論が初めて登場した。","Transformerを用いた生成AIが実用化された。","外部データベースを検索して回答する仕組みが主流であった。"],0,"第二次の主役は<b>エキスパートシステム</b>。知識記述の難しさから再び冬を迎えました。",["第二次ブーム","エキスパートシステム","知識ベース"]),
+  R("分野A AIの基礎","シンギュラリティ","シンギュラリティ（技術的特異点）に関する記述として、最も不適切なものはどれですか？",["AIが人間の仕事を一つでも自動化した瞬間を指す言葉である。","レイ・カーツワイルは2045年頃に到来すると予測した。","「2045年問題」とも呼ばれる。","ヴァーナー・ヴィンジらが提唱した概念である。"],0,"<b>シンギュラリティ</b>はAIが人類の知能を超える転換点。AIの達成を過小評価する心理が<b>AI効果</b>で、これとは別物です。",["シンギュラリティ","2045年問題","AI効果"]),
+  H(R("分野A AIの基礎","AI効果","かつて高度とされた技術も、実現して普及すると「これは単なる自動処理で知能とは言えない」と見なされがちである。この現象を表す語として最も適切なものはどれですか？",["AI効果","シンギュラリティ","ハルシネーション","ノーフリーランチ定理"],0,"達成された途端にAIを過小評価してしまう心理を<b>AI効果</b>と呼びます。シンギュラリティは知能を超える転換点で別概念です。",["AI効果","シンギュラリティ"])),
+  R("分野A AIの基礎","第三次AIブーム","現在まで続く第三次AIブームを牽引した要因の組み合わせとして最も適切なものはどれですか？",["ビッグデータの蓄積とディープラーニングの発展。","探索と推論の確立。","エキスパートシステムと知識ベースの普及。","ルールベースと制御工学の融合。"],0,"<b>第三次AIブーム</b>は<b>ビッグデータ</b>の蓄積と<b>ディープラーニング</b>の発展で到来し、生成AIへつながります。",["第三次ブーム","ビッグデータ","ディープラーニング"]),
+  R("分野A AIの基礎","知能をもたらす仕組み","AIに知能をもたらす2つの仕組みの組み合わせとして最も適切なものはどれですか？",["人が規則を与える「ルールベース」と、データから規則を学ぶ「機械学習」。","「探索」と「推論」。","「教師あり学習」と「教師なし学習」。","「強いAI」と「弱いAI」。"],0,"AIに知能をもたらす仕組みは、人が規則を与える<b>ルールベース</b>と、データから規則を学ぶ<b>機械学習</b>の2つに大別されます。",["ルールベース","機械学習","エキスパートシステム"]),
+  R("分野A AIの基礎","AIの4つのレベル","AIを能力で区分した「AIの4つのレベル」の説明として最も適切なものはどれですか？",["①単純な制御プログラム ②古典的なAI ③機械学習を取り入れたAI ④ディープラーニングを取り入れたAI、の4段階である。","①弱いAI ②強いAI ③超知能 ④汎用AI、の4段階である。","①教師あり ②教師なし ③強化 ④半教師あり、の4段階である。","①第一次 ②第二次 ③第三次 ④第四次ブーム、の4段階である。"],0,"<b>AIの4つのレベル</b>は、単純な制御→古典的なAI→機械学習→ディープラーニング、と能力で分けた区分です。",["AIの4つのレベル","ルールベース","機械学習","ディープラーニング"]),
+  R("分野A AIの基礎","学習済みモデル","「学習済みモデル」の説明として最も適切なものはどれですか？",["学習を終えて推論に使える状態になったモデル。別タスクへの再利用（転移学習）の元にもなる。","これから学習を始める前の空のモデルである。","人が規則を書き込んだルールの集合である。","学習に使うデータそのものである。"],0,"<b>学習済みモデル</b>は学習を終えたモデル。これを再利用するのが転移学習です。",["学習済みモデル","転移学習","推論"]),
+];
+Q.A2=[
+  R("分野A AIの基礎","推論","機械学習における「推論」の説明として最も適切なものはどれですか？",["学習済みのモデルを用いて、新しい入力に対する答えを出す処理である。","大量のデータからパターンを獲得し、モデルを作り上げる処理である。","データを一定の尺度にそろえる前処理である。","モデルの誤りを人手で修正する作業である。"],0,"<b>推論</b>は学習済みモデルを使って新規入力に答えを出す段階です。",["推論","学習"]),
+  R("分野A AIの基礎","学習","機械学習における「学習」の説明として最も適切なものはどれですか？",["大量のデータからパターンを獲得し、モデルのパラメータを調整する工程である。","完成したモデルを使って予測結果を出力する工程である。","出力結果を利用者に表示する処理である。","データを暗号化して保存する処理である。"],0,"<b>学習</b>はデータからパターンを獲得しモデルを構築する工程です。",["学習","パラメータ"]),
+  R("分野A AIの基礎","学習と推論","学習と推論の関係の説明として最も適切なものはどれですか？",["学習でモデルを作り、推論でそのモデルを使って予測する。","推論でモデルを作り、学習でそれを使って予測する。","学習と推論は全く同じ処理を指す。","推論を終えてから改めて学習を行う必要がある。"],0,"<b>学習でモデルを作り、推論で使う</b>という関係です。",["学習","推論"]),
+];
+Q.A3=[
+  R("分野A AIの基礎","GPU","ディープラーニングの計算に広く用いられる装置の説明として最も適切なものはどれですか？",["多数の計算を並列に処理できるGPUが広く用いられる。","逐次処理に特化したSSDが用いられる。","記憶専用の装置であるHDDが計算を担う。","量子コンピュータだけが唯一の選択肢である。"],0,"<b>GPU</b>は多数の演算を並列処理でき、ディープラーニングの学習に適します。",["GPU","並列演算"]),
+  R("分野A AIの基礎","GPUが向く理由","GPUがAIの学習に適している理由として最も適切なものはどれですか？",["行列演算などの膨大な計算を並列に処理できるから。","消費電力がゼロで発熱しないから。","記憶容量が非常に大きいから。","一つの計算だけを極めて速く逐次処理できるから。"],0,"行列演算など<b>膨大な計算を並列</b>にこなせる点がGPUの強みです。",["並列処理","行列演算","GPU"]),
+  R("分野A AIの基礎","量子コンピュータ","量子コンピュータの説明として最も適切なものはどれですか？",["重ね合わせなどの量子力学的原理を用い、特定の計算の高速化が期待される計算機である。","GPUを多数束ねた従来型の高速計算機である。","画像認識に特化した専用チップである。","データ保存のための大容量ストレージである。"],0,"<b>量子コンピュータ</b>は量子力学的原理を用い、特定問題の高速化が期待されます。GPUとは原理が異なります。",["量子コンピュータ","重ね合わせ"]),
+];
+Q.B1=[
+  T(0,"分野B 機械学習","教師あり学習","機械学習における「教師あり学習」の説明として最も適切なものはどれですか？",["正解ラベルの付いたデータを用いて、入力と出力の対応関係を学習する。","ラベルのないデータから、データ同士の類似性やパターンを見つけ出す。","行動への報酬を手がかりに、試行錯誤しながら最適な方策を学ぶ。","少量のラベル付きデータと大量のラベルなしデータを併用して学習する。"],0,"<b>教師あり学習</b>はラベル付きデータで入力と出力の関係を学びます。",[["教師あり学習"],["分類","回帰"],["特徴量・重み"],["ニューラルネットワーク"],["—"],["過学習"]]),
+  T(0,"分野B 機械学習","代表タスク","教師あり学習の代表的なタスクの組み合わせとして最も適切なものはどれですか？",["データをカテゴリに振り分ける「分類」と、連続値を予測する「回帰」。","ラベルなしデータをまとめる「クラスタリング」と「次元削減」。","新しいデータを作る「生成」と、経路を探す「探索」。","文章を短くする「要約」と「翻訳」のみ。"],0,"教師あり学習の代表タスクは<b>分類と回帰</b>です。",[["教師あり学習"],["分類","回帰"],["汎化性能"],["ニューラルネットワーク"],["—"],["過学習"]]),
+  T(0,"分野B 機械学習","必要なもの","教師あり学習を行うために必ず必要となるものの説明として最も適切なものはどれですか？",["各データに付けられた正解ラベル（教師データ）が必要である。","行動に対して与えられる報酬が必要である。","ラベルは一切不要で、データだけがあればよい。","量子コンピュータが必須である。"],0,"教師あり学習には<b>正解ラベル（教師データ）</b>が必要で、その準備コストが課題になります。",[["教師あり学習"],["分類","回帰"],["特徴量・重み"],["ニューラルネットワーク"],["—"],["過学習"]]),
+];
+Q.B2=[
+  T(0,"分野B 機械学習","教師なし学習","「教師なし学習」の説明として最も適切なものはどれですか？",["正解ラベルのないデータから、構造やパターンを見つけ出す。","正解ラベル付きのデータで入力と出力の関係を学ぶ。","報酬を最大化するように行動を学習する。","学習済みモデルを別のタスクに応用する。"],0,"<b>教師なし学習</b>はラベルなしデータから構造を発見します。",[["教師なし学習"],["クラスタリング","次元削減"],["—"],["—"],["k-means","PCA"],["—"]]),
+  T(0,"分野B 機械学習","k-means","教師なし学習の代表的手法「k-means」の説明として最も適切なものはどれですか？",["データを似た性質ごとにグループ分け（クラスタリング）する手法である。","連続した数値を予測する回帰の手法である。","人間のフィードバックでモデルを調整する手法である。","画像から特徴を抽出する畳み込み処理である。"],0,"<b>k-means</b>はクラスタリングの代表的アルゴリズムです。",[["教師なし学習"],["クラスタリング"],["—"],["—"],["k-means"],["—"]]),
+  T(0,"分野B 機械学習","PCA","「PCA（主成分分析）」の説明として最も適切なものはどれですか？",["情報をできるだけ保ちつつ変数を減らす、次元削減の代表的手法である。","データをグループに分けるクラスタリング手法である。","過学習を防ぐための正則化手法である。","例を提示して回答させるプロンプト技法である。"],0,"<b>PCA（主成分分析）</b>は次元削減の代表手法で、可視化や前処理に使われます。",[["教師なし学習"],["次元削減"],["—"],["—"],["PCA"],["—"]]),
+  H(T(0,"分野B 機械学習","k-meansとPCAの区別","教師なし学習の2手法について、担うタスクの組み合わせとして最も適切なものはどれですか？",["k-meansはクラスタリング、PCAは次元削減を担う。","k-meansは次元削減、PCAはクラスタリングを担う。","どちらも分類を担う。","どちらも回帰を担う。"],0,"同じ教師なし学習でもタスクが違います。<b>k-means＝クラスタリング（グループ分け）</b>、<b>PCA＝次元削減（変数を減らす）</b>。",[["教師なし学習"],["クラスタリング","次元削減"],["—"],["—"],["k-means","PCA"],["—"]])),
+];
+Q.B3=[
+  T(0,"分野B 機械学習","強化学習","「強化学習」の説明として最も適切なものはどれですか？",["行動に対する報酬を手がかりに、試行錯誤しながら最適な方策を学ぶ。","正解ラベル付きデータで入力と出力の関係を学ぶ。","ラベルのないデータからパターンを見つける。","変数を減らして次元を圧縮する。"],0,"<b>強化学習</b>は報酬を最大化するよう行動方針を学びます。",[["強化学習"],["—"],["—"],["—"],["AlphaGo"],["—"]]),
+  T(0,"分野B 機械学習","構成要素","強化学習の枠組みに含まれる要素の組み合わせとして最も適切なものはどれですか？",["エージェント・環境・報酬から構成される。","生成器と識別器から構成される。","エンコーダとデコーダから構成される。","チャンクとベクトルデータベースから構成される。"],0,"強化学習は<b>エージェント・環境・報酬</b>の相互作用で学習します。生成器と識別器はGANの構成要素です。",[["強化学習"],["—"],["—"],["—"],["AlphaGo"],["—"]]),
+  T(0,"分野B 機械学習","応用例","強化学習の応用例として最も適切なものはどれですか？",["囲碁AI（AlphaGo）やロボットの制御。","手書き数字の画像分類。","文書の要約のみ。","データの暗号化。"],0,"<b>囲碁AI（AlphaGo）やロボット制御</b>が代表的な応用例です。",[["強化学習"],["—"],["—"],["—"],["AlphaGo"],["—"]]),
+];
+Q.B4=[
+  T(1,"分野B 機械学習","回帰","機械学習のタスクのうち「回帰」の説明として最も適切なものはどれですか？",["住宅価格や気温のような連続した数値を予測する。","データをあらかじめ決めたカテゴリに振り分ける。","ラベルなしデータを似た者同士でグループ化する。","新しい画像や文章を生成する。"],0,"連続値の予測が<b>回帰</b>。カテゴリを当てるのは分類です。",[["教師あり学習"],["回帰"],["—"],["ニューラルネットワーク"],["—"],["過学習"]]),
+  T(1,"分野B 機械学習","分類","「分類」に当たるタスクの例として最も適切なものはどれですか？",["メールを「迷惑メール」か「通常メール」かに振り分ける。","明日の平均気温を数値で予測する。","顧客データを似た傾向のグループに自動でまとめる。","文章を要約して短くする。"],0,"カテゴリに振り分けるのが<b>分類</b>。連続値予測の回帰と対で覚えます。",[["教師あり学習"],["分類"],["—"],["ニューラルネットワーク"],["—"],["過学習"]]),
+  T(1,"分野B 機械学習","多クラス分類","「手書き数字が0〜9のどれかを当てる」問題のタスク区分の説明として最も適切なものはどれですか？",["10個のカテゴリのいずれかに振り分ける多クラス分類である。","連続した数値を予測する回帰である。","ラベルなしで行うクラスタリングである。","新しい数字画像を作り出す生成である。"],0,"0〜9のラベルに振り分けるので<b>多クラス分類</b>。連続値ではないため回帰ではありません。",[["教師あり学習"],["分類"],["—"],["CNN"],["—"],["過学習"]]),
+  T(1,"分野B 機械学習","クラスタリング","「クラスタリング」とその学習方法の組み合わせとして最も適切なものはどれですか？",["ラベルなしデータを似た性質でまとめる、教師なし学習である。","ラベル付きデータで振り分ける、教師あり学習である。","報酬で行動を学ぶ、強化学習である。","連続値を予測する、教師あり学習である。"],0,"<b>クラスタリング</b>はラベルなしを群にまとめる、<b>教師なし学習</b>の代表タスクです。",[["教師なし学習"],["クラスタリング"],["—"],["—"],["k-means"],["—"]]),
+  H(T(1,"分野B 機械学習","タスク選択（事例）","ある小売店が、過去の販売データから「来月の売上金額」を予測したいと考えています。取り組むべきタスクとして最も適切なものはどれですか？",["連続した数値を予測する回帰。","売れる／売れないの2択に振り分ける分類。","顧客を似た者同士でまとめるクラスタリング。","新しい商品画像を作る生成。"],0,"金額は<b>連続値</b>なので<b>回帰</b>です。「売れる／売れない」の判定なら分類になります。求める出力が数値かカテゴリかで見分けます。",[["教師あり学習"],["回帰"],["—"],["ニューラルネットワーク"],["—"],["過学習"]])),
+  H(T(1,"分野B 機械学習","タスク選択（事例2）","「大量の顧客アンケートを、事前にカテゴリを決めずに似た意見同士のグループへ自動的にまとめたい」という要望に最も適したタスクと学習方法はどれですか？",["クラスタリング（教師なし学習）","多クラス分類（教師あり学習）","回帰（教師あり学習）","強化学習"],0,"<b>事前にカテゴリを決めない</b>＝正解ラベルがないので<b>クラスタリング（教師なし学習）</b>。カテゴリが決まっているなら分類になります。",[["教師なし学習"],["クラスタリング"],["—"],["—"],["k-means"],["—"]])),
+];
+Q.B5=[
+  T(5,"分野B 機械学習","過学習","「過学習（オーバーフィッティング）」の説明として最も適切なものはどれですか？",["訓練データに適合しすぎて、未知のデータへの精度が下がる現象である。","モデルが単純すぎて訓練データにも適合できない現象である。","学習済みモデルを別タスクに応用することである。","変数を減らして次元を圧縮することである。"],0,"<b>過学習</b>は訓練データに過剰適合し汎化性能が落ちる現象です。",[["教師あり学習"],["分類","回帰"],["汎化性能"],["ニューラルネットワーク"],["—"],["過学習"]]),
+  T(5,"分野B 機械学習","過学習対策","過学習を防ぐための手法として、最も不適切なものはどれですか？",["わざと訓練データだけに合わせ込む。","正則化を行う。","ドロップアウトを用いる。","学習データを増やす。"],0,"対策は<b>正則化・ドロップアウト・データ増強</b>など。訓練データに合わせ込むのは過学習そのものです。",[["教師あり学習"],["分類","回帰"],["汎化性能"],["ニューラルネットワーク"],["—"],["過学習","正則化","ドロップアウト"]]),
+  T(5,"分野B 機械学習","ドロップアウト","「ドロップアウト」の説明として最も適切なものはどれですか？",["学習時に一部のノードをランダムに無効化し、過学習を抑える手法である。","モデルの複雑さに罰則を与える手法である。","データを似た者同士でグループ化する手法である。","画像の特徴を抽出する処理である。"],0,"<b>ドロップアウト</b>はノードをランダムに無効化し、特定ノードへの依存を減らします。",[["教師あり学習"],["—"],["汎化性能"],["ニューラルネットワーク"],["—"],["ドロップアウト","過学習"]]),
+  T(5,"分野B 機械学習","未学習","「未学習（アンダーフィッティング）」の説明として最も適切なものはどれですか？",["モデルが単純すぎて、訓練データにも十分適合できない状態である。","訓練データに適合しすぎて汎化性能が落ちた状態である。","学習済みモデルを再利用することである。","ノードをランダムに無効化することである。"],0,"<b>未学習</b>は表現力不足で訓練データにも適合できない状態。過学習の逆です。",[["教師あり学習"],["分類","回帰"],["—"],["ニューラルネットワーク"],["—"],["未学習","過学習"]]),
+  T(5,"分野B 機械学習","正則化","「正則化」の説明として最も適切なものはどれですか？",["モデルの複雑さに罰則を加えて、過学習を抑える手法の総称である。","データの尺度をそろえる前処理（正規化）のことである。","一部のノードを無効化する手法のことである。","入力を符号化して圧縮する処理のことである。"],0,"<b>正則化</b>は複雑さにペナルティを課して過学習を抑える手法。データの尺度をそろえる<b>正規化</b>とは別物です。",[["教師あり学習"],["—"],["汎化性能"],["ニューラルネットワーク"],["—"],["正則化","過学習"]]),
+  H(T(5,"分野B 機械学習","過学習の判別（事例）","あるモデルは訓練データで正答率98%だが、未知のテストデータでは60%だった。この状態の説明と対策の組み合わせとして最も適切なものはどれですか？",["過学習が起きており、正則化やドロップアウト、データ追加が対策となる。","未学習が起きており、モデルをさらに単純にすることが対策となる。","正常な状態であり、対策は不要である。","推論の失敗であり、学習をやめるべきである。"],0,"訓練データだけ高精度でテストが低い＝典型的な<b>過学習</b>。対策は<b>正則化・ドロップアウト・データ増強</b>です。両方低ければ未学習です。",[["教師あり学習"],["分類","回帰"],["汎化性能"],["ニューラルネットワーク"],["—"],["過学習","正則化","ドロップアウト"]])),
+];
+Q.C1=[
+  T(3,"分野C DL","CNN","主に画像認識で高い性能を発揮するアーキテクチャ「CNN」の説明として最も適切なものはどれですか？",["畳み込みにより画像の局所的な特徴を抽出する、画像認識に強いネットワークである。","前の出力を次に渡し、時系列データを扱うネットワークである。","生成器と識別器を競わせてデータを生成するネットワークである。","Attentionで系列を並列処理する言語モデルの基盤である。"],0,"<b>CNN</b>は畳み込みとプーリングで画像認識に強いネットワークです。",[["教師あり学習"],["画像認識","物体検出"],["—"],["CNN","畳み込み","プーリング"],["—"],["過学習"]]),
+  T(3,"分野C DL","畳み込み","CNNにおける「畳み込み（コンボリューション）」の説明として最も適切なものはどれですか？",["フィルタを用いて画像から局所的な特徴を抽出する処理である。","特徴マップを縮小して位置ずれに強くする処理である。","データの尺度をそろえる正規化の処理である。","文章を単語に分割するトークン化の処理である。"],0,"<b>畳み込み</b>はフィルタで画像の局所特徴を抽出します。縮小するのはプーリングです。",[["教師あり学習"],["画像認識"],["—"],["CNN","畳み込み"],["—"],["過学習"]]),
+  T(3,"分野C DL","プーリング","CNNにおける「プーリング」の説明として最も適切なものはどれですか？",["特徴マップを縮小し、位置のずれに対して頑健にする処理である。","フィルタで局所的な特徴を抽出する処理である。","一部のノードを無効化して過学習を抑える処理である。","入力を潜在ベクトルに符号化する処理である。"],0,"<b>プーリング</b>は特徴マップを圧縮し、位置ずれへの頑健性を高めます。",[["教師あり学習"],["画像認識"],["—"],["CNN","プーリング"],["—"],["過学習"]]),
+];
+Q.C2=[
+  T(3,"分野C DL","GAN","アーキテクチャ「GAN（敵対的生成ネットワーク）」の説明として最も適切なものはどれですか？",["生成器と識別器を競わせながら、本物らしいデータを生成するネットワークである。","畳み込みで画像の特徴を抽出するネットワークである。","ゲート機構で系列データを扱うネットワークである。","Attentionを用いた言語モデルの基盤である。"],0,"<b>GAN</b>は生成器と識別器を競わせて学習します。",[["敵対的学習"],["生成"],["—"],["GAN"],["—"],["—"]]),
+  T(3,"分野C DL","生成器","GANにおける「生成器（Generator）」の説明として最も適切なものはどれですか？",["識別器をだますような、本物らしい偽データを作り出す側である。","データが本物か偽物かを見分ける側である。","入力を潜在ベクトルに圧縮する側である。","潜在ベクトルから元データを復元する側である。"],0,"<b>生成器</b>が偽データを作り、<b>識別器</b>が真偽を見分けます。両者の競争で品質が上がります。",[["敵対的学習"],["生成"],["—"],["GAN"],["—"],["—"]]),
+  T(3,"分野C DL","GANの用途","GANの代表的な用途の説明として最も適切なものはどれですか？",["画像生成やディープフェイクなどに用いられる。","文章の要約に特化して用いられる。","表計算の自動化に用いられる。","データの暗号化に用いられる。"],0,"GANは<b>画像生成</b>や<b>ディープフェイク</b>などに用いられてきました。",[["敵対的学習"],["生成"],["—"],["GAN"],["—"],["ディープフェイク"]]),
+  H(T(3,"分野C DL","生成器と識別器の区別","GANにおいて、与えられたデータが本物か偽物かを判定する役割を担うのはどちらで、学習が進むと何が起きますか。最も適切なものはどれですか？",["識別器が判定を担い、両者の競争によって生成物の品質が上がっていく。","生成器が判定を担い、競争によって判定精度だけが上がる。","識別器が偽データを作り、生成器がそれを判定する。","どちらも判定は行わず、人間が毎回判定する。"],0,"判定は<b>識別器（Discriminator）</b>、偽データ作成は<b>生成器（Generator）</b>。役割が逆になる誤りが頻出です。競争により生成物の質が向上します。",[["敵対的学習"],["生成"],["—"],["GAN"],["—"],["—"]])),
+];
+Q.C3=[
+  T(3,"分野C DL","Transformer","現在の大規模言語モデルの基盤となっているアーキテクチャ「Transformer」の説明として最も適切なものはどれですか？",["Self-Attentionにより文脈を捉え、現在のLLMの基盤となっているネットワークである。","畳み込みで画像の特徴を抽出するネットワークである。","生成器と識別器を競わせる生成ネットワークである。","入力を潜在ベクトルに符号化する自己符号化器である。"],0,"<b>Transformer</b>はSelf-Attentionを用い、現在のLLMの基盤となっています。",[["自己教師あり","プレトレーニング"],["生成","翻訳・要約"],["—"],["Transformer","Attention"],["ChatGPT/GPT系","BERT"],["—"]]),
+  T(3,"分野C DL","Self-Attention","Transformerの中核である「Self-Attention（自己注意）」の説明として最も適切なものはどれですか？",["系列内の語同士の関連度を重み付けし、文脈を捉える仕組みである。","画像から局所的な特徴を抽出する仕組みである。","特徴マップを縮小する仕組みである。","データを似た者同士にまとめる仕組みである。"],0,"<b>Self-Attention</b>は系列内の語同士の関連を重み付けし、文脈を捉えます。",[["自己教師あり"],["生成"],["—"],["Transformer","Attention"],["ChatGPT/GPT系"],["—"]]),
+  T(3,"分野C DL","RNNとの比較","RNNと比べたTransformerの利点の説明として最も適切なものはどれですか？",["系列を並列に処理でき、長距離の依存関係も捉えやすい。","逐次処理しかできず、長文ほど高速になる。","記憶を一切持てず、直前の語しか使えない。","画像処理専用で、文章は扱えない。"],0,"<b>Transformer</b>は系列を並列処理でき、長距離の依存も捉えやすい点がRNNより優れます。",[["自己教師あり"],["翻訳・要約"],["—"],["Transformer","Attention"],["ChatGPT/GPT系"],["勾配消失"]]),
+  H(T(3,"分野C DL","アーキテクチャの選択（事例）","「長い文章の文脈を踏まえて自然な文章を生成するサービス」を作る場合、基盤として最も適したアーキテクチャと、その理由の組み合わせはどれですか？",["Transformer。Self-Attentionで長距離の依存関係を捉え、並列処理もできるため。","CNN。畳み込みで局所特徴を抽出できるため。","GAN。生成器と識別器を競わせられるため。","PCA。変数を減らして計算を軽くできるため。"],0,"長文の文脈理解と生成には<b>Transformer</b>。CNNは画像、GANは主に画像生成、PCAは次元削減で用途が異なります。",[["自己教師あり","プレトレーニング"],["生成","翻訳・要約"],["—"],["Transformer","Attention"],["ChatGPT/GPT系"],["ハルシネーション"]])),
+  T(3,"分野C DL","位置エンコーディング","Transformerにおける「位置エンコーディング」の説明として最も適切なものはどれですか？",["単語の順番（位置）の情報をモデルに与える仕組み。並列処理では語順が失われるために必要となる。","単語同士の関連度を重み付けする仕組みである。","画像を小さく圧縮する仕組みである。","出力のランダム性を調整する設定である。"],0,"Attentionは並列処理のため語順を保持できません。そこで<b>位置エンコーディング</b>で順番の情報を補います。",[["自己教師あり"],["翻訳・要約","生成"],["—"],["Transformer","Attention","位置エンコーディング"],["ChatGPT/GPT系"],["—"]]),
+];
+Q.C5=[ // 生成モデルの系譜・BERT派生
+  T(3,"分野C DL","ボルツマンマシン","生成モデルの源流とされる「ボルツマンマシン」の説明として最も適切なものはどれですか？",["確率的に動くニューラルネットワークの初期モデルで、制約付きボルツマンマシン（RBM）はディープラーニング発展のきっかけとなった。","画像認識に特化した畳み込みモデルである。","文章を分類する双方向モデルである。","外部データを検索して回答する仕組みである。"],0,"<b>ボルツマンマシン</b>は生成モデルの源流。制約付きボルツマンマシン（RBM）が深層学習発展の契機になりました。",[["教師なし学習"],["生成"],["—"],["ボルツマンマシン","ニューラルネットワーク"],["—"],["—"]]),
+  T(3,"分野C DL","BERTの学習方式","BERTの学習に用いられる「MLM」の説明として最も適切なものはどれですか？",["文の一部を隠して、その単語を当てさせる学習方式（マスク言語モデル）。","2つの文が連続するかを当てさせる学習方式である。","報酬をもとに方策を学ぶ方式である。","画像から特徴を抽出する方式である。"],0,"<b>MLM（Masked Language Model）</b>は文の一部を隠して当てる学習方式。2文の連続性を当てるのが<b>NSP</b>です。",[["自己教師あり","プレトレーニング"],["分類"],["—"],["Transformer"],["BERT","MLM","NSP"],["—"]]),
+  T(4,"分野C DL","BERTの派生モデル","BERTの派生モデルの説明として最も適切なものはどれですか？",["RoBERTaは学習方法を改良した版、ALBERTはパラメータを削減して軽量化した版である。","RoBERTaは画像生成モデル、ALBERTは音声認識モデルである。","どちらもOpenAIが開発した対話モデルである。","どちらもBERTより前に開発された。"],0,"<b>RoBERTa</b>は学習方法を改良（NSPを廃止など）、<b>ALBERT</b>はパラメータ共有で軽量化した派生モデルです。",[["自己教師あり"],["分類"],["パラメータ"],["Transformer"],["BERT","RoBERTa","ALBERT"],["—"]]),
+  T(4,"分野C DL","BERTとGPTの違い","BERTとGPTの違いの説明として最も適切なものはどれですか？",["BERTは文を双方向に読んで理解するのが得意、GPTは前から順に次の語を予測して生成するのが得意。","BERTは画像専用、GPTは音声専用である。","BERTは生成が得意で、GPTは理解が得意である。","両者はまったく同じ仕組みである。"],0,"<b>BERT＝双方向で理解</b>（分類・検索に強い）、<b>GPT＝自己回帰で生成</b>。得意分野が異なります。",[["自己教師あり","プレトレーニング"],["分類","生成"],["自己回帰モデル"],["Transformer"],["BERT","ChatGPT/GPT系"],["—"]]),
+];
+Q.C4=[
+  T(3,"分野C DL","RNN","時系列や文章のような順序のあるデータに適したアーキテクチャ「RNN」の説明として最も適切なものはどれですか？",["前の出力を次の入力へ渡し、系列データを扱えるネットワークである。","畳み込みで画像の特徴を抽出するネットワークである。","生成器と識別器を競わせるネットワークである。","データを次元削減する手法である。"],0,"<b>RNN</b>は前の出力を次の入力へ渡し、系列データを扱えます。",[["教師あり学習"],["翻訳・要約"],["—"],["RNN","LSTM"],["—"],["勾配消失","長期依存"]]),
+  T(3,"分野C DL","LSTM","「LSTM」の説明として最も適切なものはどれですか？",["ゲート機構によりRNNの長期依存の学習しにくさ（勾配消失）を改善したモデルである。","画像認識に特化した畳み込みモデルである。","文章を分類する教師なしモデルである。","生成器と識別器からなる生成モデルである。"],0,"<b>LSTM</b>はゲート機構で情報の保持/忘却を制御し、長期依存と勾配消失を緩和します。",[["教師あり学習"],["翻訳・要約"],["—"],["LSTM","RNN"],["—"],["勾配消失","長期依存"]]),
+  T(3,"分野C DL","RNNの弱点","RNNの弱点として最も適切なものはどれですか？",["系列が長くなると勾配消失が起き、長期依存の学習が難しい。","画像の局所特徴を抽出できない点が最大の弱点である。","並列処理しかできず、順序を扱えない。","パラメータを一切持てない。"],0,"RNNは逐次処理のため<b>勾配消失</b>が起きやすく<b>長期依存</b>が苦手。これをLSTMやTransformerが改善しました。",[["教師あり学習"],["翻訳・要約"],["—"],["RNN","LSTM"],["—"],["勾配消失","長期依存"]]),
+  T(3,"分野C DL","シーケンスデータ","RNN/LSTMが得意とするデータの種類の説明として最も適切なものはどれですか？",["文章・音声・株価のように順序を持つシーケンス（系列）データ。","順序のない、互いに独立した表形式のデータ。","一枚の静止画像。","規則性のない乱数列。"],0,"RNN/LSTMは文章・音声・株価などの<b>シーケンス（系列）データ</b>を扱うのが得意です。",[["教師あり学習"],["翻訳・要約"],["—"],["RNN","LSTM"],["—"],["長期依存"]]),
+  H(T(3,"分野C DL","時系列予測（事例）","過去の気温の推移データから翌日の気温を予測するモデルを作る場合、伝統的に適するとされるアーキテクチャはどれですか？",["RNN / LSTM","CNN","GAN","PCA"],0,"順序のある時系列には<b>RNN / LSTM</b>が適します。CNNは画像、GANは生成、PCAは次元削減です。",[["教師あり学習"],["回帰"],["—"],["RNN","LSTM"],["—"],["長期依存"]])),
+];
+Q.D1=[
+  T(2,"分野D 生成AI","LLM","「LLM（大規模言語モデル）」の説明として最も適切なものはどれですか？",["大量のテキストで事前学習された、大規模な言語モデルである。","画像を分類するための畳み込みネットワークである。","外部データを検索して回答する仕組みである。","データを暗号化するアルゴリズムである。"],0,"<b>LLM</b>は大量テキストで事前学習された言語モデルです。",[["プレトレーニング"],["生成"],["パラメータ"],["Transformer"],["ChatGPT/GPT系","Claude"],["ハルシネーション"]]),
+  T(2,"分野D 生成AI","パラメータ","LLMの「パラメータ」の説明として最も適切なものはどれですか？",["モデル内部の調整可能な値で、規模や表現力の目安になる。","文書を分割した断片（チャンク）のことである。","強化学習で与えられる報酬のことである。","各データに付けられた正解ラベルのことである。"],0,"<b>パラメータ</b>はモデル内部の重み等の値で、規模の目安になります。",[["プレトレーニング"],["生成"],["パラメータ"],["Transformer"],["ChatGPT/GPT系"],["—"]]),
+  T(2,"分野D 生成AI","出力制御","LLMの出力を制御する「Temperature」の説明として最も適切なものはどれですか？",["出力のランダム性（多様性）を調整するパラメータである。","文書を分割する単位である。","学習の繰り返し回数（エポック）である。","出力に含まれる差別的な偏りのことである。"],0,"<b>Temperature</b>（やTop-p）は出力のランダム性・多様性を調整します。",[["—"],["生成"],["Temperature/Top-p"],["Transformer"],["ChatGPT/GPT系"],["ハルシネーション"]]),
+];
+Q.D2=[
+  T(4,"分野D 生成AI","GPT系譜","GPTモデルのおおまかな発展の順序として最も適切なものはどれですか？",["GPT-3 → GPT-3.5 → GPT-4 → GPT-4o の順に発展した。","GPT-4 → GPT-3 → GPT-3.5 の順に発展した。","GPT-4o → GPT-3 → GPT-4 の順に発展した。","GPT-3.5 → GPT-3 → GPT-4o の順に発展した。"],0,"おおまかに<b>GPT-3 → 3.5 → 4 → 4o</b>と発展しました。",[["プレトレーニング","RLHF"],["生成"],["マルチモーダル"],["Transformer"],["ChatGPT/GPT系","GPT-4o"],["ハルシネーション"]]),
+  T(0,"分野D 生成AI","RLHF","「RLHF（人間のフィードバックによる強化学習）」の説明として最も適切なものはどれですか？",["人間の評価を手がかりに、モデルの応答を望ましい方向へ調整する手法である。","変数を減らして次元を圧縮する手法である。","データを似た者同士にまとめる手法である。","画像から特徴を抽出する処理である。"],0,"<b>RLHF</b>は応答を人の好みに合わせて整えます（アライメント）。",[["RLHF","SFT→報酬モデル→PPO"],["生成"],["アライメント"],["Transformer"],["InstructGPT"],["迎合"]]),
+  T(0,"分野D 生成AI","RLHFの手順","RLHFの一般的な手順の順序として最も適切なものはどれですか？",["教師あり微調整（SFT）→ 報酬モデルの学習 → 強化学習（PPO）。","報酬モデル → SFT → PPO。","PPO → SFT → 報酬モデル。","SFT → PPO → 報酬モデル。"],0,"RLHFは<b>SFT（教師あり微調整）→報酬モデルの学習→PPO（強化学習）</b>の順です。",[["RLHF","SFT→報酬モデル→PPO"],["生成"],["アライメント"],["Transformer"],["InstructGPT"],["迎合"]]),
+  T(2,"分野D 生成AI","InstructGPT","「InstructGPT」の説明として最も適切なものはどれですか？",["指示に従う能力（指示追従）を高め、ChatGPTの土台となったモデルである。","文章分類に特化した双方向モデルである。","生成器と識別器からなる生成モデルである。","画像を圧縮する自己符号化器である。"],0,"<b>InstructGPT</b>は指示追従を強化したモデルで、ChatGPTの土台になりました。",[["インストラクションチューニング","RLHF"],["生成"],["指示追従","アライメント"],["Transformer"],["InstructGPT"],["迎合"]]),
+  T(2,"分野D 生成AI","アライメント","AIの「アライメント」の説明として最も適切なものはどれですか？",["AIの出力を人間の意図や価値観に沿わせること。RLHFの主な目的である。","モデルのパラメータ数を増やすことである。","データを暗号化することである。","画像を高解像度化することである。"],0,"<b>アライメント</b>はAIを人間の意図・価値観に合わせること。RLHFの目的そのものです。",[["RLHF"],["生成"],["アライメント"],["Transformer"],["InstructGPT"],["迎合"]]),
+  H(T(4,"分野D 生成AI","対話性能の転機","GPTの発展の中で対話性能を大きく高めた転機の説明として最も適切なものはどれですか？",["GPT-3にRLHFとインストラクションチューニングを適用したInstructGPTが指示追従を高め、ChatGPTの土台になった。","GPT-4が最初のGPTモデルとして対話性能を確立した。","GPT-4oはテキスト専用に特化することで対話性能を高めた。","InstructGPTはGPT-3より前に開発された。"],0,"流れは<b>GPT-3 → InstructGPT（RLHFで指示追従を強化）→ ChatGPT → GPT-4 → GPT-4o</b>。InstructGPTが対話の転機です。",[["RLHF","インストラクションチューニング"],["生成"],["指示追従"],["Transformer"],["InstructGPT","ChatGPT/GPT系"],["迎合"]])),
+];
+Q.D3=[
+  T(2,"分野D 生成AI","マルチモーダル","モデルの性質としての「マルチモーダル」の説明として最も適切なものはどれですか？",["テキスト・画像・音声など複数種類の情報をまとめて扱える性質である。","一種類のタスクしか扱えない性質である。","自社サーバーで動かす運用形態のことである。","状態を保持しない性質のことである。"],0,"<b>マルチモーダル</b>は複数モダリティを統合処理できる性質です。",[["—"],["生成"],["マルチモーダル"],["Transformer"],["GPT-4o","Gemini"],["—"]]),
+  T(2,"分野D 生成AI","GPT-4o（omni）","GPT-4oの「o」が表す意味の説明として最も適切なものはどれですか？",["omni（全方位）の意味で、テキスト・画像・音声を統合的に扱うマルチモーダルを示す。","OpenAIの頭文字である。","出力（output）専用モデルという意味である。","オフライン（offline）動作を示す。"],0,"<b>GPT-4oの「o」はomni（全方位）</b>。マルチモーダルを表します。",[["—"],["生成"],["マルチモーダル"],["Transformer"],["GPT-4o"],["—"]]),
+  T(5,"分野D 生成AI","ハルシネーション","生成AIの「ハルシネーション」に関する記述として最も適切なものはどれですか？",["事実に基づかない誤った内容を、もっともらしく生成してしまう現象である。","訓練データをそのまま丸暗記してしまう現象である。","人の意図に出力を合わせることである。","一部のノードを無効化する手法である。"],0,"<b>ハルシネーション</b>は誤った内容を自信ありげに出力する現象。RAGや事実確認で対策します。",[["RLHF"],["生成"],["アライメント"],["Transformer"],["ChatGPT/GPT系"],["ハルシネーション"]]),
+  T(5,"分野D 生成AI","迎合(sycophancy)","生成AIの「迎合（sycophancy）」の説明として最も適切なものはどれですか？",["ユーザーの意見に過度に同調してしまう傾向のことである。","未知データにうまく対応できる性質のことである。","過学習を防ぐための手法のことである。","変数を減らす手法のことである。"],0,"<b>迎合</b>はユーザーに過度に同調する傾向で、事実より同意を優先してしまう問題です。",[["RLHF"],["生成"],["アライメント"],["Transformer"],["—"],["迎合","ハルシネーション"]]),
+  H(T(5,"分野D 生成AI","ハルシネーション対策（事例）","社内規程に基づいて正確に回答させ、事実に反する出力を減らしたい。最も適切な対応はどれですか？",["RAGで社内規程を検索させ、その内容を根拠に回答させる。","Temperatureを最大にして多様な出力にする。","学習データをそのまま丸暗記させる。","パラメータ数を減らして軽量化する。"],0,"根拠文書を参照させる<b>RAG</b>がハルシネーション低減に有効。Temperatureを上げると出力は不安定になります。",[["RLHF"],["生成"],["アライメント"],["Transformer"],["ChatGPT/GPT系"],["ハルシネーション"]])),
+];
+Q.D4=[
+  T(4,"分野D 生成AI","Claude","「Claude」の説明として最も適切なものはどれですか？",["Anthropic が開発した、安全性を重視した対話型の生成AIである。","Google が開発したマルチモーダル生成AIである。","Meta が公開したオープンな大規模言語モデルである。","Microsoft が業務ツールに統合した生成AIである。"],0,"<b>Claude</b>はAnthropic社の対話型生成AI。安全性重視の設計で知られます。",[["RLHF"],["生成"],["マルチモーダル"],["Transformer"],["Claude"],["ハルシネーション"]]),
+  T(4,"分野D 生成AI","Gemini","「Gemini」の説明として最も適切なものはどれですか？",["Google が開発したマルチモーダルの生成AIである。","Anthropic が開発した対話型の生成AIである。","Meta が公開したオープンな大規模言語モデルである。","Microsoft が業務ツールに統合した生成AIである。"],0,"<b>Gemini</b>はGoogleのマルチモーダル生成AIです。",[["RLHF"],["生成"],["マルチモーダル"],["Transformer"],["Gemini"],["ハルシネーション"]]),
+  T(4,"分野D 生成AI","Llama","「Llama」の説明として最も適切なものはどれですか？",["Meta が開発し、モデルがオープンに公開されている大規模言語モデルである。","Google が開発したマルチモーダル生成AIである。","Anthropic が開発した対話型生成AIである。","OpenAI が開発した画像生成モデルである。"],0,"<b>Llama</b>はMeta社のLLMで、重みが公開され自社環境で動かしやすい点が特徴です。",[["プレトレーニング"],["生成"],["—"],["Transformer"],["Llama"],["ハルシネーション"]]),
+  T(4,"分野D 生成AI","Copilot","「Copilot」の説明として最も適切なものはどれですか？",["Microsoft が提供し、Office製品やコーディング支援に統合された生成AIである。","Meta が公開したオープンな大規模言語モデルである。","Google のマルチモーダル生成AIである。","Anthropic の対話型生成AIである。"],0,"<b>Copilot</b>はMicrosoftの生成AIで、OfficeやGitHubのコード補完などに統合されています。",[["RLHF"],["生成"],["—"],["Transformer"],["Copilot"],["ハルシネーション"]]),
+  T(4,"分野D 生成AI","開発元の対応","生成AIと開発企業の組み合わせとして、最も不適切なものはどれですか？",["Llama — OpenAI","Claude — Anthropic","Gemini — Google","Copilot — Microsoft"],0,"<b>Llama</b>はMeta社。OpenAIはGPT/ChatGPTです。",[["—"],["—"],["—"],["Transformer"],["Llama","Claude","Gemini","Copilot"],["—"]]),
+  H(T(4,"分野D 生成AI","モデル選択（事例）","「機密データを外部に出さず、自社サーバー内でモデルを動かしたい」という要件に最も合うモデルはどれですか？",["Meta の Llama（重みが公開されている）","OpenAI の GPT-4o","Anthropic の Claude","Google の Gemini"],0,"重みが公開され自社環境で動かせるのは<b>Llama</b>。他は主にクラウドのAPI経由での利用が前提です。",[["プレトレーニング"],["生成"],["—"],["Transformer"],["Llama"],["—"]])),
+];
+Q.D5=[ // 最新モデルと機能（2026年2月シラバス追加分）
+  T(4,"分野D 生成AI","o系推論モデル","GPT-o1・o3などの「o系」モデルの特徴として最も適切なものはどれですか？",["答える前に段階的に考える（推論する）ことを重視したモデル系列である。","画像生成に特化したモデル系列である。","パラメータを削減した軽量モデル系列である。","音声認識専用のモデル系列である。"],0,"<b>o系（o1・o3・o4）</b>は、じっくり推論してから答えることを重視したOpenAIのモデル系列です。",[["RLHF"],["生成"],["—"],["Transformer"],["o系推論モデル","ChatGPT/GPT系","GPT-5"],["ハルシネーション"]]),
+  R("分野D 生成AI","Operator","OpenAIの「Operator」の説明として最も適切なものはどれですか？",["ブラウザを操作して調べ物や手続きを代行する、エージェント型のサービスである。","プログラムの生成・修正を行うコーディング支援AIである。","画像を生成する機能である。","コードを実行してデータ分析を行う機能である。"],0,"<b>Operator</b>はブラウザを操作して作業を代行するエージェント型サービス。コーディング支援は<b>Codex</b>です。",["Operator","AIエージェント","Codex"]),
+  R("分野D 生成AI","Codex","OpenAIの「Codex」の説明として最も適切なものはどれですか？",["プログラムの生成・修正を行うコーディング支援AIである。","ブラウザ操作を代行するサービスである。","動画を生成するAIである。","文章を要約する専用機能である。"],0,"<b>Codex</b>はコーディング支援AI。Microsoftの<b>Copilot</b>も同様にコード補完に使われます。",["Codex","Copilot","Operator"]),
+  R("分野D 生成AI","ChatGPTの機能","ChatGPTの機能の組み合わせとして最も適切なものはどれですか？",["Code Interpreterはコードを実行して分析やグラフ作成を行い、GPTsは目的別の自作GPTを作成・共有できる機能である。","Code Interpreterは画像生成機能で、GPTsは音声認識機能である。","どちらも他社が提供する外部サービスである。","どちらもモデルを再学習させる機能である。"],0,"<b>Code Interpreter</b>＝コード実行による分析、<b>GPTs</b>＝目的別の自作GPT、<b>Image Generation</b>＝画像生成、と機能ごとに整理して覚えます。",["Code Interpreter","GPTs","Image Generation"]),
+  T(4,"分野D 生成AI","GPTの世代","GPT系列の発展に関する説明として最も適切なものはどれですか？",["GPT-3 → GPT-3.5 → GPT-4 → GPT-4o と進み、その後 o系（推論重視）や GPT-5 へ展開している。","GPT-5 が最初に登場し、その後 GPT-3 へ簡略化された。","GPT-4o の後に GPT-3.5 が登場した。","o系は GPT-3 より前の世代である。"],0,"おおまかに<b>GPT-3→3.5→4→4o</b>、以降<b>o系（推論重視）やGPT-5</b>へ展開しています。",[["プレトレーニング","RLHF"],["生成"],["マルチモーダル"],["Transformer"],["ChatGPT/GPT系","GPT-4o","o系推論モデル","GPT-5"],["ハルシネーション"]]),
+];
+Q.F4=[ // 生成AIサービスと画像・動画の扱い
+  R("分野F 動向","生成AIの種類","生成AIの種類の説明として最も適切なものはどれですか？",["テキスト・画像・音楽・音声・動画など、生成する対象ごとにサービスが存在する。","テキスト生成AIしか実用化されていない。","画像生成AIと動画生成AIは同一のものである。","音声生成AIは存在しない。"],0,"生成AIは<b>テキスト・画像・音楽・音声・動画</b>と対象ごとに広がっています（例：動画はSora・Veo3）。",["Sora","Veo3","Image Generation","生成"]),
+  R("分野F 動向","Veo3","Googleの「Veo3」の説明として最も適切なものはどれですか？",["テキストから映像を生成する動画生成AIである。","文章を要約するテキスト生成AIである。","画像を分類するモデルである。","外部データを検索する仕組みである。"],0,"<b>Veo3</b>はGoogleの動画生成AI。OpenAIの動画生成AIが<b>Sora</b>です。",["Veo3","Sora","生成"]),
+  R("分野F 動向","画像の前処理","AIに画像を学習させる前に行う代表的な前処理として最も適切なものはどれですか？",["サイズをそろえる「リサイズ」と、画素値の尺度をそろえる「正規化」。","過学習を抑える「正則化」と「ドロップアウト」。","文章を分割する「チャンク」化。","報酬を設計すること。"],0,"画像の前処理は<b>リサイズ</b>と<b>正規化</b>が基本。過学習対策の<b>正則化</b>と名前が似ているので注意。",["画像の前処理","データ拡張","画像認識"]),
+  R("分野F 動向","データ拡張","「データ拡張（augmentation）」の説明として最も適切なものはどれですか？",["画像を回転・反転・切り取りするなどして学習データを水増しし、過学習を抑える手法である。","古い画像を高画質化することである。","学習データを削除して軽量化することである。","画素値の尺度をそろえる処理である。"],0,"<b>データ拡張</b>はデータを水増しして不足と過学習を補う手法。高画質化は<b>リマスタリング</b>です。",["データ拡張","過学習","リマスタリング","画像の前処理"]),
+];
+Q.G4=[ // 情報リテラシーとAIガバナンス
+  R("分野G 法制度","情報リテラシー","「情報リテラシー」の説明として最も適切なものはどれですか？",["情報を正しく探し、真偽を見極め、適切に発信・活用する能力のこと。","プログラムを書く技術のこと。","通信回線の速度のこと。","パソコンを分解できる技能のこと。"],0,"<b>情報リテラシー</b>は情報を探す・見極める・使う総合的な能力。生成AIの誤情報対策の土台になります。",["情報リテラシー","デジタル市民権","偽情報"]),
+  R("分野G 法制度","デジタル市民権","「デジタル市民権（デジタルシチズンシップ）」の説明として最も適切なものはどれですか？",["デジタル社会の一員として責任を持って技術を使い、他者を尊重する考え方。","デジタル機器を購入する権利のこと。","インターネットを無料で使う権利のこと。","デジタルデータを所有する法的権利のこと。"],0,"<b>デジタル市民権</b>は、responsible に技術を使い他者を尊重するという考え方です。",["デジタル市民権","情報リテラシー","公平性"]),
+  R("分野G 法制度","AIガバナンス","AI事業者ガイドラインが示す「AIガバナンスの構築」の説明として最も適切なものはどれですか？",["環境・リスクの分析、ゴールの設定、AIマネジメントシステムの構築・運用を通じてリスクを管理しながら活用する仕組みづくり。","AIの利用を全面的に禁止する仕組みのことである。","AIの計算資源を増強することである。","AIの学習データを公開する義務のことである。"],0,"<b>AIガバナンス</b>はリスクを管理しつつ活用するための組織的な仕組み。ガイドラインが構築を求めています。",["AIガバナンス","事業者ガイドライン","アカウンタビリティ","透明性"]),
+];
+Q.H3=[ // プロンプト実践
+  R("分野H プロンプト","プロンプトの構成要素","プロンプトの4つの構成要素として最も適切なものはどれですか？",["Instruction（指示）・Context（文脈）・Input Data（入力データ）・Output Indicator（出力形式の指定）。","CPU・GPU・メモリ・ストレージ。","主語・述語・目的語・補語。","朝・昼・夕・夜。"],0,"プロンプトは<b>Instruction・Context・Input Data・Output Indicator</b>の4要素で構成すると効果的です。",["プロンプトの4要素","プロンプトエンジニアリング","Zero-Shot"]),
+  R("分野H プロンプト","ハイパーパラメータ","生成AIの「ハイパーパラメータ」の説明として最も適切なものはどれですか？",["学習や生成の前に人が設定する値。生成時のTemperatureやTop-pもこれに当たる。","学習によって自動的に決まるモデル内部の重みのことである。","文書を分割した断片のことである。","出力された文章そのもののことである。"],0,"<b>ハイパーパラメータ</b>は人が事前に設定する値。学習で調整される<b>パラメータ（重み）</b>とは区別します。",["ハイパーパラメータ","Temperature/Top-p","パラメータ"]),
+  R("分野H プロンプト","n-gramモデル","LLM以前から使われてきた「n-gramモデル」の説明として最も適切なものはどれですか？",["直前のn個の単語の並びから次の語を予測する、統計的な言語モデルである。","画像を分類する深層学習モデルである。","外部データを検索して回答する仕組みである。","人間のフィードバックで調整する手法である。"],0,"<b>n-gramモデル</b>は統計的に次の語を予測する古典的な言語モデル。現在のLLMの前身にあたります。",["n-gramモデル","ChatGPT/GPT系","自己回帰モデル"]),
+  R("分野H プロンプト","実践的な使い方","テキスト生成AIの実務的な活用例として最も適切なものはどれですか？",["文章の校正、箇条書きへの変換、話者を変えた書き換え、例え話への言い換えなど。","停電時の自動発電。","物理的な荷物の配送。","正確な四則演算の代行。"],0,"<b>校正・要約・箇条書き変換・話者変更・例え話</b>などの言語変換は生成AIの得意分野です。",["プロンプトエンジニアリング","翻訳・要約","プロンプトの4要素"]),
+];
+Q.E1=[
+  R("分野E 倫理・法律","個人情報","個人情報保護法における「個人情報」の説明として最も適切なものはどれですか？",["氏名や生年月日の組み合わせなど、特定の個人を識別できる情報である。","企業の売上データである。","公開された天気予報である。","意味を持たない乱数列である。"],0,"個人情報は<b>特定の個人を識別できる情報</b>（個人識別符号を含む）を指します。",["個人情報","個人識別符号"]),
+  R("分野E 倫理・法律","要配慮個人情報","「要配慮個人情報」に該当するものの説明として最も適切なものはどれですか？",["人種・信条・病歴・犯罪歴など、差別や偏見につながりうる機微な情報である。","氏名だけの情報である。","会社の住所である。","製品の型番である。"],0,"<b>要配慮個人情報</b>は人種・信条・病歴・犯罪歴などの機微な情報で、取得には原則本人同意が必要です。",["要配慮個人情報","個人情報"]),
+  R("分野E 倫理・法律","匿名/仮名加工情報","匿名加工情報と仮名加工情報の違いの説明として最も適切なものはどれですか？",["匿名加工は個人の復元・再識別を困難にした情報、仮名加工は他の情報と照合しなければ個人を識別できないよう加工した情報である。","両者は完全に同じものである。","仮名加工情報は必ず公開してよい。","匿名加工情報はいつでも元の個人情報に戻せる。"],0,"<b>匿名加工情報</b>は復元困難まで加工、<b>仮名加工情報</b>は照合しなければ識別できない加工です。",["匿名加工情報","仮名加工情報","マスキング"]),
+  R("分野E 倫理・法律","個人情報保護委員会","個人情報保護法に基づき事業者を監督する「個人情報保護委員会」の位置づけとして最も適切なものはどれですか？",["内閣府の外局として設置された、独立性の高い監督機関である。","経済産業省の一つの部局である。","民間の任意団体である。","裁判所の下部組織である。"],0,"<b>個人情報保護委員会</b>は内閣府の外局として置かれた独立性の高い監督機関です。",["個人情報保護委員会","内閣府の外局"]),
+  R("分野E 倫理・法律","監督の流れ","違反した事業者に対する個人情報保護委員会の措置の順序として最も適切なものはどれですか？",["指導・助言 → 勧告 → 命令 と段階的に行う。","はじめから刑事罰を科す。","命令 → 勧告 の順に行う。","勧告だけで、命令の仕組みはない。"],0,"監督は<b>指導・助言→勧告→命令</b>と段階的に進み、命令違反は罰則の対象になります。",["個人情報保護委員会"]),
+  R("分野E 倫理・法律","5000人要件","かつての個人情報保護法にあった「取り扱う個人情報が5000人分以下の事業者は対象外」という要件について、最も適切なものはどれですか？",["この要件は撤廃され、現在は原則すべての事業者が対象となる。","現在も有効で、小規模事業者は対象外である。","1万人分に引き上げられた。","もともと存在しなかった。"],0,"<b>5000人要件は撤廃</b>され、現在は取扱件数にかかわらず原則すべての事業者が対象です。",["5000人要件の撤廃","個人情報"]),
+  H(R("分野E 倫理・法律","加工情報の区別（事例）","ある企業が社内分析のため、氏名を削除し管理用IDに置き換えたデータを作成した。他の情報と照合すれば個人を特定できる状態である。このデータの種類として最も適切なものはどれですか？",["仮名加工情報","匿名加工情報","要配慮個人情報","個人識別符号"],0,"照合すれば特定できる状態は<b>仮名加工情報</b>。復元・再識別が困難なまで加工したものが<b>匿名加工情報</b>です。区別が頻出ポイント。",["仮名加工情報","匿名加工情報","マスキング"])),
+];
+Q.E2=[
+  R("分野E 倫理・法律","知的財産権","著作権も含まれる、創作や発明を保護する権利の総称の説明として最も適切なものはどれですか？",["著作権・特許権・商標権・意匠権などを総称した「知的財産権」である。","特定の個人を識別できる「個人情報」である。","自分の容ぼうを無断で撮影・公表されない「肖像権」である。","私生活をみだりに公開されない「プライバシー権」である。"],0,"著作権・特許権・商標権・意匠権などをまとめて<b>知的財産権</b>と呼びます。",["知的財産権","著作権","特許権","商標権","意匠権"]),
+  R("分野E 倫理・法律","AI生成物の著作権","AI生成物の著作権について、日本での一般的な考え方として最も適切なものはどれですか？",["AIを道具として用い、人間の創作的関与が認められれば著作物になり得る。","AIが自動生成したものは、必ず著作物として保護される。","生成物は常に著作権フリーで、誰でも自由に使える。","著作権は必ずAIの開発企業に自動的に帰属する。"],0,"日本では<b>人間の創作的関与</b>が認められる場合に著作物となり得ると整理されています。",["創作的関与","著作権"]),
+  R("分野E 倫理・法律","権利侵害","生成AIの出力が既存の著作物と類似していた場合の注意点として最も適切なものはどれですか？",["既存著作物に依拠・類似する場合、著作権侵害となる可能性がある。","AIの出力なので、いかなる場合も問題は生じない。","AIが作った以上、責任はまったく発生しない。","出典さえ書けば、無条件に合法となる。"],0,"<b>依拠性</b>と<b>類似性</b>が認められると著作権侵害となる可能性があります。",["依拠性","類似性","著作権"]),
+  R("分野E 倫理・法律","知的財産権の範囲","次のうち、知的財産権に含まれないものとして最も適切なものはどれですか？",["個人情報保護法上の開示請求権","特許権","商標権","意匠権"],0,"特許・商標・意匠・著作は知的財産権。<b>個人情報の開示請求権</b>は個人情報保護法の枠で別です。",["知的財産権","特許権","商標権","意匠権"]),
+  R("分野E 倫理・法律","肖像権・パブリシティ権","肖像権とパブリシティ権の説明として最も適切なものはどれですか？",["肖像権は容ぼうを無断で撮影・公表されない権利、パブリシティ権は著名人の氏名・肖像が持つ経済的価値を保護する権利である。","どちらも知的財産権に含まれる同一の権利である。","肖像権は発明を保護し、パブリシティ権はデザインを保護する。","どちらも著作権の一部である。"],0,"<b>肖像権</b>は人格的な権利、<b>パブリシティ権</b>は著名人の顧客吸引力（経済的価値）を守る権利です。",["肖像権","パブリシティ権","知的財産権"]),
+  R("分野E 倫理・法律","不正競争防止法","不正競争防止法が保護するものとして最も適切なものはどれですか？",["営業秘密や限定提供データなど、事業者の競争上の利益。","発明そのもの（特許）。","製品のデザイン（意匠）。","個人の容ぼう（肖像）。"],0,"<b>不正競争防止法</b>は<b>営業秘密</b>（秘密管理性・有用性・非公知性）や<b>限定提供データ</b>を保護します。",["不正競争防止法","営業秘密","限定提供データ"]),
+  R("分野E 倫理・法律","生成AIと名誉毀損","生成AIが事実と異なる内容を出力し、それを公開した場合のリスクとして最も適切なものはどれですか？",["他人の社会的評価を下げれば、名誉毀損に問われる可能性がある。","AIの出力なので法的責任は一切生じない。","著作権だけが問題となり、名誉毀損は関係ない。","公開しても本人が気づかなければ問題にならない。"],0,"AIの出力でも、公開した結果として他人の評価を下げれば<b>名誉毀損</b>となりうるため、事実確認が必要です。",["名誉毀損","ハルシネーション","偽情報"]),
+  H(R("分野E 倫理・法律","著作権の判断（事例）","生成AIで作成した画像が、既存のキャラクターを参考にしており、表現も似ていた。取るべき対応として最も適切なものはどれですか？",["依拠性と類似性が認められる可能性があるため、公開前に権利関係を確認する。","AIの出力なので確認せず公開してよい。","出典を明記すれば無断で公開してよい。","生成物はすべて著作権フリーなので問題ない。"],0,"<b>依拠性</b>（参考にした）と<b>類似性</b>（似ている）が揃うと侵害となり得るため、事前確認が必要です。",["依拠性","類似性","著作権"])),
+];
+Q.E3=[
+  R("分野E 倫理・法律","バイアスの原因","AIの出力に差別や偏りが生じる主な原因の説明として最も適切なものはどれですか？",["学習に用いたデータそのものに偏りがあることが主な原因である。","GPUの性能が不足していることが主な原因である。","通信速度が遅いことが主な原因である。","画面の解像度が低いことが主な原因である。"],0,"AIの<b>バイアス</b>は主に学習データの偏りから生じます。",["バイアス","公平性"]),
+  R("分野E 倫理・法律","バイアス対策","AIのバイアスを抑えるための対策として最も適切なものはどれですか？",["多様で代表性のあるデータを用い、偏りを点検する。","学習に使うデータをできるだけ減らす。","出力に乱数を多く加える。","出力を暗号化する。"],0,"<b>多様で代表性のあるデータ</b>の利用や偏りの点検がバイアス低減に有効です。",["バイアス","公平性"]),
+  R("分野E 倫理・法律","AI社会原則","バイアスの是正と最も関係が深いAI社会原則の要素はどれですか？",["不当な差別をしないという「公平性」。","処理速度。","省電力性。","可搬性。"],0,"バイアス是正は、AI社会原則の<b>公平性</b>と直結します。",["公平性","人間中心","透明性"]),
+  H(R("分野E 倫理・法律","バイアスの発生（事例）","過去の採用実績データでAIを学習させたところ、特定の属性の応募者を低く評価する傾向が出た。この原因と対策の組み合わせとして最も適切なものはどれですか？",["過去データに含まれる偏りを学習したことが原因で、データの代表性の確保と偏りの点検が対策となる。","GPUの性能不足が原因で、機材の増強が対策となる。","過学習が原因で、学習データを減らすことが対策となる。","ハルシネーションが原因で、Temperatureを上げることが対策となる。"],0,"過去の偏りをAIが再生産する典型例。原因は<b>学習データの偏り（バイアス）</b>で、対策は多様で代表性のあるデータと点検です。<b>公平性</b>の原則に関わります。",["バイアス","公平性","透明性"])),
+];
+Q.F1=[
+  R("分野F 動向","RAGとは","RAG（検索拡張生成）の説明として最も適切なものはどれですか？",["外部の知識データベース等から関連情報を検索し、その内容を踏まえて回答を生成する仕組みである。","モデルのパラメータを再学習させて新しい知識を覚えさせる手法である。","画像から文章を生成するためのマルチモーダル技術である。","出力のランダム性（多様性）を調整するパラメータである。"],0,"<b>RAG</b>は外部データから関連情報を検索し、それを根拠に回答を生成する仕組みです。",["検索拡張生成","ハルシネーション"]),
+  R("分野F 動向","RAGのメリット","RAGを使う利点として最も適切なものはどれですか？",["最新情報や社内文書に基づいた回答ができ、ハルシネーションを抑えやすい。","計算資源がまったく要らなくなる。","回答が必ず正解になることが保証される。","学習データにない情報は一切扱えなくなる。"],0,"RAGは<b>最新情報や社内文書</b>を参照でき、根拠に基づくため<b>ハルシネーション低減</b>に有効です。",["検索拡張生成","ハルシネーション"]),
+  R("分野F 動向","チャンク・ベクトルDB","RAGで文書を扱う際の一般的な流れの説明として最も適切なものはどれですか？",["文書を分割（チャンク）してベクトル化し、ベクトルデータベースで類似検索する。","文書を丸ごとモデルに暗記させる。","文書を画像化して保存する。","文書を削除してから学習する。"],0,"文書を<b>チャンク</b>に分割→ベクトル化→<b>ベクトルデータベース</b>で類似検索が基本の流れです。",["チャンク","ベクトルデータベース","類似検索"]),
+  R("分野F 動向","ユースケース","RAGの活用例として最も不適切なものはどれですか？",["GPUの物理的な冷却。","社内規程に基づく問い合わせ対応。","製品マニュアルに関するQA。","最新情報を踏まえた要約。"],0,"RAGは社内文書QA・マニュアル対応・最新情報の反映などに有効。ハードの冷却は無関係です。",["検索拡張生成"]),
+  H(R("分野F 動向","RAGとファインチューニングの選択（事例）","頻繁に更新される社内規程を、最新の内容で回答に反映させたい。運用コストを抑える方法として最も適切なものはどれですか？",["RAGで規程を検索・参照させる（更新時は文書を差し替えるだけでよい）。","更新のたびにモデルをファインチューニングし直す。","Temperatureを上げて多様な回答にする。","プロンプトに乱数を加える。"],0,"頻繁な更新には<b>RAG</b>が適切。<b>ファインチューニング</b>は都度の再学習コストが高くつきます。両者の使い分けが問われます。",["検索拡張生成","ファインチューニング","チャンク"])),
+];
+Q.F2=[
+  R("分野F 動向","AIエージェントとは","「AIエージェント」の説明として最も適切なものはどれですか？",["目標に向けてタスクを分解し、ツールを使いながら自律的に処理を進めるAIである。","1回の応答だけを返す単純なチャットである。","画像を分類するだけのモデルである。","データを保存するための装置である。"],0,"<b>AIエージェント</b>はタスクを分解し、ツールを呼び出しながら自律的に処理を進めます。",["AIエージェント","タスク分解"]),
+  R("分野F 動向","MCP","「MCP（Model Context Protocol）」の説明として最も適切なものはどれですか？",["AIと外部のツールやデータを連携させるための標準的な仕組みである。","AIモデルそのものの一種である。","データの暗号化方式である。","画像の保存形式である。"],0,"<b>MCP</b>はAIモデルと外部ツール・データソースを接続するための標準的なプロトコルです。",["MCP","AIエージェント"]),
+  R("分野F 動向","ツール例","AIエージェント関連のツールの例として最も適切なものはどれですか？",["GenSpark・Manus・Skywork AI など。","Excel・Word・PowerPoint。","HTML・CSS・JavaScript。","USB・HDMI。"],0,"<b>GenSpark・Manus・Skywork AI</b>などがAIエージェント系ツールの例です。",["GenSpark","Manus","Skywork AI"]),
+  R("分野F 動向","エージェントの仕組み","AIエージェントが自律的に動く基本的なループに含まれないものはどれですか？",["電源の物理的な配線。","計画（タスク分解）。","ツールの実行。","結果の観察。"],0,"エージェントは<b>計画→実行→観察</b>を繰り返して目標に近づきます。",["AIエージェント","タスク分解"]),
+  H(R("分野F 動向","エージェントとの違い（事例）","「情報を検索し、要約を作り、メール下書きまで一連の手順を自分で判断して進めてほしい」という要件に最も合うものはどれですか？",["AIエージェント（タスクを分解し、ツールを使って自律的に実行する）","1問1答で完結する通常のチャット応答","画像分類モデル","ベクトルデータベース単体"],0,"複数手順を自分で計画・実行するのが<b>AIエージェント</b>。単発の応答を返す通常のチャットとの違いが要点です。",["AIエージェント","タスク分解","MCP"])),
+];
+Q.F3=[
+  R("分野F 動向","ディープフェイクとは","「ディープフェイク（深層偽造）」の説明として最も適切なものはどれですか？",["深層学習を用いて、本物そっくりの偽の画像・音声・動画を作り出す技術である。","データを暗号化する技術である。","AIを冷却する技術である。","文章を要約する技術である。"],0,"<b>ディープフェイク</b>は深層学習で偽の映像・音声などを生成する技術です。",["ディープフェイク","深層偽造"]),
+  R("分野F 動向","主な生成技術","ディープフェイクの生成に用いられてきた代表的な技術として最も適切なものはどれですか？",["GAN（敵対的生成ネットワーク）。","RAG（検索拡張生成）。","MCP（外部連携の仕組み）。","OCR（文字認識）。"],0,"<b>GAN</b>など生成モデルがディープフェイク生成に用いられてきました。",["GAN","ディープフェイク"]),
+  R("分野F 動向","リスク","ディープフェイクがもたらす主なリスクとして最も適切なものはどれですか？",["偽情報（ディスインフォメーション）の拡散や、なりすまし・詐欺。","通信速度が速くなること。","電気代が削減されること。","画質が劣化すること。"],0,"ディープフェイクは<b>偽情報</b>の拡散やなりすまし詐欺などのリスクを生みます。",["ディープフェイク","偽情報"]),
+  R("分野F 動向","向き合い方","ディープフェイクへの対応として最も不適切なものはどれですか？",["受け取った動画を無条件に信じて拡散する。","情報の出所を確認する。","不審な動画を鵜呑みにしない。","真偽を検証する技術を活用する。"],0,"出所確認・検証技術の活用が重要。無条件に信じて拡散するのは被害を広げます。",["ディープフェイク","偽情報"]),
+];
+Q.G1=[
+  R("分野G 法制度","基本理念","日本のAI社会原則が掲げる3つの基本理念に含まれないものはどれですか？",["利益を最大化する社会。","人間の尊厳が尊重される社会。","多様な背景を持つ人々が幸せを追求できる社会。","持続可能な社会。"],0,"3つの基本理念は<b>人間の尊厳・多様性と包摂・持続可能性</b>。利益最大化は含まれません。",["人間の尊厳","多様性と包摂","持続可能性"]),
+  R("分野G 法制度","人間中心の原則","AI社会原則の中心に置かれる考え方として最も適切なものはどれですか？",["人間中心の考え方。","機械中心の考え方。","企業中心の考え方。","政府中心の考え方。"],0,"AI社会原則は<b>人間中心</b>を基本に、安全性・公平性・透明性などを掲げます。",["人間中心","安全性","公平性","透明性"]),
+  R("分野G 法制度","3つの主体","AI事業者ガイドラインが示す、AIの事業活動を担う3つの主体として最も適切なものはどれですか？",["AI開発者・AI提供者・AI利用者。","政府・企業・大学。","作家・編集者・読者。","医師・患者・薬剤師。"],0,"AI事業者ガイドラインは<b>AI開発者・AI提供者・AI利用者</b>の3主体を示します。",["事業者ガイドライン"]),
+  R("分野G 法制度","共通の指針","AI事業者ガイドラインの「共通の指針」に含まれるものとして最も適切なものはどれですか？",["透明性やアカウンタビリティ（説明責任）。","市場の独占の推進。","情報を一切開示しない秘匿義務。","無制限のデータ収集。"],0,"共通の指針には人間中心・安全性・公平性・プライバシー保護・<b>透明性・アカウンタビリティ</b>等が含まれます。",["透明性","アカウンタビリティ","公平性"]),
+  H(R("分野G 法制度","主体の判別（事例）","ある企業が、他社が開発した生成AIを組み込んだサービスを自社の顧客に提供している。AI事業者ガイドラインにおけるこの企業の立場として最も適切なものはどれですか？",["AI提供者","AI開発者","AI利用者のみ","規制対象外"],0,"モデルを作るのが<b>AI開発者</b>、それを組み込んでサービス提供するのが<b>AI提供者</b>、業務で使うのが<b>AI利用者</b>。3主体の区別が要点です。",["事業者ガイドライン","透明性","アカウンタビリティ"])),
+];
+Q.G2=[
+  R("分野G 法制度","AI新法とは","2025年6月に公布されたAI新法の正式名称として最も適切なものはどれですか？",["人工知能関連技術の研究開発及び活用の推進に関する法律。","個人情報保護法。","不正競争防止法。","著作権法。"],0,"<b>AI新法</b>は「人工知能関連技術の研究開発及び活用の推進に関する法律」で、2025年6月4日に公布されました。",["AI新法"]),
+  R("分野G 法制度","AI新法の性質","AI新法の基本的な性質の説明として最も適切なものはどれですか？",["研究開発と活用を推進するための理念や基本方針を定める性格の法律である。","違反者に重い刑罰を科すことを中心とした規制法である。","AIの使用を全面的に禁止する法律である。","個人だけを対象とする法律である。"],0,"AI新法は罰則中心の規制ではなく、<b>研究開発と活用の推進</b>のための理念や方針を定める性格の法律です。",["AI新法"]),
+  R("分野G 法制度","目的","AI新法が目指す方向の説明として最も適切なものはどれですか？",["イノベーションの推進とリスクへの対応の両立を図る。","AI開発を停止させる。","海外企業を排除する。","個人情報の自由な売買を認める。"],0,"AIの<b>イノベーション推進とリスク対応の両立</b>を図る方向性です。",["AI新法"]),
+  R("分野G 法制度","ガイドラインとの関連","AI新法とAI事業者ガイドラインの関係の説明として最も適切なものはどれですか？",["法律の理念を、事業者向けの具体的な指針で補完する関係にある。","両者はまったく無関係である。","ガイドラインが法律を無効化する。","法律がガイドラインを禁止している。"],0,"AI新法の理念を、<b>AI事業者ガイドライン</b>が実務的指針として補完する関係です。",["AI新法","事業者ガイドライン"]),
+];
+Q.G3=[
+  R("分野G 法制度","フィッシング詐欺","正規のサイトを装ったメールやサイトでID・パスワードを盗み取る手口の説明として最も適切なものはどれですか？",["正規を装って認証情報を詐取する「フィッシング詐欺」である。","データを暗号化して身代金を要求する「ランサムウェア」である。","データを似た者同士にまとめる「クラスタリング」である。","モデルを追加学習する「ファインチューニング」である。"],0,"<b>フィッシング詐欺</b>は正規を装い認証情報を詐取する手口です。",["フィッシング","スピアフィッシング"]),
+  R("分野G 法制度","ランサムウェア","データを暗号化し、復旧と引き換えに身代金を要求する不正プログラムの説明として最も適切なものはどれですか？",["データを人質に身代金を要求する「ランサムウェア」である。","情報をひそかに盗み出す「スパイウェア」である。","広告を勝手に表示する「アドウェア」である。","ウイルスを検知・駆除する「ワクチンソフト」である。"],0,"<b>ランサムウェア</b>はデータを人質に身代金を要求する不正プログラムです。",["ランサムウェア"]),
+  R("分野G 法制度","ソーシャルエンジニアリング","技術ではなく人の心理や行動の隙をついて情報を盗む攻撃の総称として最も適切なものはどれですか？",["ソーシャルエンジニアリング攻撃。","DDoS攻撃。","SQLインジェクション。","総当たり（ブルートフォース）攻撃。"],0,"<b>ソーシャルエンジニアリング</b>は人の心理・行動の隙を突く手口の総称です。",["ソーシャルエンジニアリング","フィッシング"]),
+  R("分野G 法制度","スミッシング","SMS（ショートメッセージ）を悪用したフィッシングの呼び名として最も適切なものはどれですか？",["スミッシング。","ヴィッシング。","マルウェア。","ベイト攻撃。"],0,"SMSを使うフィッシングが<b>スミッシング</b>、音声通話を使うのが<b>ヴィッシング</b>です。",["スミッシング","フィッシング"]),
+  R("分野G 法制度","マルウェア","「マルウェア」の説明として最も適切なものはどれですか？",["利用者に害を与える不正なソフトウェアの総称で、ランサムウェアやスパイウェアなどを含む。","ウイルスを検知・駆除するソフトウェアのことである。","通信を高速化するソフトウェアのことである。","人の心理の隙を突く攻撃手法のことである。"],0,"<b>マルウェア</b>は不正ソフトの総称（ランサムウェア等を含む）。検知・駆除するのが<b>アンチウイルスソフト</b>です。",["マルウェア","ランサムウェア","アンチウイルスソフト"]),
+  R("分野G 法制度","ソーシャルエンジニアリングの手口","ソーシャルエンジニアリングの手口の説明として最も適切なものはどれですか？",["「無料」などの餌で誘う「ベイト攻撃」、もっともらしい口実で信用させる「プレテキスト」などがある。","通信を暗号化して盗聴を防ぐ手法である。","データを圧縮して保存する手法である。","AIの学習データを増やす手法である。"],0,"<b>ベイト攻撃</b>は餌で誘う手口、<b>プレテキスト</b>は作り話で信用させる手口。いずれも人の心理を突きます。",["ベイト攻撃","プレテキスト","ソーシャルエンジニアリング"]),
+  R("分野G 法制度","身近な危険","日常で注意すべきセキュリティ上の危険として最も適切なものはどれですか？",["貼り替えられた悪意のあるQRコードや、暗号化されていない公衆Wi-Fiの利用。","OSやアプリを最新に保つこと。","パスワードを定期的に見直すこと。","アンチウイルスソフトを導入すること。"],0,"<b>悪意のあるQRコード</b>や無防備な公衆Wi-Fiは身近な危険。他の3つはむしろ推奨される対策です。",["悪意のあるQRコード","フィッシング","情報リテラシー"]),
+  H(R("分野G 法制度","手口の判別（事例）","宅配業者を装ったSMSに記載されたリンクから偽サイトへ誘導され、認証情報を入力させられた。この手口の呼び名として最も適切なものはどれですか？",["スミッシング（SMSを悪用したフィッシング）","ヴィッシング（音声通話を悪用したフィッシング）","ランサムウェア","総当たり攻撃"],0,"SMS経由なら<b>スミッシング</b>。音声通話なら<b>ヴィッシング</b>。媒体で呼び名が変わる点が要点です。",["スミッシング","フィッシング","ソーシャルエンジニアリング"])),
+];
+Q.H1=[
+  R("分野H プロンプト","Zero-Shot","例を一切与えず、指示だけで回答させるプロンプト技法の説明として最も適切なものはどれですか？",["例示をせず指示だけを与える「Zero-Shotプロンプティング」である。","いくつかの例を示してから回答させる「Few-Shotプロンプティング」である。","モデルを追加学習する「ファインチューニング」である。","外部情報を検索して回答する「RAG」である。"],0,"<b>Zero-Shotプロンプティング</b>は例示なしで指示だけを与える方法です。",["Zero-Shot","Few-Shot"]),
+  R("分野H プロンプト","Few-Shot","いくつかの例を示してから回答させるプロンプト技法の説明として最も適切なものはどれですか？",["数個の例を与えて出力の形式や傾向を誘導する「Few-Shotプロンプティング」である。","例を与えず指示だけを渡す「Zero-Shotプロンプティング」である。","訓練データに過剰適合する「過学習」である。","変数を減らす「次元削減」である。"],0,"<b>Few-Shotプロンプティング</b>は数個の例を与えて出力の形式や傾向を誘導します。",["Few-Shot","Zero-Shot"]),
+  R("分野H プロンプト","構成要素","効果的なプロンプトの構成要素として最も適切なものはどれですか？",["指示・文脈・入力データ・出力形式の指定。","CPU・GPU・RAM。","HTML・CSS・JavaScript。","朝・昼・晩。"],0,"プロンプトは<b>指示・文脈・入力データ・出力指示</b>で構成すると効果的です。",["プロンプトエンジニアリング"]),
+  R("分野H プロンプト","プロンプトエンジニアリング","「プロンプトエンジニアリング」の説明として最も適切なものはどれですか？",["望む出力を引き出せるよう、指示文の与え方を工夫する取り組みである。","モデルの重みそのものを書き換える作業である。","GPUを増設する作業である。","データを暗号化する作業である。"],0,"<b>プロンプトエンジニアリング</b>は指示の与え方を工夫して望む出力を引き出す取り組みです。",["プロンプトエンジニアリング","Few-Shot"]),
+  H(R("分野H プロンプト","技法の判別（事例）","AIに「変換例を3つ提示し、それと同じ形式で残りのデータも変換させる」プロンプトを与えた。この技法として最も適切なものはどれですか？",["Few-Shot プロンプティング","Zero-Shot プロンプティング","ファインチューニング","RAG"],0,"例（ショット）を示して形式を誘導するのが<b>Few-Shot</b>。例なしなら<b>Zero-Shot</b>、モデル自体を追加学習するのがファインチューニングです。",["Few-Shot","Zero-Shot","プロンプトエンジニアリング"])),
+];
+Q.H2=[
+  R("分野H プロンプト","不得意なこと","テキスト生成AIが不得意とすることとして最も適切なものはどれですか？",["正確な文字数の指定や計算。","文章の要約。","メールの下書き作成。","アイデア出し。"],0,"生成AIは<b>正確な文字数指定・計算・最新情報</b>などが不得意です。要約や下書きは得意分野です。",["ハルシネーション"]),
+  R("分野H プロンプト","ビジネス応用","生成AIのビジネス活用例として最も不適切なものはどれですか？",["停電時に自動で発電すること。","メール文面の作成。","アンケートの分析。","会議アジェンダの作成。"],0,"メール作成・アンケート分析・アジェンダ作成などに活用可能。物理的な発電はできません。",["プロンプトエンジニアリング"]),
+  R("分野H プロンプト","最新情報の扱い","学習時点より後の最新情報について、素のテキスト生成AIに起こりやすいことの説明として最も適切なものはどれですか？",["知らない情報を、それらしく誤って答えてしまうことがある。","どんな最新情報にも常に正確に答えられる。","必ず「わからない」と正直に答える。","計算だけは完璧になる。"],0,"学習後の最新情報は持たないため<b>ハルシネーション</b>が起きやすく、RAGや検索連携で補います。",["ハルシネーション","検索拡張生成"]),
+  R("分野H プロンプト","得意なタスク","生成AIが比較的得意とするタスクとして最も適切なものはどれですか？",["外国語の翻訳や文章の要約。","正確な四則演算。","リアルタイムの株価取得。","物理的な荷物の配送。"],0,"<b>翻訳・要約・言い換え</b>などの言語タスクは生成AIが得意とする領域です。",["翻訳・要約"]),
+];
+
+/* ============ CURRICULUM ============ */
+const DOMAINS=[
+  {code:"A",name:"AIの基礎",topics:[
+    {id:"A1",name:"AIの定義・歴史・種類",seed:"todo",qs:Q.A1},
+    {id:"A2",name:"推論と学習の違い",seed:"done",qs:Q.A2},
+    {id:"A3",name:"GPU / 量子コンピュータの違い",seed:"done",qs:Q.A3},
+  ]},
+  {code:"B",name:"機械学習",topics:[
+    {id:"B1",name:"教師あり学習",seed:"done",qs:Q.B1},
+    {id:"B2",name:"教師なし学習（k-means・PCA）",seed:"done",qs:Q.B2},
+    {id:"B3",name:"強化学習",seed:"done",qs:Q.B3},
+    {id:"B4",name:"タスク区分（分類・回帰・生成）",seed:"partial",qs:Q.B4},
+    {id:"B5",name:"過学習 / 未学習と対策",seed:"partial",qs:Q.B5},
+  ]},
+  {code:"C",name:"ディープラーニング（アーキテクチャ）",topics:[
+    {id:"C1",name:"CNN（畳み込み・プーリング）",seed:"done",qs:Q.C1},
+    {id:"C2",name:"GAN（生成器・識別器）",seed:"done",qs:Q.C2},
+    {id:"C3",name:"Transformer",seed:"done",qs:Q.C3},
+    {id:"C4",name:"RNN / LSTM",seed:"todo",qs:Q.C4},
+    {id:"C5",name:"生成モデルの系譜・BERT派生",seed:"todo",qs:Q.C5},
+  ]},
+  {code:"D",name:"生成AI",topics:[
+    {id:"D1",name:"LLM・パラメータ",seed:"done",qs:Q.D1},
+    {id:"D2",name:"GPT系譜・RLHF",seed:"done",qs:Q.D2},
+    {id:"D3",name:"マルチモーダル・ハルシネーション",seed:"done",qs:Q.D3},
+    {id:"D4",name:"他モデル（Claude / Gemini / Llama）",seed:"todo",qs:Q.D4},
+    {id:"D5",name:"最新モデルと機能（o系・Operator・Codex）",seed:"todo",qs:Q.D5},
+  ]},
+  {code:"E",name:"社会実装・倫理・法律",topics:[
+    {id:"E1",name:"個人情報保護法・匿名/仮名加工情報",seed:"done",qs:Q.E1},
+    {id:"E2",name:"著作権・知的財産権",seed:"todo",qs:Q.E2},
+    {id:"E3",name:"バイアス・公平性",seed:"todo",qs:Q.E3},
+  ]},
+  {code:"F",name:"生成AIの動向",topics:[
+    {id:"F1",name:"RAG（検索拡張生成）",seed:"todo",qs:Q.F1},
+    {id:"F2",name:"AIエージェント・MCP",seed:"todo",qs:Q.F2},
+    {id:"F3",name:"ディープフェイク",seed:"todo",qs:Q.F3},
+    {id:"F4",name:"生成AIサービスと画像の扱い",seed:"todo",qs:Q.F4},
+  ]},
+  {code:"G",name:"法制度・原則",topics:[
+    {id:"G1",name:"AI社会原則・事業者ガイドライン",seed:"todo",qs:Q.G1},
+    {id:"G2",name:"AI新法",seed:"todo",qs:Q.G2},
+    {id:"G3",name:"セキュリティ（フィッシング等）",seed:"todo",qs:Q.G3},
+    {id:"G4",name:"情報リテラシー・AIガバナンス",seed:"todo",qs:Q.G4},
+  ]},
+  {code:"H",name:"プロンプト",topics:[
+    {id:"H1",name:"プロンプト技法（Zero/Few-Shot）",seed:"todo",qs:Q.H1},
+    {id:"H2",name:"ビジネス応用・不得意なこと",seed:"todo",qs:Q.H2},
+    {id:"H3",name:"プロンプトの構成・LLMの基礎",seed:"todo",qs:Q.H3},
+  ]},
+];
+const ALLTOPICS={}; DOMAINS.forEach(d=>d.topics.forEach(t=>{t.dom=d;ALLTOPICS[t.id]=t;}));
+const QBYID={}; DOMAINS.forEach(d=>d.topics.forEach(t=>{if(t.qs)t.qs.forEach((q,i)=>{q.qid=t.id+"-"+i;q.topicId=t.id;QBYID[q.qid]=q;});}));
+
+/* 関連ワードマップ（6軸リファレンス用） */
+const RELMAP={};
+function relAdd(list){
+  const ks=[...new Set(list.map(x=>lookupTerm(x)).filter(Boolean))];
+  ks.forEach(a=>{RELMAP[a]=RELMAP[a]||new Set();ks.forEach(b=>{if(b!==a)RELMAP[a].add(b);});});
+}
+DOMAINS.forEach(d=>d.topics.forEach(t=>{if(!t.qs)return;t.qs.forEach(q=>{
+  if(q.map){const act=[];q.map.forEach(arr=>arr.forEach(x=>{if(x&&x!=="—")act.push(x);}));if(q.title)act.push(q.title);relAdd(act);}
+  else if(q.related){const l=q.related.slice();if(q.title)l.push(q.title);relAdd(l);}
+});}));
+
+/* 6軸ワード同士の関連（明示定義・双方向に登録） */
+const LINKS={
+  "教師あり学習":["分類","回帰","画像認識","物体検出","特徴量・重み","汎化性能","ニューラルネットワーク","CNN","過学習","未学習","半教師あり学習"],
+  "教師なし学習":["クラスタリング","次元削減","半教師あり学習","k-means","PCA"],
+  "強化学習":["RLHF","アライメント","ニューラルネットワーク","AlphaGo"],
+  "半教師あり学習":["教師あり学習","教師なし学習","分類"],
+  "転移学習":["ファインチューニング","プレトレーニング","ニューラルネットワーク","CNN"],
+  "ファインチューニング":["転移学習","プレトレーニング","RLHF","インストラクションチューニング","Transformer"],
+  "RLHF":["強化学習","アライメント","指示追従","インストラクションチューニング","InstructGPT","ChatGPT/GPT系","迎合","ファインチューニング"],
+  "プレトレーニング":["ファインチューニング","転移学習","Transformer","ChatGPT/GPT系","BERT","パラメータ","生成"],
+  "インストラクションチューニング":["指示追従","RLHF","InstructGPT","ChatGPT/GPT系","アライメント"],
+  "分類":["教師あり学習","回帰","CNN","画像認識","BERT","過学習"],
+  "回帰":["教師あり学習","分類","過学習","ニューラルネットワーク"],
+  "クラスタリング":["教師なし学習","次元削減","k-means"],
+  "次元削減":["教師なし学習","クラスタリング","PCA","VAE"],
+  "生成":["GAN","VAE","Transformer","自己回帰モデル","ChatGPT/GPT系","Sora","DALL·E","ハルシネーション","プレトレーニング","翻訳・要約"],
+  "画像認識":["CNN","物体検出","教師あり学習","分類"],
+  "物体検出":["CNN","画像認識","教師あり学習"],
+  "翻訳・要約":["Transformer","RNN","LSTM","生成","ChatGPT/GPT系","Attention"],
+  "マルチモーダル":["GPT-4o","Gemini","生成","Transformer","ChatGPT/GPT系","Sora"],
+  "アライメント":["RLHF","指示追従","迎合","InstructGPT","強化学習"],
+  "指示追従":["インストラクションチューニング","RLHF","InstructGPT","アライメント"],
+  "パラメータ":["ニューラルネットワーク","特徴量・重み","プレトレーニング","ChatGPT/GPT系","Transformer","Llama"],
+  "Temperature/Top-p":["生成","ハルシネーション","ChatGPT/GPT系"],
+  "特徴量・重み":["ニューラルネットワーク","パラメータ","教師あり学習","CNN"],
+  "汎化性能":["過学習","未学習","正則化","ドロップアウト","教師あり学習"],
+  "弱いAI/強いAI":["ChatGPT/GPT系","AIの定義","シンギュラリティ"],
+  "ニューラルネットワーク":["CNN","RNN","LSTM","GAN","VAE","Transformer","パラメータ","特徴量・重み","過学習","ドロップアウト","勾配消失","教師あり学習"],
+  "CNN":["ニューラルネットワーク","画像認識","物体検出","教師あり学習","過学習","畳み込み","プーリング"],
+  "RNN":["LSTM","勾配消失","翻訳・要約","Transformer","ニューラルネットワーク","長期依存"],
+  "LSTM":["RNN","勾配消失","翻訳・要約","ニューラルネットワーク","長期依存"],
+  "GAN":["生成","ニューラルネットワーク","VAE","ディープフェイク"],
+  "VAE":["生成","GAN","ニューラルネットワーク","次元削減"],
+  "Transformer":["Attention","自己回帰モデル","ChatGPT/GPT系","BERT","Claude","Gemini","GPT-4o","Llama","Copilot","プレトレーニング","生成","翻訳・要約","RNN","パラメータ","マルチモーダル"],
+  "Attention":["Transformer","翻訳・要約","生成"],
+  "自己回帰モデル":["Transformer","生成","ChatGPT/GPT系"],
+  "ChatGPT/GPT系":["GPT-4o","InstructGPT","RLHF","Transformer","プレトレーニング","生成","ハルシネーション","迎合","マルチモーダル","パラメータ"],
+  "GPT-4o":["ChatGPT/GPT系","マルチモーダル","Transformer"],
+  "Claude":["Transformer","生成","RLHF","ハルシネーション"],
+  "Gemini":["Transformer","マルチモーダル","生成"],
+  "Copilot":["Transformer","生成"],
+  "Llama":["Transformer","プレトレーニング","生成","パラメータ"],
+  "BERT":["Transformer","分類","プレトレーニング","Attention"],
+  "Sora":["生成","マルチモーダル"],
+  "DALL·E":["生成","マルチモーダル"],
+  "InstructGPT":["RLHF","インストラクションチューニング","指示追従","ChatGPT/GPT系","アライメント"],
+  "過学習":["未学習","正則化","ドロップアウト","汎化性能","教師あり学習","ニューラルネットワーク","CNN"],
+  "未学習":["過学習","汎化性能"],
+  "正則化":["過学習","ドロップアウト","汎化性能"],
+  "ドロップアウト":["過学習","正則化","汎化性能","ニューラルネットワーク"],
+  "ハルシネーション":["生成","ChatGPT/GPT系","Claude","Temperature/Top-p","迎合","検索拡張生成"],
+  "バイアス":["生成","ChatGPT/GPT系","教師あり学習","公平性"],
+  "迎合":["RLHF","アライメント","ハルシネーション","ChatGPT/GPT系"],
+  "勾配消失":["RNN","LSTM","ニューラルネットワーク"],
+  /* --- 歴史・基礎 --- */
+  "AIの定義":["ダートマス会議","マッカーシー","弱いAI/強いAI","AI効果","シンギュラリティ"],
+  "ダートマス会議":["マッカーシー","AIの定義","第一次ブーム","探索と推論"],
+  "マッカーシー":["ダートマス会議","AIの定義","第一次ブーム"],
+  "特化型":["弱いAI/強いAI","AIの定義","ChatGPT/GPT系"],
+  "第一次ブーム":["探索と推論","AIの冬","第二次ブーム","AIの定義"],
+  "探索と推論":["第一次ブーム","AIの冬","エキスパートシステム"],
+  "第二次ブーム":["エキスパートシステム","知識ベース","AIの冬","第一次ブーム"],
+  "エキスパートシステム":["知識ベース","第二次ブーム","探索と推論","AIの冬"],
+  "知識ベース":["エキスパートシステム","第二次ブーム"],
+  "AIの冬":["第一次ブーム","第二次ブーム","探索と推論","エキスパートシステム"],
+  "シンギュラリティ":["2045年問題","AI効果","弱いAI/強いAI","AIの定義"],
+  "2045年問題":["シンギュラリティ","AI効果"],
+  "AI効果":["シンギュラリティ","AIの定義","2045年問題"],
+  "ノーフリーランチ定理":["教師あり学習","教師なし学習","汎化性能"],
+  /* --- 学習と推論・計算資源 --- */
+  "推論":["学習","パラメータ","ニューラルネットワーク","GPU"],
+  "学習":["推論","パラメータ","ニューラルネットワーク","教師あり学習"],
+  "GPU":["並列処理","並列演算","行列演算","ディープラーニング","量子コンピュータ","ニューラルネットワーク"],
+  "並列処理":["GPU","並列演算","行列演算","Transformer"],
+  "並列演算":["GPU","並列処理","行列演算","Transformer","ニューラルネットワーク"],
+  "行列演算":["GPU","並列処理","並列演算","ニューラルネットワーク"],
+  "量子コンピュータ":["重ね合わせ","GPU","並列演算"],
+  "重ね合わせ":["量子コンピュータ","GPU","並列演算"],
+  "ディープラーニング":["ニューラルネットワーク","CNN","RNN","Transformer","GPU","過学習"],
+  /* --- 手法・アルゴリズム --- */
+  "k-means":["クラスタリング","教師なし学習","PCA"],
+  "PCA":["次元削減","教師なし学習","k-means","VAE"],
+  "AlphaGo":["強化学習","ニューラルネットワーク","ディープラーニング"],
+  "自己教師あり":["プレトレーニング","Transformer","BERT","ChatGPT/GPT系"],
+  "敵対的学習":["GAN","生成器","識別器","生成"],
+  "生成器":["GAN","識別器","敵対的学習","生成"],
+  "識別器":["GAN","生成器","敵対的学習"],
+  "畳み込み":["CNN","プーリング","画像認識","物体検出"],
+  "プーリング":["CNN","畳み込み","画像認識"],
+  "モード崩壊":["GAN","生成器","識別器","生成"],
+  "長期依存":["RNN","LSTM","勾配消失","Transformer"],
+  "正規化":["正則化","特徴量・重み","教師あり学習","過学習"],
+  "SFT→報酬モデル→PPO":["RLHF","強化学習","アライメント","InstructGPT"],
+  /* --- 生成AIの周辺 --- */
+  "検索拡張生成":["RAG","チャンク","ベクトルデータベース","類似検索","ハルシネーション","ファインチューニング"],
+  "RAG":["検索拡張生成","チャンク","ベクトルデータベース","類似検索","ハルシネーション"],
+  "チャンク":["検索拡張生成","ベクトルデータベース","類似検索","RAG"],
+  "ベクトルデータベース":["検索拡張生成","チャンク","類似検索","RAG"],
+  "類似検索":["ベクトルデータベース","チャンク","検索拡張生成"],
+  "AIエージェント":["タスク分解","MCP","検索拡張生成","GenSpark","Manus","Skywork AI"],
+  "タスク分解":["AIエージェント","MCP","検索拡張生成"],
+  "MCP":["AIエージェント","タスク分解","検索拡張生成"],
+  "GenSpark":["AIエージェント","Manus","Skywork AI","タスク分解"],
+  "Manus":["AIエージェント","GenSpark","Skywork AI","タスク分解"],
+  "Skywork AI":["AIエージェント","GenSpark","Manus","タスク分解"],
+  "ディープフェイク":["GAN","深層偽造","偽情報","生成","透明性"],
+  "深層偽造":["ディープフェイク","GAN","偽情報","生成"],
+  "偽情報":["ディープフェイク","深層偽造","GAN","透明性"],
+  "Zero-Shot":["Few-Shot","プロンプトエンジニアリング","ChatGPT/GPT系"],
+  "Few-Shot":["Zero-Shot","プロンプトエンジニアリング","ChatGPT/GPT系"],
+  "プロンプトエンジニアリング":["Zero-Shot","Few-Shot","ChatGPT/GPT系","生成"],
+  /* --- 法務・倫理 --- */
+  "個人情報":["個人識別符号","要配慮個人情報","匿名加工情報","仮名加工情報","個人情報保護委員会","5000人要件の撤廃"],
+  "個人識別符号":["個人情報","要配慮個人情報","匿名加工情報","仮名加工情報"],
+  "要配慮個人情報":["個人情報","個人識別符号","個人情報保護委員会"],
+  "匿名加工情報":["仮名加工情報","個人情報","マスキング","個人識別符号"],
+  "仮名加工情報":["匿名加工情報","個人情報","マスキング","個人識別符号"],
+  "マスキング":["匿名加工情報","仮名加工情報","個人情報"],
+  "個人情報保護委員会":["個人情報","内閣府の外局","5000人要件の撤廃","要配慮個人情報"],
+  "内閣府の外局":["個人情報保護委員会","個人情報","AI新法"],
+  "5000人要件の撤廃":["個人情報","個人情報保護委員会","要配慮個人情報"],
+  "知的財産権":["著作権","特許権","商標権","意匠権","創作的関与"],
+  "著作権":["知的財産権","創作的関与","依拠性","類似性","特許権"],
+  "特許権":["知的財産権","著作権","商標権","意匠権"],
+  "商標権":["知的財産権","特許権","意匠権","著作権"],
+  "意匠権":["知的財産権","特許権","商標権","著作権"],
+  "創作的関与":["著作権","知的財産権","依拠性","類似性"],
+  "依拠性":["類似性","著作権","創作的関与","知的財産権"],
+  "類似性":["依拠性","著作権","創作的関与","知的財産権"],
+  "AI新法":["AI社会原則","事業者ガイドライン","人間中心","透明性","内閣府の外局"],
+  "AI社会原則":["人間の尊厳","多様性と包摂","持続可能性","人間中心","公平性","透明性","安全性","AI新法","事業者ガイドライン"],
+  "事業者ガイドライン":["AI開発者","AI提供者","AI利用者","AI社会原則","AI新法","透明性","アカウンタビリティ"],
+  "AI開発者":["AI提供者","AI利用者","事業者ガイドライン","AI社会原則"],
+  "AI提供者":["AI開発者","AI利用者","事業者ガイドライン","AI社会原則"],
+  "AI利用者":["AI開発者","AI提供者","事業者ガイドライン","AI社会原則"],
+  "人間中心":["AI社会原則","人間の尊厳","公平性","透明性","AI新法"],
+  "人間の尊厳":["AI社会原則","多様性と包摂","持続可能性","人間中心"],
+  "多様性と包摂":["AI社会原則","人間の尊厳","持続可能性","公平性"],
+  "持続可能性":["AI社会原則","人間の尊厳","多様性と包摂"],
+  "公平性":["バイアス","AI社会原則","透明性","人間中心","多様性と包摂"],
+  "透明性":["アカウンタビリティ","AI社会原則","公平性","事業者ガイドライン","人間中心"],
+  "アカウンタビリティ":["透明性","事業者ガイドライン","AI社会原則","公平性"],
+  "安全性":["AI社会原則","人間中心","透明性","事業者ガイドライン"],
+  /* --- セキュリティ --- */
+  "フィッシング":["スピアフィッシング","スミッシング","ヴィッシング","ソーシャルエンジニアリング","ランサムウェア"],
+  "スピアフィッシング":["フィッシング","ソーシャルエンジニアリング","スミッシング","ヴィッシング"],
+  "スミッシング":["フィッシング","ヴィッシング","スピアフィッシング","ソーシャルエンジニアリング"],
+  "ヴィッシング":["フィッシング","スミッシング","スピアフィッシング","ソーシャルエンジニアリング"],
+  "ランサムウェア":["フィッシング","ソーシャルエンジニアリング","スミッシング","スピアフィッシング"],
+  "ソーシャルエンジニアリング":["フィッシング","スピアフィッシング","スミッシング","ヴィッシング","ランサムウェア"],
+  /* --- 6軸内で関連が薄かった語の補強 --- */
+  "弱いAI/強いAI":["ChatGPT/GPT系","Claude","Gemini","GPT-4o","AIの定義","シンギュラリティ","特化型"],
+  "推論＝モデル活用":["学習","推論","パラメータ"],
+  "学習＝モデル作成":["学習","推論","パラメータ"],
+  "GPT":["ChatGPT/GPT系","Transformer","GPT-4o","InstructGPT","プレトレーニング"],
+};
+/* 6軸カバレッジ補強（事実として正しい関連のみ。LINKSに追記マージ） */
+const LINKS2={
+  "転移学習":["画像認識","分類","汎化性能","特徴量・重み","BERT","過学習"],
+  "ファインチューニング":["分類","生成","指示追従","パラメータ","BERT","InstructGPT","Llama","過学習"],
+  "教師なし学習":["特徴量・重み","VAE","ニューラルネットワーク","k-means","PCA"],
+  "半教師あり学習":["汎化性能","ニューラルネットワーク","過学習"],
+  "クラスタリング":["特徴量・重み","k-means"],
+  "次元削減":["特徴量・重み","PCA","VAE"],
+  "強化学習":["AlphaGo","ニューラルネットワーク"],
+  "GAN":["敵対的学習","教師なし学習","モード崩壊","生成器","識別器"],
+  "VAE":["教師なし学習","特徴量・重み","PCA","次元削減"],
+  "Sora":["プレトレーニング","Transformer","ハルシネーション"],
+  "DALL·E":["プレトレーニング","Transformer","ハルシネーション"],
+  "自己回帰モデル":["プレトレーニング","自己教師あり","Temperature/Top-p","ハルシネーション"],
+  "バイアス":["特徴量・重み","ニューラルネットワーク"],
+  "弱いAI/強いAI":["教師あり学習","分類","生成","マルチモーダル","パラメータ","Transformer","ハルシネーション","汎化性能"],
+  "自己教師あり":["プレトレーニング","Transformer","BERT","ChatGPT/GPT系","生成","翻訳・要約","パラメータ","ハルシネーション"],
+  "敵対的学習":["GAN","生成","生成器","識別器","モード崩壊","ニューラルネットワーク"],
+  "k-means":["クラスタリング","教師なし学習","PCA","特徴量・重み"],
+  "PCA":["次元削減","教師なし学習","k-means","特徴量・重み","VAE"],
+  "AlphaGo":["強化学習","教師あり学習","ニューラルネットワーク","CNN","パラメータ","ディープラーニング"],
+  "長期依存":["RNN","LSTM","勾配消失","Transformer","翻訳・要約","Attention"],
+  "モード崩壊":["GAN","敵対的学習","生成","生成器","識別器"],
+  "物体検出":["CNN","画像認識","分類","教師あり学習","特徴量・重み"],
+  "Attention":["自己教師あり","ChatGPT/GPT系","BERT","長期依存"],
+  "Copilot":["プレトレーニング","ChatGPT/GPT系","ハルシネーション"],
+  "Claude":["マルチモーダル","プレトレーニング","迎合"],
+  "Gemini":["プレトレーニング","ハルシネーション"],
+  "Llama":["ファインチューニング","ハルシネーション"],
+  "BERT":["自己教師あり","ファインチューニング","転移学習"],
+  "GPT-4o":["プレトレーニング","生成","ハルシネーション"],
+  "InstructGPT":["迎合","ファインチューニング"],
+  "回帰":["未学習","特徴量・重み","汎化性能"],
+  "未学習":["教師あり学習","分類","回帰","ニューラルネットワーク"],
+  "正則化":["ニューラルネットワーク","教師あり学習"],
+  "ドロップアウト":["CNN"],
+  "迎合":["Claude","指示追従"],
+  "勾配消失":["長期依存","翻訳・要約"],
+  "Temperature/Top-p":["自己回帰モデル","Transformer"],
+  "指示追従":["ChatGPT/GPT系","生成"],
+  "アライメント":["ハルシネーション"],
+  "マルチモーダル":["Sora","DALL·E","画像認識"],
+  "拡散モデル":["生成","DALL·E","Sora","GAN","VAE","ニューラルネットワーク","画像認識","プレトレーニング","Veo3"],
+  "ルールベース":["機械学習","エキスパートシステム","探索と推論","AIの定義","AIの4つのレベル"],
+  "機械学習":["ルールベース","教師あり学習","教師なし学習","強化学習","ディープラーニング","学習済みモデル"],
+  "AIの4つのレベル":["ルールベース","機械学習","ディープラーニング","弱いAI/強いAI","AIの定義"],
+  "ビッグデータ":["第三次ブーム","ディープラーニング","機械学習","プレトレーニング"],
+  "第三次ブーム":["ビッグデータ","ディープラーニング","第二次ブーム","AIの冬"],
+  "学習済みモデル":["転移学習","ファインチューニング","推論","プレトレーニング","機械学習"],
+  "ボルツマンマシン":["ニューラルネットワーク","生成","ディープラーニング","VAE","GAN"],
+  "位置エンコーディング":["Transformer","Attention","自己回帰モデル","翻訳・要約"],
+  "MLM":["BERT","NSP","自己教師あり","プレトレーニング"],
+  "NSP":["BERT","MLM","自己教師あり","プレトレーニング"],
+  "RoBERTa":["BERT","ALBERT","MLM","Transformer"],
+  "ALBERT":["BERT","RoBERTa","パラメータ","Transformer"],
+  "o系推論モデル":["ChatGPT/GPT系","GPT-5","GPT-4o","Transformer"],
+  "GPT-5":["ChatGPT/GPT系","o系推論モデル","GPT-4o","マルチモーダル"],
+  "GPTs":["ChatGPT/GPT系","プロンプトエンジニアリング","Code Interpreter"],
+  "Code Interpreter":["ChatGPT/GPT系","GPTs","Codex"],
+  "Operator":["AIエージェント","ChatGPT/GPT系","タスク分解","MCP"],
+  "Codex":["ChatGPT/GPT系","Copilot","Code Interpreter","生成"],
+  "Image Generation":["ChatGPT/GPT系","DALL·E","拡散モデル","生成","マルチモーダル"],
+  "Veo3":["Sora","拡散モデル","生成","マルチモーダル"],
+  "データ拡張":["過学習","画像認識","画像の前処理","CNN","汎化性能"],
+  "リマスタリング":["生成","画像認識","画像の前処理"],
+  "画像の前処理":["データ拡張","画像認識","CNN","リマスタリング","特徴量・重み"],
+  "肖像権":["パブリシティ権","知的財産権","著作権","ディープフェイク"],
+  "パブリシティ権":["肖像権","知的財産権","著作権","ディープフェイク"],
+  "不正競争防止法":["営業秘密","限定提供データ","知的財産権","著作権"],
+  "営業秘密":["不正競争防止法","限定提供データ","知的財産権"],
+  "限定提供データ":["不正競争防止法","営業秘密","知的財産権"],
+  "名誉毀損":["ディープフェイク","偽情報","肖像権","著作権"],
+  "マルウェア":["ランサムウェア","アンチウイルスソフト","フィッシング","ソーシャルエンジニアリング"],
+  "アンチウイルスソフト":["マルウェア","ランサムウェア","情報リテラシー"],
+  "ベイト攻撃":["ソーシャルエンジニアリング","フィッシング","プレテキスト","マルウェア"],
+  "プレテキスト":["ソーシャルエンジニアリング","フィッシング","ベイト攻撃","スピアフィッシング"],
+  "悪意のあるQRコード":["フィッシング","スミッシング","マルウェア","情報リテラシー"],
+  "情報リテラシー":["デジタル市民権","偽情報","ディープフェイク","ハルシネーション","アンチウイルスソフト"],
+  "デジタル市民権":["情報リテラシー","公平性","透明性","偽情報"],
+  "AIガバナンス":["事業者ガイドライン","AI社会原則","アカウンタビリティ","透明性","AI新法"],
+  "ハイパーパラメータ":["Temperature/Top-p","パラメータ","プレトレーニング","生成"],
+  "n-gramモデル":["ChatGPT/GPT系","Transformer","翻訳・要約","自己回帰モデル"],
+  "プロンプトの4要素":["プロンプトエンジニアリング","Zero-Shot","Few-Shot","生成"],
+  "DALL·E":["拡散モデル"],
+  "Sora":["拡散モデル"],
+  "GAN":["拡散モデル"],
+  "VAE":["拡散モデル"],
+};
+[LINKS,LINKS2].forEach(tbl=>Object.keys(tbl).forEach(k=>{
+  const a=lookupTerm(k);if(!a)return;
+  RELMAP[a]=RELMAP[a]||new Set();
+  tbl[k].forEach(x=>{
+    const b=lookupTerm(x);if(!b||b===a)return;
+    RELMAP[a].add(b);
+    RELMAP[b]=RELMAP[b]||new Set();RELMAP[b].add(a);
+  });
+}));
+
+/* ============ STATE ============ */
+const $=s=>document.querySelector(s);
+const LS="genai_passport_v3";
+const TARGET=80, PER_TOPIC_MIN=25;
+let data=load();
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(LS));
+    if(d&&d.bestPct){
+      d.wrongs=d.wrongs||[];d.cleared=d.cleared||[];d.started=d.started||{};
+      d.studySeconds=d.studySeconds||0;d.session=d.session||null;
+      // 旧「難易度フィルタ」で一部の問題だけを解いた記録は実力を正しく表さないため、スコアのみ一度だけ初期化
+      if(d.diff&&d.diff!=="all"){d.bestPct={};d.started={};d.scoreReset=true;}
+      delete d.diff;
+      localStorage.setItem(LS,JSON.stringify(d));
+      return d;}
+  }catch(e){}
+  // 旧バージョン（v2/v1）の記録を引き継ぐ
+  for(const oldKey of ["genai_passport_v2","genai_passport_v1"]){
+    try{const o=JSON.parse(localStorage.getItem(oldKey));
+      if(o&&(o.bestPct||o.chapters)){
+        const mig={studySeconds:o.studySeconds||0,bestPct:{},wrongs:[],cleared:[],started:o.started||{},diff:"all",session:null};
+        if(o.bestPct)for(const k in o.bestPct){if(ALLTOPICS[k])mig.bestPct[k]=o.bestPct[k];}
+        if(o.status)for(const k in o.status){if(ALLTOPICS[k]&&o.status[k]!=="todo")mig.started[k]=true;}
+        if(Array.isArray(o.wrongs))mig.wrongs=o.wrongs.filter(id=>QBYID[id]);
+        if(Array.isArray(o.cleared))mig.cleared=o.cleared.filter(id=>mig.wrongs.indexOf(id)!==-1);
+        localStorage.setItem(LS,JSON.stringify(mig));
+        return mig;
+      }
+    }catch(e){}
+  }
+  return {studySeconds:0,bestPct:{},wrongs:[],cleared:[],started:{},diff:"all",session:null};
+}
+function save(){try{localStorage.setItem(LS,JSON.stringify(data));}catch(e){}}
+function statusOf(id){
+  const best=data.bestPct[id];
+  if(best!=null)return best>=TARGET?"done":"partial";
+  if(data.started[id])return "partial";
+  return ALLTOPICS[id].seed;
+}
+function topicWrongCount(id){return data.wrongs.filter(q=>q.indexOf(id+"-")===0&&!data.cleared.includes(q)).length;}
+/* 難易度フィルタは廃止：常に全問を出題する（応用問題も混在） */
+function filtered(qs){return qs.slice();}
+function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+
+/* ============ TIME TRACKER ============ */
+let sessionSecs=0,lastActive=Date.now(),tickTimer=null,tracking=false;const IDLE=120000;
+function markActive(){lastActive=Date.now();}
+function startTracking(){
+  tracking=true;sessionSecs=0;lastActive=Date.now();
+  if(tickTimer)clearInterval(tickTimer);
+  tickTimer=setInterval(()=>{
+    if(document.visibilityState==="visible"&&Date.now()-lastActive<IDLE){
+      sessionSecs++;data.studySeconds++;
+      if(sessionSecs%5===0)save();
+      const e=$("#sessTime");if(e){const m=Math.floor(sessionSecs/60);e.textContent=m+":"+String(sessionSecs%60).padStart(2,"0");}
+    }
+  },1000);
+}
+function stopTracking(){tracking=false;if(tickTimer){clearInterval(tickTimer);tickTimer=null;}save();}
+document.addEventListener("visibilitychange",()=>{document.visibilityState==="visible"?markActive():(saveSession(),save());});
+["click","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,markActive,{passive:true}));
+window.addEventListener("beforeunload",()=>{saveSession();save();});
+
+/* ============ VIEWS ============ */
+function view(n){["home","quiz","result","axref"].forEach(v=>$("#"+v).classList.toggle("hidden",v!==n));$("#homeBtn").classList.toggle("hidden",n==="home");}
+
+/* ============ QUIZ STATE ============ */
+let curTopic=null,pool=[],order=[],idx=0,score=0,answers=[],mockMode=false,lastMock=false,curOpts=[],curCorrect=0,curMode="topic";
+
+/* --- セッション保存／再開 --- */
+function saveSession(){
+  if(!tracking||!pool.length){return;}
+  data.session={mode:curMode,topicId:curTopic&&curTopic.id,qids:pool.map(q=>q.qid),idx:idx,score:score,
+    answers:answers.map(a=>a?{qid:a.q.qid,chosenText:a.chosenText,correctText:a.correctText,ok:a.ok}:null)};
+  save();
+}
+function clearSession(){data.session=null;save();}
+function resumeSession(){
+  const s=data.session;if(!s)return;
+  const qs=s.qids.map(id=>QBYID[id]).filter(Boolean);
+  if(qs.length!==s.qids.length||!qs.length){clearSession();renderHome();return;}
+  curMode=s.mode;mockMode=(s.mode==="mock");
+  curTopic=s.topicId&&ALLTOPICS[s.topicId]?ALLTOPICS[s.topicId]:
+    (s.mode==="mock"?{id:"__mock",name:"模擬試験",dom:{code:"模試"}}:{id:"__wrong",name:"間違いノート",dom:{code:"復習"}});
+  pool=qs;order=pool.map((_,i)=>i);idx=Math.min(s.idx,order.length-1);score=s.score||0;
+  answers=(s.answers||[]).map(a=>a?{q:QBYID[a.qid],chosenText:a.chosenText,correctText:a.correctText,ok:a.ok}:null);
+  $("#subtitle").textContent=(curMode==="mock"?"模擬試験 ":curMode==="wrong"?"間違いノート ":curTopic.dom.code+"：")+
+    (curMode==="topic"?curTopic.name:pool.length+"問")+"（再開）";
+  view("quiz");startTracking();renderQ();
+}
+
+function startQuiz(id,custom){
+  const t=ALLTOPICS[id];if(!t||!t.qs)return;
+  const qs=custom||filtered(t.qs);
+  if(!qs.length){alert("この難易度に該当する問題がありません。難易度を「すべて」に切り替えてください。");return;}
+  curMode="topic";mockMode=false;curTopic=t;pool=qs;order=pool.map((_,i)=>i);idx=0;score=0;answers=[];
+  if(!data.started[id]){data.started[id]=true;}
+  $("#subtitle").textContent=t.dom.code+"："+t.name;
+  view("quiz");startTracking();saveSession();renderQ();
+}
+function startMock(n,customPool){
+  let sel;
+  if(customPool)sel=customPool;
+  else{const all=[];DOMAINS.forEach(d=>d.topics.forEach(t=>{if(t.qs)all.push(...filtered(t.qs));}));sel=shuffle(all).slice(0,Math.min(n,all.length));}
+  if(!sel.length){alert("該当する問題がありません。");return;}
+  curMode="mock";mockMode=true;curTopic={id:"__mock",name:"模擬試験",dom:{code:"模試"}};
+  pool=sel;order=pool.map((_,i)=>i);idx=0;score=0;answers=[];
+  $("#subtitle").textContent="模擬試験 "+pool.length+"問";
+  view("quiz");startTracking();saveSession();renderQ();
+}
+function startWrongReview(custom){
+  const qs=custom||data.wrongs.map(id=>QBYID[id]).filter(Boolean);
+  if(!qs.length)return;
+  curMode="wrong";mockMode=false;curTopic={id:"__wrong",name:"間違いノート",dom:{code:"復習"}};
+  pool=qs;order=pool.map((_,i)=>i);idx=0;score=0;answers=[];
+  $("#subtitle").textContent="間違いノート "+pool.length+"問";
+  view("quiz");startTracking();saveSession();renderQ();
+}
+
+/* ============ 6軸マップ（解答画面） ============ */
+function renderCtx(q){
+  let inner;
+  if(q.map){
+    inner='<div class="map"><div class="mhd"><span class="cap">いま学んでいるところ ・ '+q.title+'</span><span class="field">'+q.field+'</span></div>'+
+      AXES.map((ax,n)=>{
+        const active=(q.map[n]||[]).filter(x=>x&&x!=="—");
+        const base=AXTERMS[n];
+        const extras=active.filter(x=>base.indexOf(x)===-1);
+        const terms=base.concat(extras).map(x=>chipHtml(x,"term",active.indexOf(x)!==-1)).join("");
+        return '<div class="arow'+(n===q.focus?' cur':'')+'"><div class="axl">'+ax+'</div><div class="terms">'+terms+'</div></div>';
+      }).join("")+'</div>';
+  }else{
+    inner='<div class="relbox"><div class="cap"><span>いま学んでいるところ ・ '+q.title+'</span><span class="field">'+q.field+'</span></div>'+
+      '<div class="chips">'+q.related.map(x=>chipHtml(x,"chip",false)).join("")+'</div></div>';
+  }
+  $("#ctx").innerHTML='<button class="ctxtoggle" id="ctxToggle" type="button" aria-expanded="false">🧭 6軸マップを見る（ヒント）<span class="chev">▾</span></button><div id="ctxBody" class="hidden">'+inner+'</div>';
+  $("#ctxToggle").addEventListener("click",()=>{
+    const b=$("#ctxBody"),t=$("#ctxToggle"),open=b.classList.contains("hidden");
+    b.classList.toggle("hidden",!open);t.setAttribute("aria-expanded",open?"true":"false");
+  });
+}
+
+/* ============ 出題 ============ */
+function renderQ(){
+  const q=pool[order[idx]],keys=["A","B","C","D"];
+  if(mockMode)$("#ctx").innerHTML="";else renderCtx(q);
+  $("#qnum").textContent="Q"+(idx+1)+" / "+order.length;
+  $("#hardTag").innerHTML=q.hard?'<span class="hardtag">応用</span>':"";
+  $("#qtext").innerHTML=q.q;
+  $("#qbarfill").style.width=(idx/order.length*100)+"%";
+  $("#navrow").classList.add("hidden");$("#explainWrap").innerHTML="";
+  const box=$("#opts");box.innerHTML="";
+  curOpts=shuffle(q.opts.map((_,n)=>n));
+  curCorrect=curOpts.indexOf(q.a);
+  curOpts.forEach((orig,d)=>{
+    const b=document.createElement("button");b.className="opt";
+    b.innerHTML='<span class="key">'+keys[d]+'</span><span class="lab">'+q.opts[orig]+'</span><span class="mark"></span>';
+    b.addEventListener("click",()=>choose(d,b));box.appendChild(b);
+  });
+  // 模試モードで既に選択済みなら復元
+  if(mockMode&&answers[idx]){
+    const prev=answers[idx];
+    [...document.querySelectorAll("#opts .opt")].forEach((n,i)=>{
+      if(q.opts[curOpts[i]]===prev.chosenText)n.classList.add("sel");
+    });
+    $("#navrow").classList.remove("hidden");
+    $("#nextBtn").textContent=idx+1<order.length?"次へ":"採点する";
+  }
+  saveSession();
+  window.scrollTo({top:0,behavior:"instant"});
+}
+function choose(d,btn){
+  markActive();
+  const q=pool[order[idx]],keys=["A","B","C","D"];
+  const nodes=[...document.querySelectorAll("#opts .opt")];
+  const ok=(d===curCorrect);
+  const rec={q,chosenText:q.opts[curOpts[d]],correctText:q.opts[q.a],ok};
+  if(mockMode){
+    nodes.forEach(n=>n.classList.remove("sel"));btn.classList.add("sel");
+    answers[idx]=rec;saveSession();
+    $("#navrow").classList.remove("hidden");
+    $("#nextBtn").textContent=idx+1<order.length?"次へ":"採点する";
+    return;
+  }
+  nodes.forEach(n=>n.disabled=true);
+  if(ok)score++;answers.push(rec);
+  nodes[curCorrect].classList.add("correct");nodes[curCorrect].querySelector(".mark").textContent="✓";
+  if(!ok){btn.classList.add("wrong");btn.querySelector(".mark").textContent="✕";}
+  const ex=document.createElement("div");ex.className="explain "+(ok?"ok":"ng");
+  ex.innerHTML='<div class="lead">'+(ok?"✓ 正解":"✕ 不正解")+'　<span style="color:var(--muted);font-weight:600">正解 '+keys[curCorrect]+'</span></div>'+q.ex+glossHtml(q);
+  $("#explainWrap").appendChild(ex);
+  $("#navrow").classList.remove("hidden");
+  $("#nextBtn").textContent=idx+1<order.length?"次の問題へ":"結果を見る";
+  saveSession();
+  ex.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+$("#nextBtn").addEventListener("click",()=>{idx+1<order.length?(idx++,renderQ()):finish();});
+
+/* ============ 結果 ============ */
+function finish(){
+  stopTracking();clearSession();
+  const isMock=mockMode;lastMock=isMock;
+  if(isMock)score=answers.filter(a=>a&&a.ok).length;
+  const total=order.length,pct=Math.round(score/total*100);
+  const isFullTopic=(curMode==="topic"&&pool.length===filtered(ALLTOPICS[curTopic.id].qs).length);
+  if(isFullTopic){
+    const prev=data.bestPct[curTopic.id];
+    data.bestPct[curTopic.id]=prev==null?pct:Math.max(prev,pct);
+  }
+  answers.forEach(a=>{
+    if(!a||!a.q||!a.q.qid)return;
+    if(!a.ok){
+      if(data.wrongs.indexOf(a.q.qid)===-1)data.wrongs.push(a.q.qid);
+      data.cleared=data.cleared.filter(x=>x!==a.q.qid);
+    }else if(data.wrongs.indexOf(a.q.qid)!==-1&&data.cleared.indexOf(a.q.qid)===-1)data.cleared.push(a.q.qid);
+  });
+  save();
+  $("#rtopic").textContent=isMock?"模擬試験（全範囲）":(curMode==="wrong"?"間違いノート":curTopic.dom.code+"："+curTopic.name);
+  $("#rscore").textContent=score;$("#rtot").textContent=total;$("#rpct").textContent=pct;
+  const v=$("#verdict"),pass=pct>=TARGET;v.className="verdict "+(pass?"pass":"fail");
+  v.textContent=pass?"合格ライン到達（80%以上）🎉":"もう一歩（目標80%）";
+  const wrongs=answers.filter(a=>a&&!a.ok),rv=$("#review");
+  rv.innerHTML=wrongs.length===0?'<div class="allright">全問正解！素晴らしい 🎉</div>':
+    '<h3>復習：間違えた問題（'+wrongs.length+'）</h3>'+wrongs.map(w=>
+      '<div class="ritem"><div class="q">'+w.q.q+'</div>'+
+      '<div class="a" style="margin-top:4px">あなたの回答：'+w.chosenText+'</div>'+
+      '<div class="a"><b>正解：'+w.correctText+'</b></div>'+
+      (isMock?'<div class="a" style="margin-top:6px;color:var(--text)">'+w.q.ex+'</div>'+glossHtml(w.q):'')+'</div>').join("");
+  $("#retryWrong").style.display=wrongs.length?"block":"none";
+  mockMode=false;
+  view("result");window.scrollTo({top:0,behavior:"smooth"});
+}
+$("#retryWrong").addEventListener("click",()=>{
+  const wp=answers.filter(a=>a&&!a.ok).map(a=>a.q);if(!wp.length)return;
+  if(lastMock)startMock(0,wp);
+  else if(curTopic&&curTopic.id==="__wrong")startWrongReview(wp);
+  else startQuiz(curTopic.id,wp);
+});
+$("#toHome").addEventListener("click",goHome);
+$("#homeBtn").addEventListener("click",()=>{if(tracking){saveSession();stopTracking();}goHome();});
+function goHome(){mockMode=false;$("#subtitle").textContent="2026年2月シラバス対応";view("home");renderHome();}
+
+/* ============ ダッシュボード ============ */
+function fmtTime(sec){const m=Math.round(sec/60);if(m<60)return m+'<small>分</small>';return Math.floor(m/60)+'<small>時間</small>'+(m%60?(m%60)+'<small>分</small>':'');}
+function renderHome(){
+  const ids=Object.keys(ALLTOPICS);
+  const SV={done:1,partial:.5,todo:0};
+  let sum=0;ids.forEach(id=>sum+=SV[statusOf(id)]);
+  const ready=Math.round(sum/ids.length*100);
+  $("#readyPct").textContent=ready;
+  requestAnimationFrame(()=>{$("#hbar").style.width=ready+"%";});
+  let rem=0;ids.forEach(id=>rem+=(1-SV[statusOf(id)])*PER_TOPIC_MIN);rem=Math.round(rem);
+  $("#remainTime").innerHTML=rem<=0?"到達！":(rem<60?rem+'<small>分</small>':Math.floor(rem/60)+'<small>時間</small>'+(rem%60?(rem%60)+'<small>分</small>':''));
+  $("#totalTime").innerHTML=fmtTime(data.studySeconds);
+  const done=ids.filter(id=>statusOf(id)==="done").length;
+  $("#ratio").textContent=done+" / "+ids.length+" 完了";
+  const hn=$("#hnote");
+  if(ready>=100)hn.textContent="準備OK 🎉";
+  else if(ready>=70)hn.textContent="あと少しで一周";
+  else hn.textContent="目標 100%";
+
+  let tq=0;DOMAINS.forEach(d=>d.topics.forEach(t=>{if(t.qs)tq+=filtered(t.qs).length;}));
+  $("#mockPool").textContent="全"+tq+"問から出題";
+
+  // 修正のお知らせ（一度だけ）
+  $("#noticeCard").classList.toggle("hidden",!data.scoreReset);
+  // 再開カード
+  const rc=$("#resumeCard"),s=data.session;
+  if(s&&s.qids&&s.qids.length){
+    const label=s.mode==="mock"?"模擬試験":(s.mode==="wrong"?"間違いノート":(ALLTOPICS[s.topicId]?ALLTOPICS[s.topicId].name:"演習"));
+    rc.classList.remove("hidden");
+    $("#resumeTitle").textContent="解きかけの演習があります";
+    $("#resumeSub").textContent=label+"・Q"+(s.idx+1)+" / "+s.qids.length+"問";
+  }else rc.classList.add("hidden");
+
+  // 未着手ジャンプ
+  const todoList=[],partialList=[];
+  DOMAINS.forEach(dm=>dm.topics.forEach(t=>{if(!t.qs)return;const st=statusOf(t.id);if(st==="todo")todoList.push(t);else if(st==="partial")partialList.push(t);}));
+  const jt=todoList.length?{t:todoList[0],kind:"未着手",n:todoList.length}:(partialList.length?{t:partialList[0],kind:"着手中",n:partialList.length}:null);
+  const jb=$("#jumpBtn");
+  if(jt){jb.disabled=false;jb.style.opacity="1";jb.dataset.tid=jt.t.id;jb.textContent="▶ "+jt.kind+"へ："+jt.t.name+"（残り"+jt.n+"）";}
+  else{jb.disabled=true;jb.style.opacity=".5";jb.dataset.tid="";jb.textContent="全トピック完了 🎉";}
+
+  // 間違いノート
+  data.wrongs=data.wrongs.filter(id=>QBYID[id]);
+  data.cleared=data.cleared.filter(id=>data.wrongs.indexOf(id)!==-1);
+  const wc=data.wrongs.length,cc=data.cleared.length,uc=wc-cc,wb=$("#wrongBtn");
+  $("#wrongMeta").textContent=wc===0?"0問":wc+"問（未克服 "+uc+"・克服済み "+cc+"）";
+  wb.disabled=wc===0;wb.style.opacity=wc===0?".5":"1";
+  wb.textContent=wc===0?"まだ間違いはありません 🎉":"間違えた問題をもう一度解く（"+wc+"問）";
+
+  // ツリー
+  const tr=$("#tree");tr.innerHTML="";
+  DOMAINS.forEach(d=>{
+    let s2=0;d.topics.forEach(t=>s2+=SV[statusOf(t.id)]);
+    const dp=Math.round(s2/d.topics.length*100);
+    const dom=document.createElement("div");dom.className="dom card";dom.style.padding="10px 11px";
+    dom.innerHTML='<div class="domhd"><span class="code">'+d.code+'</span><span class="nm">'+d.name+'</span>'+
+      '<span class="pbar"><i style="width:'+dp+'%"></i></span><span class="pct">'+dp+'%</span></div>';
+    d.topics.forEach(t=>{
+      const st=statusOf(t.id),wn=topicWrongCount(t.id),n=filtered(t.qs).length;
+      const sym=st==="done"?"✓":st==="partial"?"◐":"○";
+      const stLabel=st==="done"?"完了":st==="partial"?"着手":"未着手";
+      const sub=data.bestPct[t.id]!=null?stLabel+"・最高 "+data.bestPct[t.id]+"%":(data.started[t.id]?"着手（採点前）":stLabel);
+      const warn=wn>0?'<span class="warnb">⚠ 間違い'+wn+'問</span>':'';
+      const row=document.createElement("div");row.className="topic";
+      row.innerHTML='<span class="stbtn st-'+st+'" title="'+stLabel+'（自動判定）">'+sym+'</span>'+
+        '<div class="nm"><div class="tt">'+t.name+warn+'</div><div class="sub">'+sub+' ・ '+n+'問</div></div>'+
+        (n?'<button class="go">演習 ›</button>':'<span class="go soon">該当なし</span>');
+      if(n)row.querySelector(".go").addEventListener("click",()=>startQuiz(t.id));
+      dom.appendChild(row);
+    });
+    tr.appendChild(dom);
+  });
+}
+
+/* ============ 6軸リファレンス ============ */
+function axrefSelect(k){
+  const rel=RELMAP[k]||new Set();let n=0;
+  document.querySelectorAll("#axrefBody [data-term]").forEach(ch=>{
+    const t=ch.dataset.term,hit=(t===k||rel.has(t));
+    ch.classList.toggle("on",hit&&t!==k);
+    ch.classList.toggle("focus",t===k);
+    if(hit&&t!==k)n++;
+  });
+  $("#axDetail").innerHTML='<div class="cap">用語解説・関連 '+n+'語をハイライト中</div><b>'+k+'</b>'+
+    fullNameHtml(k)+'<div style="margin-top:'+(fullNameOf(k)?'4px':'2px')+'">'+(TERMDICT[k]||"")+'</div>'+
+    '<div style="margin-top:6px"><button class="back" id="axClear" style="padding:5px 10px;font-size:.72rem">選択を解除</button></div>';
+  $("#axClear").onclick=axrefClear;
+}
+function axrefClear(){
+  document.querySelectorAll("#axrefBody .on,#axrefBody .focus").forEach(ch=>ch.classList.remove("on","focus"));
+  $("#axDetail").innerHTML='<div class="cap">使い方</div>ワードをタップすると<b>関連ワードがハイライト</b>され、ここに解説が表示されます。';
+}
+$("#axrefBtn").addEventListener("click",()=>{
+  $("#axrefBody").innerHTML=AXES.map((ax,n)=>
+    '<div class="axcard card"><div class="an">'+(n+1)+'. '+ax+'</div><div class="ad">'+AXDESC[n]+'</div>'+
+    AXGROUPS[n].map(g=>'<div class="gl">'+g.g+'</div><div class="chips">'+g.terms.map(t=>chipHtml(t,"chip",false)).join("")+'</div>').join("")+
+    '</div>').join("");
+  axrefClear();
+  $("#subtitle").textContent="6軸リファレンス";view("axref");window.scrollTo({top:0});
+});
+
+/* ============ 用語ポップアップ ============ */
+function showTerm(k){
+  if(!TERMDICT[k])return;
+  const host=$("#modalHost");
+  host.innerHTML='<div class="modal" id="termModal"><div class="box">'+
+    '<div style="font-size:.64rem;color:var(--muted);font-weight:800;letter-spacing:.06em">用語解説</div>'+
+    '<h3>'+k+'</h3>'+fullNameHtml(k)+
+    '<p style="font-size:.87rem;color:var(--text);line-height:1.75;margin-top:6px">'+TERMDICT[k]+'</p>'+
+    '<div class="mrow"><button class="btn btn-primary" id="tmClose">閉じる</button></div></div></div>';
+  $("#tmClose").onclick=()=>{host.innerHTML="";};
+  $("#termModal").addEventListener("click",e=>{if(e.target.id==="termModal")host.innerHTML="";});
+}
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-term]");if(!el)return;
+  if(el.closest("#axrefBody"))axrefSelect(el.dataset.term);
+  else showTerm(el.dataset.term);
+});
+
+/* ============ ボタン ============ */
+$("#jumpBtn").addEventListener("click",()=>{const id=$("#jumpBtn").dataset.tid;if(id)startQuiz(id);});
+$("#resumeBtn").addEventListener("click",()=>resumeSession());
+$("#resumeDiscard").addEventListener("click",()=>{clearSession();renderHome();});
+$("#noticeOk").addEventListener("click",()=>{delete data.scoreReset;save();renderHome();});
+$("#mock20").addEventListener("click",()=>startMock(20));
+$("#mock40").addEventListener("click",()=>startMock(40));
+$("#wrongBtn").addEventListener("click",()=>startWrongReview());
+
+/* ============ 引き継ぎ ============ */
+$("#dataBtn").addEventListener("click",()=>{
+  const host=$("#modalHost");
+  host.innerHTML='<div class="modal"><div class="box"><h3>引き継ぎ（バックアップ）</h3>'+
+    '<p>進捗データです。コピーして保存すれば、別端末やリセット後に貼り付けて復元できます。</p>'+
+    '<textarea id="ta">'+JSON.stringify(data)+'</textarea>'+
+    '<div class="mrow"><button class="btn btn-ghost" id="mImport">貼り付けて復元</button><button class="btn btn-primary" id="mClose">閉じる</button></div>'+
+    '<div class="mrow"><button class="btn btn-ghost" id="mReset" style="color:var(--wrong)">記録をリセット</button></div></div></div>';
+  $("#mClose").onclick=()=>{host.innerHTML="";};
+  $("#mImport").onclick=()=>{
+    try{const d=JSON.parse($("#ta").value);
+      if(d&&d.bestPct){data={studySeconds:d.studySeconds||0,bestPct:d.bestPct||{},wrongs:d.wrongs||[],cleared:d.cleared||[],started:d.started||{},session:d.session||null};
+        save();host.innerHTML="";renderHome();}
+      else alert("形式が正しくありません。");
+    }catch(e){alert("読み込めませんでした。");}
+  };
+  $("#mReset").onclick=()=>{if(confirm("学習時間と進捗をすべて消去します。よろしいですか？")){data={studySeconds:0,bestPct:{},wrongs:[],cleared:[],started:{},diff:"all",session:null};save();host.innerHTML="";renderHome();}};
+});
+
+/* init */
+renderHome();view("home");
+</script>
+
+<script>
+/* PWA: オフライン動作のためのService Worker登録 */
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+}
+</script>
+</body>
+</html>

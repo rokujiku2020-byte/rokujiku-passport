@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="生成AIパスポート 学習アプリ">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#0d9488"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#g)"/>
+  <!-- 6軸を表す六角形 -->
+  <polygon points="256,120 374,188 374,324 256,392 138,324 138,188"
+           fill="none" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" opacity=".95"/>
+  <polygon points="256,186 316,221 316,291 256,326 196,291 196,221"
+           fill="#ffffff" opacity=".22"/>
+  <!-- 中心から各頂点への軸 -->
+  <g stroke="#ffffff" stroke-width="10" opacity=".8" stroke-linecap="round">
+    <line x1="256" y1="256" x2="256" y2="120"/>
+    <line x1="256" y1="256" x2="374" y2="188"/>
+    <line x1="256" y1="256" x2="374" y2="324"/>
+    <line x1="256" y1="256" x2="256" y2="392"/>
+    <line x1="256" y1="256" x2="138" y2="324"/>
+    <line x1="256" y1="256" x2="138" y2="188"/>
+  </g>
+  <circle cx="256" cy="256" r="26" fill="#ffffff"/>
+</svg>
