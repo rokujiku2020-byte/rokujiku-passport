@@ -19,7 +19,6 @@
   body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 </style>
 </head>
-<body>
 <style>
   :root{
     --bg:#eef8f3;--surface:#ffffff;--surface-2:#e6f4ee;--surface-3:#d7ece1;
@@ -924,52 +923,52 @@ Q.H2=[
 /* ============ CURRICULUM ============ */
 const DOMAINS=[
   {code:"A",name:"AIの基礎",topics:[
-    {id:"A1",name:"AIの定義・歴史・種類",seed:"todo",qs:Q.A1},
-    {id:"A2",name:"推論と学習の違い",seed:"done",qs:Q.A2},
-    {id:"A3",name:"GPU / 量子コンピュータの違い",seed:"done",qs:Q.A3},
+    {id:"A1",name:"AIの定義・歴史・種類",qs:Q.A1},
+    {id:"A2",name:"推論と学習の違い",qs:Q.A2},
+    {id:"A3",name:"GPU / 量子コンピュータの違い",qs:Q.A3},
   ]},
   {code:"B",name:"機械学習",topics:[
-    {id:"B1",name:"教師あり学習",seed:"done",qs:Q.B1},
-    {id:"B2",name:"教師なし学習（k-means・PCA）",seed:"done",qs:Q.B2},
-    {id:"B3",name:"強化学習",seed:"done",qs:Q.B3},
-    {id:"B4",name:"タスク区分（分類・回帰・生成）",seed:"partial",qs:Q.B4},
-    {id:"B5",name:"過学習 / 未学習と対策",seed:"partial",qs:Q.B5},
+    {id:"B1",name:"教師あり学習",qs:Q.B1},
+    {id:"B2",name:"教師なし学習（k-means・PCA）",qs:Q.B2},
+    {id:"B3",name:"強化学習",qs:Q.B3},
+    {id:"B4",name:"タスク区分（分類・回帰・生成）",qs:Q.B4},
+    {id:"B5",name:"過学習 / 未学習と対策",qs:Q.B5},
   ]},
   {code:"C",name:"ディープラーニング（アーキテクチャ）",topics:[
-    {id:"C1",name:"CNN（畳み込み・プーリング）",seed:"done",qs:Q.C1},
-    {id:"C2",name:"GAN（生成器・識別器）",seed:"done",qs:Q.C2},
-    {id:"C3",name:"Transformer",seed:"done",qs:Q.C3},
-    {id:"C4",name:"RNN / LSTM",seed:"todo",qs:Q.C4},
-    {id:"C5",name:"生成モデルの系譜・BERT派生",seed:"todo",qs:Q.C5},
+    {id:"C1",name:"CNN（畳み込み・プーリング）",qs:Q.C1},
+    {id:"C2",name:"GAN（生成器・識別器）",qs:Q.C2},
+    {id:"C3",name:"Transformer",qs:Q.C3},
+    {id:"C4",name:"RNN / LSTM",qs:Q.C4},
+    {id:"C5",name:"生成モデルの系譜・BERT派生",qs:Q.C5},
   ]},
   {code:"D",name:"生成AI",topics:[
-    {id:"D1",name:"LLM・パラメータ",seed:"done",qs:Q.D1},
-    {id:"D2",name:"GPT系譜・RLHF",seed:"done",qs:Q.D2},
-    {id:"D3",name:"マルチモーダル・ハルシネーション",seed:"done",qs:Q.D3},
-    {id:"D4",name:"他モデル（Claude / Gemini / Llama）",seed:"todo",qs:Q.D4},
-    {id:"D5",name:"最新モデルと機能（o系・Operator・Codex）",seed:"todo",qs:Q.D5},
+    {id:"D1",name:"LLM・パラメータ",qs:Q.D1},
+    {id:"D2",name:"GPT系譜・RLHF",qs:Q.D2},
+    {id:"D3",name:"マルチモーダル・ハルシネーション",qs:Q.D3},
+    {id:"D4",name:"他モデル（Claude / Gemini / Llama）",qs:Q.D4},
+    {id:"D5",name:"最新モデルと機能（o系・Operator・Codex）",qs:Q.D5},
   ]},
   {code:"E",name:"社会実装・倫理・法律",topics:[
-    {id:"E1",name:"個人情報保護法・匿名/仮名加工情報",seed:"done",qs:Q.E1},
-    {id:"E2",name:"著作権・知的財産権",seed:"todo",qs:Q.E2},
-    {id:"E3",name:"バイアス・公平性",seed:"todo",qs:Q.E3},
+    {id:"E1",name:"個人情報保護法・匿名/仮名加工情報",qs:Q.E1},
+    {id:"E2",name:"著作権・知的財産権",qs:Q.E2},
+    {id:"E3",name:"バイアス・公平性",qs:Q.E3},
   ]},
   {code:"F",name:"生成AIの動向",topics:[
-    {id:"F1",name:"RAG（検索拡張生成）",seed:"todo",qs:Q.F1},
-    {id:"F2",name:"AIエージェント・MCP",seed:"todo",qs:Q.F2},
-    {id:"F3",name:"ディープフェイク",seed:"todo",qs:Q.F3},
-    {id:"F4",name:"生成AIサービスと画像の扱い",seed:"todo",qs:Q.F4},
+    {id:"F1",name:"RAG（検索拡張生成）",qs:Q.F1},
+    {id:"F2",name:"AIエージェント・MCP",qs:Q.F2},
+    {id:"F3",name:"ディープフェイク",qs:Q.F3},
+    {id:"F4",name:"生成AIサービスと画像の扱い",qs:Q.F4},
   ]},
   {code:"G",name:"法制度・原則",topics:[
-    {id:"G1",name:"AI社会原則・事業者ガイドライン",seed:"todo",qs:Q.G1},
-    {id:"G2",name:"AI新法",seed:"todo",qs:Q.G2},
-    {id:"G3",name:"セキュリティ（フィッシング等）",seed:"todo",qs:Q.G3},
-    {id:"G4",name:"情報リテラシー・AIガバナンス",seed:"todo",qs:Q.G4},
+    {id:"G1",name:"AI社会原則・事業者ガイドライン",qs:Q.G1},
+    {id:"G2",name:"AI新法",qs:Q.G2},
+    {id:"G3",name:"セキュリティ（フィッシング等）",qs:Q.G3},
+    {id:"G4",name:"情報リテラシー・AIガバナンス",qs:Q.G4},
   ]},
   {code:"H",name:"プロンプト",topics:[
-    {id:"H1",name:"プロンプト技法（Zero/Few-Shot）",seed:"todo",qs:Q.H1},
-    {id:"H2",name:"ビジネス応用・不得意なこと",seed:"todo",qs:Q.H2},
-    {id:"H3",name:"プロンプトの構成・LLMの基礎",seed:"todo",qs:Q.H3},
+    {id:"H1",name:"プロンプト技法（Zero/Few-Shot）",qs:Q.H1},
+    {id:"H2",name:"ビジネス応用・不得意なこと",qs:Q.H2},
+    {id:"H3",name:"プロンプトの構成・LLMの基礎",qs:Q.H3},
   ]},
 ];
 const ALLTOPICS={}; DOMAINS.forEach(d=>d.topics.forEach(t=>{t.dom=d;ALLTOPICS[t.id]=t;}));
@@ -1273,11 +1272,13 @@ function load(){
   return {studySeconds:0,bestPct:{},wrongs:[],cleared:[],started:{},diff:"all",session:null};
 }
 function save(){try{localStorage.setItem(LS,JSON.stringify(data));}catch(e){}}
+/* 状態は自動判定：80%以上→完了 / 演習に着手→着手 / それ以外→未着手。
+   初期状態は全員「未着手」。進捗はこのアプリで解いた実績だけから算出する。 */
 function statusOf(id){
   const best=data.bestPct[id];
   if(best!=null)return best>=TARGET?"done":"partial";
   if(data.started[id])return "partial";
-  return ALLTOPICS[id].seed;
+  return "todo";
 }
 function topicWrongCount(id){return data.wrongs.filter(q=>q.indexOf(id+"-")===0&&!data.cleared.includes(q)).length;}
 /* 難易度フィルタは廃止：常に全問を出題する（応用問題も混在） */
