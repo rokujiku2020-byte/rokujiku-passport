@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>生成AIパスポート 学習アプリ</title>
-<meta name="description" content="生成AIパスポート試験（2026年2月シラバス対応）の学習アプリ。全154問の演習・6軸フレームワーク・間違いノート付き。">
+<title>ろくじくパスポート｜生成AIパスポート試験 対策（非公式）</title>
+<meta name="description" content="生成AIパスポート試験（2026年2月シラバス）の対策アプリ。個人が作成した非公式ツールで、GUGA（生成AI活用普及協会）およびその認定教材とは関係ありません。全154問の演習・6軸リファレンス・間違いノート付き。">
+<meta name="robots" content="index,follow">
 <meta name="theme-color" content="#0d9488" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0c1512" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.json">
@@ -12,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AIパスポート">
+<meta name="apple-mobile-web-app-title" content="ろくじくパスポート">
 <style>
   html,body{margin:0;padding:0}
   body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
@@ -217,12 +218,15 @@
 
 <div class="wrap">
   <header class="appbar">
-    <div class="t"><b>生成AIパスポート 学習アプリ</b><span id="subtitle">2026年2月シラバス対応</span></div>
+    <div class="t"><b>ろくじくパスポート</b><span id="subtitle">生成AIパスポート試験 対策（非公式）</span></div>
     <button class="back hidden" id="homeBtn">← ホーム</button>
   </header>
 
   <!-- HOME -->
   <main id="home">
+    <div style="font-size:.68rem;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:8px 11px;margin-bottom:11px;line-height:1.6">
+      ⚠️ <b>非公式アプリ</b>です。GUGA（生成AI活用普及協会）およびその認定教材とは関係ありません。
+    </div>
     <section class="hero">
       <div class="rd">
         <span class="lb2">合格到達度</span>
@@ -294,9 +298,10 @@
     <div class="card" style="padding:13px 15px;margin-top:14px">
       <div style="font-size:.7rem;color:var(--muted);line-height:1.75">
         <b style="color:var(--text)">このアプリについて</b><br>
-        本アプリは<b>非公式の学習用ツール</b>です。生成AIパスポート試験を主催する一般社団法人生成AI活用普及協会（GUGA）とは<b>一切関係ありません</b>。<br>
-        収録問題は公式の過去問ではなく、<b>公開シラバス（2026年2月適用）に基づく独自作成</b>です。内容の正確性・合格を保証するものではありません。受験要項は必ず公式サイトでご確認ください。<br>
-        学習記録（時間・スコア・間違いノート）は<b>お使いの端末内にのみ保存</b>され、外部に送信されません。アクセス解析・広告・Cookieによる追跡も行っていません。
+        本アプリ「ろくじくパスポート」は、個人が学習用に作成した<b>非公式ツール</b>です。生成AIパスポート試験を主催する一般社団法人生成AI活用普及協会（GUGA）、および同協会の<b>公式教材・認定対策アプリとは一切関係ありません</b>（認定・監修・提携を受けていません）。<br>
+        収録問題は公式の過去問や公式テキストの転載ではなく、<b>一般公開されているシラバス（2026年2月適用）を参照した独自作成</b>です。内容の正確性・合格を保証するものではありません。受験要項・出題範囲は必ず<b>公式サイト（guga.or.jp）</b>でご確認ください。<br>
+        学習記録（時間・スコア・間違いノート）は<b>お使いの端末内にのみ保存</b>され、外部に送信されません。アクセス解析・広告・Cookieによる追跡も行っていません。<br>
+        <span style="color:var(--faint)">「生成AIパスポート」は一般社団法人生成AI活用普及協会の商標です。本アプリでは、対策対象の試験を示す目的でのみ表記しています。</span>
       </div>
     </div>
   </main>
@@ -1475,7 +1480,7 @@ $("#retryWrong").addEventListener("click",()=>{
 });
 $("#toHome").addEventListener("click",goHome);
 $("#homeBtn").addEventListener("click",()=>{if(tracking){saveSession();stopTracking();}goHome();});
-function goHome(){mockMode=false;$("#subtitle").textContent="2026年2月シラバス対応";view("home");renderHome();}
+function goHome(){mockMode=false;$("#subtitle").textContent="生成AIパスポート試験 対策（非公式）";view("home");renderHome();}
 
 /* ============ ダッシュボード ============ */
 function fmtTime(sec){const m=Math.round(sec/60);if(m<60)return m+'<small>分</small>';return Math.floor(m/60)+'<small>時間</small>'+(m%60?(m%60)+'<small>分</small>':'');}
