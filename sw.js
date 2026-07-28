@@ -2,7 +2,7 @@
    目的：オフラインでも起動できるようにする（通勤中の地下鉄など）
    方針：アプリ本体はキャッシュ優先＋バックグラウンド更新（stale-while-revalidate）
    更新方法：アプリを更新したら下の CACHE の数字を1つ増やす */
-const CACHE = "genai-passport-v14";
+const CACHE = "genai-passport-v15";
 const ASSETS = [
   "./",
   "./index.html",
