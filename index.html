@@ -225,7 +225,6 @@
   .modal .box{background:var(--surface);border-radius:16px;padding:18px;max-width:460px;width:100%;box-shadow:var(--shadow)}
   .modal h3{margin:0 0 4px;font-size:1.05rem}
   .modal p{margin:0 0 11px;font-size:.82rem;color:var(--muted)}
-  .modal textarea{width:100%;height:110px;border:1px solid var(--border);border-radius:10px;padding:10px;font-family:ui-monospace,monospace;font-size:.7rem;background:var(--surface-2);color:var(--text);resize:vertical}
   .modal .mrow{display:flex;gap:9px;margin-top:11px}.modal .mrow .btn{flex:1;padding:11px;font-size:.85rem}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}.timer .dot{animation:none}}
 </style>
@@ -296,7 +295,7 @@
     <div id="tree"></div>
 
     <div class="tools">
-      <button class="btn btn-ghost" id="dataBtn">↔ 引き継ぎ（バックアップ）</button>
+      <button class="btn btn-ghost" id="resetBtn">記録をリセット</button>
     </div>
     <p class="foot">状態は<b>自動判定</b>：演習を始めると <b>◐着手</b>、80%以上で <b>✓完了</b>。<br><b>⚠</b> はまだ克服できていない間違いがある印（正解しても間違いノートには残ります）。<br>学習時間は解答中のみ自動計測。中断しても<b>途中から再開</b>できます。</p>
     <div class="card" style="padding:13px 15px;margin-top:14px">
@@ -1623,23 +1622,11 @@ $("#mock20").addEventListener("click",()=>startMock(20));
 $("#mock40").addEventListener("click",()=>startMock(40));
 $("#wrongBtn").addEventListener("click",()=>startWrongReview());
 
-/* ============ 引き継ぎ ============ */
-$("#dataBtn").addEventListener("click",()=>{
-  const host=$("#modalHost");
-  host.innerHTML='<div class="modal"><div class="box"><h3>引き継ぎ（バックアップ）</h3>'+
-    '<p>進捗データです。コピーして保存すれば、別端末やリセット後に貼り付けて復元できます。</p>'+
-    '<textarea id="ta">'+JSON.stringify(data)+'</textarea>'+
-    '<div class="mrow"><button class="btn btn-ghost" id="mImport">貼り付けて復元</button><button class="btn btn-primary" id="mClose">閉じる</button></div>'+
-    '<div class="mrow"><button class="btn btn-ghost" id="mReset" style="color:var(--wrong)">記録をリセット</button></div></div></div>';
-  $("#mClose").onclick=()=>{host.innerHTML="";};
-  $("#mImport").onclick=()=>{
-    try{const d=JSON.parse($("#ta").value);
-      if(d&&d.bestPct){data={studySeconds:d.studySeconds||0,bestPct:d.bestPct||{},wrongs:d.wrongs||[],cleared:d.cleared||[],started:d.started||{},session:d.session||null};
-        save();host.innerHTML="";renderHome();}
-      else alert("形式が正しくありません。");
-    }catch(e){alert("読み込めませんでした。");}
-  };
-  $("#mReset").onclick=()=>{if(confirm("学習時間と進捗をすべて消去します。よろしいですか？")){data={studySeconds:0,bestPct:{},wrongs:[],cleared:[],started:{},diff:"all",session:null};save();host.innerHTML="";renderHome();}};
+/* ============ 記録のリセット ============ */
+$("#resetBtn").addEventListener("click",()=>{
+  if(!confirm("学習時間・進捗・間違いノートをすべて消去します。この操作は元に戻せません。よろしいですか？"))return;
+  data={studySeconds:0,bestPct:{},wrongs:[],cleared:[],started:{},diff:"all",session:null};
+  save();goHome();
 });
 
 /* init */
