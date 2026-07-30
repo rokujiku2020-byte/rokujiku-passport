@@ -1415,6 +1415,22 @@ function renderQ(){
     $("#navrow").classList.remove("hidden");
     $("#nextBtn").textContent=idx+1<order.length?"次へ":"採点する";
   }
+  // 通常の演習で既に回答済みなら、答えた状態のまま復元する
+  // （中断・再開すると回答済みの問題が再表示されるため、答え直せると点数が二重に計上される）
+  else if(!mockMode&&answers[idx]){
+    const prev=answers[idx],nodes=[...document.querySelectorAll("#opts .opt")];
+    nodes.forEach(n=>n.disabled=true);
+    if(nodes[curCorrect]){nodes[curCorrect].classList.add("correct");nodes[curCorrect].querySelector(".mark").textContent="✓";}
+    if(!prev.ok){
+      const chosen=nodes.filter((n,i)=>q.opts[curOpts[i]]===prev.chosenText)[0];
+      if(chosen){chosen.classList.add("wrong");chosen.querySelector(".mark").textContent="✕";}
+    }
+    const ex=document.createElement("div");ex.className="explain "+(prev.ok?"ok":"ng");
+    ex.innerHTML='<div class="lead">'+(prev.ok?"✓ 正解":"✕ 不正解")+'　<span style="color:var(--muted);font-weight:600">正解 '+keys[curCorrect]+'</span></div>'+q.ex+glossHtml(q);
+    $("#explainWrap").appendChild(ex);
+    $("#navrow").classList.remove("hidden");
+    $("#nextBtn").textContent=idx+1<order.length?"次の問題へ":"結果を見る";
+  }
   saveSession();
   window.scrollTo({top:0,behavior:"instant"});
 }
@@ -1432,7 +1448,8 @@ function choose(d,btn){
     return;
   }
   nodes.forEach(n=>n.disabled=true);
-  if(ok)score++;answers.push(rec);
+  // 位置で上書きする（push だと再開後に答え直したとき二重に積まれ、点数が分母を超える）
+  answers[idx]=rec;
   nodes[curCorrect].classList.add("correct");nodes[curCorrect].querySelector(".mark").textContent="✓";
   if(!ok){btn.classList.add("wrong");btn.querySelector(".mark").textContent="✕";}
   const ex=document.createElement("div");ex.className="explain "+(ok?"ok":"ng");
@@ -1449,7 +1466,8 @@ $("#nextBtn").addEventListener("click",()=>{idx+1<order.length?(idx++,renderQ())
 function finish(){
   stopTracking();clearSession();
   const isMock=mockMode;lastMock=isMock;
-  if(isMock)score=answers.filter(a=>a&&a.ok).length;
+  // 点数は常に回答履歴から数え直す（加算方式は再開時に二重計上の原因になる）
+  score=answers.filter(a=>a&&a.ok).length;
   const total=order.length,pct=Math.round(score/total*100);
   const isFullTopic=(curMode==="topic"&&pool.length===filtered(ALLTOPICS[curTopic.id].qs).length);
   if(isFullTopic){
