@@ -250,7 +250,6 @@
         <span class="hnote" id="hnote"></span>
         <span class="hstats">
           <span>⏱ 累計 <b id="totalTime">0<small>分</small></b></span>
-          <span>🎯 あと <b id="remainTime">—</b></span>
         </span>
       </div>
       <div class="hbar"><i id="hbar"></i></div>
@@ -307,7 +306,7 @@
         アプリ名の「ろくじく」は<b>6軸（ろくじく）</b>のこと。学習方法／タスク／モデル性質／アーキテクチャ／具体モデル／学習上の問題という<b>6つの軸で用語を整理する、本アプリ独自のフレームワーク</b>に由来します。<br>
         本アプリ「ろくじく」は、個人が学習用に作成した<b>非公式ツール</b>です。生成AIパスポート試験を主催する一般社団法人生成AI活用普及協会（GUGA）、および同協会の<b>公式教材・認定対策アプリとは一切関係ありません</b>（認定・監修・提携を受けていません）。<br>
         収録問題は公式の過去問や公式テキストの転載ではなく、<b>一般公開されているシラバス（2026年2月適用）を参照した独自作成</b>です。内容の正確性・合格を保証するものではありません。受験要項・出題範囲は必ず<b>公式サイト（guga.or.jp）</b>でご確認ください。<br>
-        ホームの<b>「合格到達度」「合格まで あと」は、本アプリの演習実績から計算した目安</b>です（1トピックあたり25分・正答率80%で完了として算出）。実際の試験の合否や、必要な学習時間を示すものではありません。<br>
+        ホームの<b>「合格到達度」は、本アプリの演習実績から計算した目安</b>です（正答率80%以上のトピックを完了として算出）。実際の試験の合否を示すものではありません。<br>
         学習記録（時間・スコア・間違いノート）は<b>お使いの端末内にのみ保存</b>され、外部に送信されません。アクセス解析・広告・Cookieによる追跡も行っていません。<br>
         <span style="color:var(--faint)">「生成AIパスポート」は一般社団法人生成AI活用普及協会の商標です。本アプリでは、対策対象の試験を示す目的でのみ表記しています。</span>
       </div>
@@ -1259,7 +1258,7 @@ const LINKS2={
 /* ============ STATE ============ */
 const $=s=>document.querySelector(s);
 const LS="genai_passport_v3";
-const TARGET=80, PER_TOPIC_MIN=25;
+const TARGET=80;
 let data=load();
 function load(){
   try{const d=JSON.parse(localStorage.getItem(LS));
@@ -1532,8 +1531,6 @@ function renderHome(){
   const ready=Math.round(sum/ids.length*100);
   $("#readyPct").textContent=ready;
   requestAnimationFrame(()=>{$("#hbar").style.width=ready+"%";});
-  let rem=0;ids.forEach(id=>rem+=(1-SV[statusOf(id)])*PER_TOPIC_MIN);rem=Math.round(rem);
-  $("#remainTime").innerHTML=rem<=0?"到達！":(rem<60?rem+'<small>分</small>':Math.floor(rem/60)+'<small>時間</small>'+(rem%60?(rem%60)+'<small>分</small>':''));
   $("#totalTime").innerHTML=fmtTime(data.studySeconds);
   const done=ids.filter(id=>statusOf(id)==="done").length;
   $("#ratio").textContent=done+" / "+ids.length+" 完了";
