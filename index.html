@@ -1642,10 +1642,24 @@ $("#mock40").addEventListener("click",()=>startMock(40));
 $("#wrongBtn").addEventListener("click",()=>startWrongReview());
 
 /* ============ 記録のリセット ============ */
+/* 確認はアプリ内のモーダルで行う。
+   ブラウザ標準の confirm() は、Artifact のようなサンドボックス内では
+   ブロックされて「押しても何も起きない」状態になるため使わない。 */
 $("#resetBtn").addEventListener("click",()=>{
-  if(!confirm("学習時間・進捗・間違いノートをすべて消去します。この操作は元に戻せません。よろしいですか？"))return;
-  data={studySeconds:0,bestPct:{},wrongs:[],cleared:[],started:{},diff:"all",session:null};
-  save();goHome();
+  const host=$("#modalHost");
+  host.innerHTML='<div class="modal"><div class="box"><h3>記録をリセット</h3>'+
+    '<p>学習時間・進捗・間違いノートを<b>すべて消去</b>します。この操作は元に戻せません。</p>'+
+    '<div class="mrow"><button class="btn btn-ghost" id="rcCancel">やめる</button>'+
+    '<button class="btn btn-primary" id="rcOk" style="background:var(--wrong)">消去する</button></div>'+
+    '</div></div>';
+  $("#rcCancel").onclick=()=>{host.innerHTML="";};
+  $("#rcOk").onclick=()=>{
+    data={studySeconds:0,bestPct:{},wrongs:[],cleared:[],started:{},diff:"all",session:null};
+    save();
+    // 旧バージョンの記録も消す（残っていると再び移行される余地が残るため）
+    try{localStorage.removeItem("genai_passport_v2");localStorage.removeItem("genai_passport_v1");}catch(e){}
+    host.innerHTML="";goHome();
+  };
 });
 
 /* init */
