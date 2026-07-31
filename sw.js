@@ -7,7 +7,7 @@
          古い画面が残っているように見える問題があった（2026-07-28 修正）。
      - アイコン等の変わらないファイルはキャッシュ優先のまま（表示を速くするため）。
    更新方法：下の CACHE の数字を1つ増やす（tools/build.sh が自動で行う） */
-const CACHE = "genai-passport-v21";
+const CACHE = "genai-passport-v23";
 const ASSETS = [
   "./",
   "./index.html",
