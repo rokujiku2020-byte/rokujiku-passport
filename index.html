@@ -1267,7 +1267,8 @@ function load(){
       if(o&&(o.bestPct||o.chapters)){
         const mig={studySeconds:o.studySeconds||0,bestPct:{},wrongs:[],cleared:[],started:o.started||{},diff:"all",session:null};
         if(o.bestPct)for(const k in o.bestPct){if(ALLTOPICS[k])mig.bestPct[k]=o.bestPct[k];}
-        if(o.status)for(const k in o.status){if(ALLTOPICS[k]&&o.status[k]!=="todo")mig.started[k]=true;}
+        // 旧 status は「事前知識の初期値」であり演習実績ではないため引き継がない。
+        // （引き継ぐと撤廃したはずの初期値が着手済みとして復活し、いきなり41%等になる）
         if(Array.isArray(o.wrongs))mig.wrongs=o.wrongs.filter(id=>QBYID[id]);
         if(Array.isArray(o.cleared))mig.cleared=o.cleared.filter(id=>mig.wrongs.indexOf(id)!==-1);
         localStorage.setItem(LS,JSON.stringify(mig));
